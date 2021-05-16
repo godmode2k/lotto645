@@ -51,8 +51,7 @@ from sklearn.svm import SVC
 
 
 
-#df = pd.read_csv( "./lotto645_dataset_919.csv" )
-df = pd.read_csv( "./lotto645_dataset_960.csv" )
+df = pd.read_csv( "./lotto645_dataset_latest.csv" )
 
 df.head()
 #df.describe()
@@ -280,7 +279,8 @@ print()
 # best parameters : {'C': 0.001, 'gamma': 0.001}
 # best score : 0.022839506172839506
 
-pass
+import sys
+sys.exit()
 '''
 
 
@@ -289,15 +289,33 @@ pass
 classifier = SVC(kernel='rbf', gamma=0.001).fit(X, y)
 #print (classifier)
 
+# Export
+# ------------------------------------------------
+from micromlgen import port
+
+# v1.1.2
+c_code = port(classifier)
+
+# save as 'model.h'
+#print(c_code)
+
+print( "writing model_lotto.h ..." )
+with open('model_lotto645.h', 'w') as f:
+    print(c_code, file=f)
+# ------------------------------------------------
+
+
+
 
 from numpy.random import seed
 from numpy.random import randint
 total_generate = 100
 total_games = 5
-result_won = [2, 18, 24, 30, 32, 45, 14]
+result_won = [6,12,19,23,34,42,35] # no. 963
+result_won_game = "no.963"
 result_matched_all = []
 result_predict_all = []
-print( "result won (no.960): 2, 18, 24, 30, 32, 45 + 14" )
+print( "result won (" + result_won_game + "): ", result_won )
 for x_gen in range(total_generate):
     for i in range(total_games): # 5 results
         result = np.zeros(6) # 1 ~ 6, bonus
@@ -339,7 +357,7 @@ for x_gen in range(total_generate):
                 result_matched.append( result[x] )
 
         result_matched_all.extend( result_matched )
-        print( "result =", result, "==>", "no.960 matched(", len(result_matched), ")", result_matched )
+        print( "result =", result, "==>", result_won_game + " matched(", len(result_matched), ")", result_matched )
     
         '''
         result:
@@ -360,7 +378,7 @@ for x_gen in range(total_generate):
     
     
 result_matched_all = list( set(result_matched_all) ) # remove duplicate item
-print( "result all (no.960) =", result_matched_all, "==> count =", len(result_matched_all) )
+print( "result all " + "(" + result_won_game + ") =", result_matched_all, "==> count =", len(result_matched_all) )
 print()
 print( "result predict all =" )
 for i in range(len(result_predict_all)):
@@ -379,26 +397,12 @@ result predict all =
 
 
 
-
-'''
-# Export
-# ------------------------------------------------
-from micromlgen import port
-
-# v1.1.2
-c_code = port(classifier)
-
-# save as 'model.h'
-#print(c_code)
-
-print( "writing model_lotto.h ..." )
-with open('model_lotto.h', 'w') as f:
-    print(c_code, file=f)
-# ------------------------------------------------
-'''
 #"""
 
 pass
+
+
+
 
 
 # SEE: https://eloquentarduino.github.io/2019/11/how-to-train-a-classifier-in-scikit-learn/
