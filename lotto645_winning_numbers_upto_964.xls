@@ -1,0 +1,95 @@
+
+
+
+<!-- JSTL-->
+
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+<title>Insert title here</title>
+</head>
+<body>
+	<table>
+	<tr align=center>
+		<td colspan=20><font size=5>회차별 추첨결과</font></td>
+	</tr>
+	</table>
+	
+	<table border="1">
+		 
+		<tr align=center bgcolor="#CCFFCC">
+			<td rowspan=2>년도</td>
+			<td rowspan=2>회차</td>
+			<td rowspan=2>추첨일</td>
+			<!--<td rowspan=2>판매액</td>-->
+			<td colspan=2>1등</td>
+			<td colspan=2>2등</td>
+			<td colspan=2>3등</td>
+			<td colspan=2>4등</td>
+			<td colspan=2>5등</td>
+			<td colspan=7>당첨번호</td>
+		</tr>
+		<tr align=center bgcolor="#CCFFCC">
+			<td>당첨자수</td>
+			<td>당첨금액</td>
+			<td>당첨자수</td>
+			<td>당첨금액</td>
+			<td>당첨자수</td>
+			<td>당첨금액</td>
+			<td>당첨자수</td>
+			<td>당첨금액</td>
+			<td>당첨자수</td>
+			<td>당첨금액</td>
+			<td>1</td>
+			<td>2</td>
+			<td>3</td>
+			<td>4</td>
+			<td>5</td>
+			<td>6</td>
+			<td>보너스</td>
+		</tr>
+	    
+	    
+	    	
+			<tr>
+			
+				<td bgcolor='#ccffff'  rowspan="1" align="center">2021</td>
+							
+				<td align="right">964</td>
+				<td align="center">2021.05.22</td>
+				<td align="right" bgcolor='#ffff99'>10</td>
+				<td align="right">2,345,861,063원</td>
+				
+				<td align="right" bgcolor='#ffff99'>52</td>
+				<td align="right">75,187,855원</td>
+				
+				<td align="right" bgcolor='#ffff99'>2,447</td>
+				<td align="right">1,597,781원</td>
+				
+				<td align="right" bgcolor='#ffff99'>123,780</td>
+				<td align="right">50,000원</td>
+				
+				<td align="right" bgcolor='#ffff99'>2,061,560</td>
+				<td align="right">5,000원</td>
+				
+				<td>6</td>
+				<td>21</td>
+				<td>36</td>
+				<td>38</td>
+				<td>39</td>
+				<td>43</td>
+				<td>30</td>
+				
+			</tr>
+			
+			
+		
+	    
+	</table>
+</body>
+</html>

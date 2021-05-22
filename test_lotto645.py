@@ -311,9 +311,10 @@ from numpy.random import seed
 from numpy.random import randint
 total_generate = 100
 total_games = 5
-result_won = [6,12,19,23,34,42,35] # no. 963
-result_won_game = "no.963"
+result_won = [6,21,36,38,39,43,30] # no. 964
+result_won_game = "no.964"
 result_matched_all = []
+result_matched_one_game = []
 result_predict_all = []
 print( "result won (" + result_won_game + "): ", result_won )
 for x_gen in range(total_generate):
@@ -350,7 +351,7 @@ for x_gen in range(total_generate):
             
         result_predict_all.append( result )
         
-        # comparision
+        # comparison
         result_matched = []
         for x in range(6):
             if result[x] in result_won:
@@ -358,6 +359,9 @@ for x_gen in range(total_generate):
 
         result_matched_all.extend( result_matched )
         print( "result =", result, "==>", result_won_game + " matched(", len(result_matched), ")", result_matched )
+        if len(result_matched_one_game) < len(result_matched):
+            result_matched_one_game.clear()
+            result_matched_one_game.extend( result_matched )
     
         '''
         result:
@@ -368,17 +372,21 @@ for x_gen in range(total_generate):
         result = [ 2. 44. 19.  1. 18. 11.] ==> no.960 matched( 2 ) [2.0, 18.0]
         result = [ 3.  9. 38. 28. 23. 18.] ==> no.960 matched( 1 ) [18.0]
         result = [24. 30. 12. 27. 22. 31.] ==> no.960 matched( 2 ) [24.0, 30.0]
-        result all (no.960) = [30.0, 24.0, 32.0, 2.0, 18.0] ==> count = 5
+        result all (accumulative) (no.960) = [30.0, 24.0, 32.0, 2.0, 18.0] ==> count = 5
+        result (no.960) = [24.0, 32.0] ==> count = 2
         '''
         
     if (x_gen < (total_generate - 1)):
         result_matched_all.clear()
+        result_matched_one_game.clear()
         result_predict_all.clear()
     print( "total random generated = {}/{}".format(x_gen, total_generate - 1) )
     
     
 result_matched_all = list( set(result_matched_all) ) # remove duplicate item
-print( "result all " + "(" + result_won_game + ") =", result_matched_all, "==> count =", len(result_matched_all) )
+result_matched_one_game = list( set(result_matched_one_game) ) # remove duplicate item
+print( "result all (accumulative) " + "(" + result_won_game + ") =", result_matched_all, "==> count =", len(result_matched_all) )
+print( "result " + "(" + result_won_game + ") =", result_matched_one_game, "==> count =", len(result_matched_one_game) )
 print()
 print( "result predict all =" )
 for i in range(len(result_predict_all)):
