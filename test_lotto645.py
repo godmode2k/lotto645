@@ -107,7 +107,7 @@ df_5_count = df_5["5"].value_counts()
 df_6_count = df_6["6"].value_counts()
 df_b_count = df_b["bonus"].value_counts()
 
-#print( "df_1_count\n{}".format(df_1_count) )
+print( "df_1_count\n{}".format(df_1_count) )
 #print()
 
 df_count_merge = pd.merge( df_1_count, df_2_count, left_index=True, right_index=True, how="outer")
@@ -126,6 +126,7 @@ print( df_count_merge )
 print()
 
 result = df_count_merge.sort_values( by="sum", ascending=False )
+#result = result.fillna(0)
 print( result )
 print()
 
@@ -142,6 +143,16 @@ print()
 #print( len(df) )
 #print( df.iloc[0] )
 
+
+#for a in range(len(result.columns.values) - 2):
+#    print( result.columns.values[a] )
+#print( result.columns[0], result.columns[1], result.columns[2], result.columns[3], result.columns[4], result.columns[5] )
+#print( result["1"][1], result["2"][1], result["3"][1], result["4"][1], result["5"][1], result["6"][1] )
+#print( result["1"][2], result["2"][2], result["3"][2], result["4"][2], result["5"][2], result["6"][2] )
+
+
+#import sys
+#sys.exit()
 
 
 
@@ -230,16 +241,15 @@ def load_features(df_features):
         #samples = np.zeros((45, 7)) # 1 ~ 45: each 1 ~ 6 + bonus
         samples = np.zeros((45, 6)) # 1 ~ 45: each 1 ~ 6 (without bonus) 
         #for i in range(len(df_features.columns.values) -1): # 1 ~ 6, bonus (without sum)
-        for i in range(len(df_features.columns.values) -2): # 1 ~ 6 (without binux, sum)
+        for i in range(len(df_features.columns.values) -2): # 1 ~ 6 (without bonus, sum)
             class_name = df_features.columns.values[i]
             classmap[class_idx] = class_name
             
-            samples[class_idx][i] = df_features[class_name][i+1] # 1 ~ 6, bonus
-            #print( "pos = [{}][{}] = {}".format(class_idx, i, samples[class_idx][i]))
+            samples[class_idx][i] = df_features[class_name][class_idx+1] # 1 ~ 6, bonus
+            print( "pos = [{}][{}] = {}".format(class_idx, i, samples[class_idx][i]))
 
 
-
-        samples[np.isnan(samples)] = 0        
+        samples[np.isnan(samples)] = 0
 
         labels = np.ones((len(samples), 1)) * class_idx
         #print( f'lables = {labels}' )
@@ -256,6 +266,8 @@ features, classmap = load_features( result )
 #print (classmap)
 X, y = features[:, :-1], features[:, -1]
 
+#import sys
+#sys.exit()
 
 '''
 # Cross-Validation
@@ -277,7 +289,7 @@ print()
 # result:
 # test set score : 0.009876543209876543
 # best parameters : {'C': 0.001, 'gamma': 0.001}
-# best score : 0.022839506172839506
+# best score : 0.024074074074074074
 
 import sys
 sys.exit()
