@@ -12,6 +12,11 @@ Environment
 ```sh
 Python: v3.7.4
 sklearn, micromlgen
+
+Android:
+ - Android Studio
+ - Android 11
+ - NDK
 ```
 
 
@@ -31,3 +36,12 @@ $ pip install https://github.com/eloquentarduino/micromlgen.git
 
 $ python3 test_lotto645.py
 ```
+
+
+
+Screenshots
+----------
+
+> Android App
+![alt tag](https://github.com/godmode2k/lotto645/raw/main/Android/Screenshot_1676280079.png)
+
