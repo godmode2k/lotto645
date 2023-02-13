@@ -1,0 +1,3 @@
+include ':app'
+//rootProject.name='I will win the Lotto645 today'
+rootProject.name='이번 주는 꼭 당첨될 거야!'
