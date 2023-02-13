@@ -51,6 +51,21 @@ from sklearn.svm import SVC
 
 
 
+"""
+# ---------------------------------
+# CSV
+#
+# download (Excel: xls): https://www.dhlottery.co.kr/gameResult.do?method=byWin
+#
+# CSV (.csv) file (modified)
+# ----------------------------------------------------------------
+# game    date          1     2     3     4     5     6     bonus
+# ----------------------------------------------------------------
+# 1054    2023.02.11    14    19    27    28    30    45    33
+# ................................................................
+# 1       2002.12.07    10    23    29    33    37    40    16
+# ----------------------------------------------------------------
+# ---------------------------------
 df = pd.read_csv( "./lotto645_dataset_latest.csv" )
 
 df.head()
@@ -64,6 +79,7 @@ pd.options.display.float_format = "{:,.2f}".format
 df.head( 0 )
 print( df )
 print()
+
 
 '''
 df["당첨금액"].plot(figsize=(20, 6))
@@ -79,7 +95,12 @@ df_5 = df[ ["5"] ]
 df_6 = df[ ["6"] ]
 df_b = df[ ["bonus"] ]
 
+#print( df["1"] )
+#print( df_1["1"] )
 #print( f'{df_1["1"][1]}' )
+
+#import sys
+#sys.exit()
 
 
 '''
@@ -117,7 +138,7 @@ df_count_merge = pd.merge( df_count_merge, df_5_count, left_index=True, right_in
 df_count_merge = pd.merge( df_count_merge, df_6_count, left_index=True, right_index=True, how="outer")
 df_count_merge = pd.merge( df_count_merge, df_b_count, left_index=True, right_index=True, how="outer")
 #pd.options.display.float_format = "{:,.0f}".format
-#print( df_count_merge )
+print( df_count_merge )
 #print()
 
 df_count_merge["sum"] = df_count_merge.fillna(0).apply(
@@ -153,6 +174,198 @@ print()
 
 #import sys
 #sys.exit()
+"""
+
+
+#"""
+# ---------------------------------
+# Excel
+#
+# download (Excel: xls): https://www.dhlottery.co.kr/gameResult.do?method=byWin
+#
+# Excel (.xls) file (NOT modified)
+# ---------------------------------
+xls_filename = "./lotto645_당첨번호1054회차까지.xls"
+#df = pd.read_excel( xls_filename )
+df_excel_list = pd.read_html( xls_filename )
+pd.options.display.float_format = "{:,.2f}".format
+df = pd.DataFrame( df_excel_list[1] )
+#print( df[0] ) # 년도
+#print( df[1] ) # 회차
+#print( df[2] ) # 추첨일
+#print( df[13] ) # 당첨번호 1
+#print( df[14] ) # 당첨번호 2
+#print( df[15] ) # 당첨번호 3
+#print( df[16] ) # 당첨번호 4
+#print( df[17] ) # 당첨번호 5
+#print( df[18] ) # 당첨번호 6
+#print( df[19] ) # 당첨번호 보너스
+
+'''
+df_1 = { "1": list(df[13]) } # start at [2]: df[13][2]
+df_2 = { "2": list(df[14]) }
+df_3 = { "3": list(df[15]) }
+df_4 = { "4": list(df[16]) }
+df_5 = { "5": list(df[17]) }
+df_6 = { "6": list(df[18]) }
+df_b = { "bonus": list(df[19]) }
+
+del df_1["1"][:2]
+del df_2["2"][:2]
+del df_3["3"][:2]
+del df_4["4"][:2]
+del df_5["5"][:2]
+del df_6["6"][:2]
+del df_b["bonus"][:2]
+'''
+
+df_1 = { "1": df[13] } # start at [2]: df[13][2]
+df_2 = { "2": df[14] }
+df_3 = { "3": df[15] }
+df_4 = { "4": df[16] }
+df_5 = { "5": df[17] }
+df_6 = { "6": df[18] }
+df_b = { "bonus": df[19] }
+
+#print( df_1["1"][1] )
+
+
+'''
+del df_1["1"][0]
+del df_1["1"][1]
+del df_2["2"][0]
+del df_2["2"][1]
+del df_3["3"][0]
+del df_3["3"][1]
+del df_4["4"][0]
+del df_4["4"][1]
+del df_5["5"][0]
+del df_5["5"][1]
+del df_6["6"][0]
+del df_6["6"][1]
+del df_b["bonus"][0]
+del df_b["bonus"][1]
+'''
+
+#'''
+df_1["1"][0] = 0
+df_1["1"][1] = 0
+df_2["2"][0] = 0
+df_2["2"][1] = 0
+df_3["3"][0] = 0
+df_3["3"][1] = 0
+df_4["4"][0] = 0
+df_4["4"][1] = 0
+df_5["5"][0] = 0
+df_5["5"][1] = 0
+df_6["6"][0] = 0
+df_6["6"][1] = 0
+df_b["bonus"][0] = 0
+df_b["bonus"][1] = 0
+#'''
+
+new_data = {}
+new_data["1"] = df_1["1"]
+new_data["2"] = df_2["2"]
+new_data["3"] = df_3["3"]
+new_data["4"] = df_4["4"]
+new_data["5"] = df_5["5"]
+new_data["6"] = df_6["6"]
+new_data["bonus"] = df_b["bonus"]
+pd2 = pd.DataFrame( new_data )
+
+#print( f'{df_1["1"]}' )
+#print( f'{df_1["1"][1]}' )
+
+#import sys
+#sys.exit()
+
+
+'''
+for i in range(len(df_1)):
+    #if i == 10:
+    #    break
+    
+    print( "[{}] {}, {}, {}, {}, {}, {}, {}".format(
+            i,
+            df_1["1"][i],
+            df_2["2"][i],
+            df_3["3"][i],
+            df_4["4"][i],
+            df_5["5"][i],
+            df_6["6"][i],
+            df_b["bonus"][i]) )
+print()
+'''
+
+df_1_count = df_1["1"].value_counts()
+df_2_count = df_2["2"].value_counts()
+df_3_count = df_3["3"].value_counts()
+df_4_count = df_4["4"].value_counts()
+df_5_count = df_5["5"].value_counts()
+df_6_count = df_6["6"].value_counts()
+df_b_count = df_b["bonus"].value_counts()
+
+#print( "df_1_count\n{}".format(df_1_count) )
+#print()
+
+df_count_merge = pd.merge( df_1_count, df_2_count, left_index=True, right_index=True, how="outer")
+df_count_merge = pd.merge( df_count_merge, df_3_count, left_index=True, right_index=True, how="outer")
+df_count_merge = pd.merge( df_count_merge, df_4_count, left_index=True, right_index=True, how="outer")
+df_count_merge = pd.merge( df_count_merge, df_5_count, left_index=True, right_index=True, how="outer")
+df_count_merge = pd.merge( df_count_merge, df_6_count, left_index=True, right_index=True, how="outer")
+df_count_merge = pd.merge( df_count_merge, df_b_count, left_index=True, right_index=True, how="outer")
+#pd.options.display.float_format = "{:,.0f}".format
+print( df_count_merge )
+#print()
+
+df_count_merge["sum"] = df_count_merge.fillna(0).apply(
+        # 1, 2, 3, 4, 5, 6, bonus
+        #lambda x: x["1"] + x["2"] + x["3"] + x["4"] + x["5"] + x["6"] + x["bonus"], axis=1 )
+        lambda x: x[13] + x[14] + x[15] + x[16] + x[17] + x[18] + x[19], axis=1 )
+print( df_count_merge )
+print()
+
+result = df_count_merge.sort_values( by="sum", ascending=False )
+#result = result.fillna(0)
+#columns_new = {"13": "1", "14": "2", "15": "3", "16": "4", "17": "5", "18": "6", "19": "bonus"}
+columns_new = {result.columns[0]: "1", result.columns[1]: "2", result.columns[2]: "3",
+               result.columns[3]: "4", result.columns[4]: "5", result.columns[5]: "6",
+               result.columns[6]: "bonus"}
+#print( list(map(int, result.index)) )
+result.index = list(map(int, result.index))
+result = result.rename( columns=columns_new )
+print( "result:" )
+print( result )
+print()
+#print( result.columns )
+#print( result.index )
+
+
+#print( result["1"] )
+#print( result["1"][1] )
+#print()
+
+#print( result.columns.values )
+#print()
+
+#print( df_count_merge.columns.values )
+#print( df.columns.values )
+#print( df.columns.values[0] )
+#print( len(df) )
+#print( df.iloc[0] )
+
+
+#for a in range(len(result.columns.values) - 2):
+#    print( result.columns.values[a] )
+#print( result.columns[0], result.columns[1], result.columns[2], result.columns[3], result.columns[4], result.columns[5] )
+#print( result["1"][1], result["2"][1], result["3"][1], result["4"][1], result["5"][1], result["6"][1] )
+#print( result["1"][2], result["2"][2], result["3"][2], result["4"][2], result["5"][2], result["6"][2] )
+
+
+#import sys
+#sys.exit()
+#"""
 
 
 
@@ -321,10 +534,13 @@ with open('model_lotto645.h', 'w') as f:
 
 from numpy.random import seed
 from numpy.random import randint
-total_generate = 100
+total_generate = (100*5) * 3
 total_games = 5
-result_won = [6,21,36,38,39,43,30] # no. 964
-result_won_game = "no.964"
+#result_won = [6,21,36,38,39,43,30] # no. 964
+#result_won_game = "no.964"
+#result_won = [9,18,20,22,38,44,10] # no. 964
+result_won = [6, 7, 22, 32, 35, 36, 19] # no. 964
+result_won_game = "no.1024"
 result_matched_all = []
 result_matched_one_game = []
 result_predict_all = []
