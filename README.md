@@ -43,5 +43,5 @@ Screenshots
 ----------
 
 > Android App
-![alt tag](https://github.com/godmode2k/lotto645/raw/main/Android/Screenshot_1676280079.png){: width="40%" height="40%"}
+<img src="https://github.com/godmode2k/lotto645/raw/main/Android/Screenshot_1676280079.png" width="40%" height="40%">
 
