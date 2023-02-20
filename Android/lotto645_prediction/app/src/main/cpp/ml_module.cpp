@@ -105,7 +105,7 @@ extern "C" {
 #define MAX_MATCH_NUMBER  6
 
 // for display last game (number of games: no.1 ~ present)
-#define LAST_GAME   "1 ~ 1054회\n(2023년 02월 11일 추첨)"
+#define LAST_GAME   "1 ~ 1055회\n(2023년 02월 18일 추첨)"
 
 //int main(int argc, char* argv[]) {
 //    if ( argc < 2 ) {
@@ -121,10 +121,10 @@ int main_ml(int _total_generate, int _total_games, std::vector<char*>*& ret_resu
     int total_games = _total_games;
 
     // for display last game (number of games: no.1 ~ present)
-    const char* last_game = "no.1024"; // range: no.1 ~ present
+    const char* last_game = "no.1055"; // range: no.1 ~ present
 
-    int result_won[] = { 14, 19, 27, 28, 30, 45, 33 }; // ignore
-    const char* result_won_game = "no.1054"; // ignore
+    int result_won[] = { 4, 7, 12, 14, 22, 33, 31 }; // ignore
+    const char* result_won_game = "no.1055"; // ignore
     std::vector<int> result_matched_all;
     std::vector<int> result_matched_one_game;
     std::vector<std::array<int, MAX_MATCH_NUMBER>> result_predict_all;
@@ -367,7 +367,7 @@ int main_ml(int _total_generate, int _total_games, std::vector<char*>*& ret_resu
 #endif
 
 
-        const int BUF_LEN = 12 + 5 + 10 + 1; // 12 (numbers: 2x6), ',', ''
+        const int BUF_LEN = 12 + 5 + 10 + 1; // 12 (numbers: 2*6), 5 (','), 10 ('  ': 2*5)
         const int BUF_DESC_LEN = 100;
 
         // for display last game (number of games: no.1 ~ present)
