@@ -44451,7 +44451,7 @@ namespace Eloquent {
                         - kernels[1978]
                         - kernels[1979]
                         ;
-                        decisions[461] = 0.0
+                        decisions[461] = -0.0
                         + kernels[495]
                         + kernels[496]
                         + kernels[497]
@@ -69751,7 +69751,7 @@ namespace Eloquent {
                         - kernels[1978]
                         - kernels[1979]
                         ;
-                        decisions[736] = 0.0
+                        decisions[736] = -0.0
                         + kernels[945]
                         + kernels[946]
                         + kernels[947]
@@ -86955,7 +86955,7 @@ namespace Eloquent {
                         - kernels[1978]
                         - kernels[1979]
                         ;
-                        decisions[923] = -0.0
+                        decisions[923] = 0.0
                         + kernels[1440]
                         + kernels[1441]
                         + kernels[1442]
