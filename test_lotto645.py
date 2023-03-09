@@ -185,7 +185,7 @@ print()
 #
 # Excel (.xls) file (NOT modified)
 # ---------------------------------
-xls_filename = "./lotto645_당첨번호1055회차까지.xls"
+xls_filename = "./lotto645_당첨번호1057회차까지.xls"
 #df = pd.read_excel( xls_filename )
 df_excel_list = pd.read_html( xls_filename )
 pd.options.display.float_format = "{:,.2f}".format
