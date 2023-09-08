@@ -105,7 +105,7 @@ extern "C" {
 #define MAX_MATCH_NUMBER  6
 
 // for display last game (number of games: no.1 ~ present)
-#define LAST_GAME   "1 ~ 1057회\n(2023년 03월 04일 추첨)"
+#define LAST_GAME   "1 ~ 1083회\n(2023년 09월 02일 추첨까지)"
 
 //int main(int argc, char* argv[]) {
 //    if ( argc < 2 ) {
@@ -297,8 +297,8 @@ int main_ml(int _total_generate, int _total_games, std::vector<char*>*& ret_resu
                     }
                     else {
 #ifdef ENABLE_LOG
-                        printf( "result_matched_one_game: found a duplocated, skip...\n" );
-                        LOGD( "main_ml(): result_matched_one_game: found a duplocated, skip...\n" );
+                        printf( "result_matched_one_game: found a duplicated, skip...\n" );
+                        LOGD( "main_ml(): result_matched_one_game: found a duplicated, skip...\n" );
 #endif
                     }
                 }

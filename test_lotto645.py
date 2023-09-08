@@ -185,7 +185,7 @@ print()
 #
 # Excel (.xls) file (NOT modified)
 # ---------------------------------
-xls_filename = "./lotto645_당첨번호1057회차까지.xls"
+xls_filename = "./lotto645_당첨번호1083회차까지.xls"
 #df = pd.read_excel( xls_filename )
 df_excel_list = pd.read_html( xls_filename )
 pd.options.display.float_format = "{:,.2f}".format
@@ -534,7 +534,9 @@ with open('model_lotto645.h', 'w') as f:
 
 from numpy.random import seed
 from numpy.random import randint
-total_generate = (100*5) * 3
+#from numpy.random import choice
+total_generate = 100*2
+#total_generate = (100*5) * 3
 total_games = 5
 #result_won = [6,21,36,38,39,43,30] # no. 964
 #result_won_game = "no.964"
@@ -554,9 +556,16 @@ for x_gen in range(total_generate):
                 #input_val = randint( 1, 45, 7 ) # 1 ~ 6, bonus
                 input_val = randint( 1, 45, 6 ) # 1 ~ 6 (without bonus)
                 #print( input_val )
-            
+
                 _result = classifier.predict( [input_val] ) # 0 ~ 44
                 _result += 1 # start at 1
+                    
+                ## 50 : 50
+                #if (j % 2) != 0:
+                #    _result = classifier.predict( [input_val] ) # 0 ~ 44
+                #    _result += 1 # start at 1
+                #else:
+                #    _result = choice( input_val )
                 
                 # Note
                 #        1     2     3     4     5      6  bonus    sum

@@ -14,7 +14,7 @@ namespace Eloquent {
                         float kernels[2025] = { 0 };
                         float decisions[990] = { 0 };
                         int votes[45] = { 0 };
-                        kernels[0] = compute_kernel(x,   146.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
+                        kernels[0] = compute_kernel(x,   151.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[2] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[3] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -60,7 +60,7 @@ namespace Eloquent {
                         kernels[43] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[44] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[45] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[46] = compute_kernel(x,   121.0  , 20.0  , 0.0  , 0.0  , 0.0  , 0.0 );
+                        kernels[46] = compute_kernel(x,   121.0  , 21.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[47] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[48] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[49] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -106,7 +106,7 @@ namespace Eloquent {
                         kernels[89] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[90] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[91] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[92] = compute_kernel(x,   103.0  , 34.0  , 3.0  , 0.0  , 0.0  , 0.0 );
+                        kernels[92] = compute_kernel(x,   110.0  , 34.0  , 3.0  , 0.0  , 0.0  , 0.0 );
                         kernels[93] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[94] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[95] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -152,7 +152,7 @@ namespace Eloquent {
                         kernels[135] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[136] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[137] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[138] = compute_kernel(x,   93.0  , 44.0  , 4.0  , 0.0  , 0.0  , 0.0 );
+                        kernels[138] = compute_kernel(x,   97.0  , 44.0  , 4.0  , 0.0  , 0.0  , 0.0 );
                         kernels[139] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[140] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[141] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -244,7 +244,7 @@ namespace Eloquent {
                         kernels[227] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[228] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[229] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[230] = compute_kernel(x,   79.0  , 40.0  , 12.0  , 3.0  , 0.0  , 0.0 );
+                        kernels[230] = compute_kernel(x,   82.0  , 44.0  , 12.0  , 3.0  , 0.0  , 0.0 );
                         kernels[231] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[232] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[233] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -290,7 +290,7 @@ namespace Eloquent {
                         kernels[273] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[274] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[275] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[276] = compute_kernel(x,   66.0  , 63.0  , 10.0  , 0.0  , 0.0  , 0.0 );
+                        kernels[276] = compute_kernel(x,   68.0  , 66.0  , 10.0  , 0.0  , 0.0  , 0.0 );
                         kernels[277] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[278] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[279] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -336,7 +336,7 @@ namespace Eloquent {
                         kernels[319] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[320] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[321] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[322] = compute_kernel(x,   52.0  , 64.0  , 18.0  , 3.0  , 0.0  , 0.0 );
+                        kernels[322] = compute_kernel(x,   52.0  , 66.0  , 18.0  , 3.0  , 0.0  , 0.0 );
                         kernels[323] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[324] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[325] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -382,7 +382,7 @@ namespace Eloquent {
                         kernels[365] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[366] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[367] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[368] = compute_kernel(x,   39.0  , 53.0  , 16.0  , 4.0  , 1.0  , 0.0 );
+                        kernels[368] = compute_kernel(x,   39.0  , 54.0  , 18.0  , 4.0  , 1.0  , 0.0 );
                         kernels[369] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[370] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[371] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -428,7 +428,7 @@ namespace Eloquent {
                         kernels[411] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[412] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[413] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[414] = compute_kernel(x,   40.0  , 65.0  , 33.0  , 1.0  , 1.0  , 0.0 );
+                        kernels[414] = compute_kernel(x,   40.0  , 70.0  , 33.0  , 1.0  , 1.0  , 0.0 );
                         kernels[415] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[416] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[417] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -474,7 +474,7 @@ namespace Eloquent {
                         kernels[457] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[458] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[459] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[460] = compute_kernel(x,   34.0  , 64.0  , 32.0  , 13.0  , 0.0  , 0.0 );
+                        kernels[460] = compute_kernel(x,   35.0  , 65.0  , 34.0  , 13.0  , 0.0  , 0.0 );
                         kernels[461] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[462] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[463] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -566,7 +566,7 @@ namespace Eloquent {
                         kernels[549] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[550] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[551] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[552] = compute_kernel(x,   28.0  , 49.0  , 59.0  , 13.0  , 2.0  , 0.0 );
+                        kernels[552] = compute_kernel(x,   29.0  , 49.0  , 59.0  , 13.0  , 2.0  , 0.0 );
                         kernels[553] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[554] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[555] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -612,7 +612,7 @@ namespace Eloquent {
                         kernels[595] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[596] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[597] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[598] = compute_kernel(x,   31.0  , 52.0  , 44.0  , 24.0  , 1.0  , 0.0 );
+                        kernels[598] = compute_kernel(x,   31.0  , 52.0  , 46.0  , 25.0  , 1.0  , 0.0 );
                         kernels[599] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[600] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[601] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -658,7 +658,7 @@ namespace Eloquent {
                         kernels[641] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[642] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[643] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[644] = compute_kernel(x,   13.0  , 53.0  , 53.0  , 22.0  , 3.0  , 0.0 );
+                        kernels[644] = compute_kernel(x,   13.0  , 53.0  , 53.0  , 23.0  , 3.0  , 0.0 );
                         kernels[645] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[646] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[647] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -704,7 +704,7 @@ namespace Eloquent {
                         kernels[687] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[688] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[689] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[690] = compute_kernel(x,   21.0  , 37.0  , 46.0  , 31.0  , 3.0  , 0.0 );
+                        kernels[690] = compute_kernel(x,   22.0  , 38.0  , 48.0  , 31.0  , 3.0  , 0.0 );
                         kernels[691] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[692] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[693] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -750,7 +750,7 @@ namespace Eloquent {
                         kernels[733] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[734] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[735] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[736] = compute_kernel(x,   18.0  , 45.0  , 49.0  , 31.0  , 9.0  , 0.0 );
+                        kernels[736] = compute_kernel(x,   18.0  , 45.0  , 50.0  , 31.0  , 9.0  , 0.0 );
                         kernels[737] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[738] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[739] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -796,7 +796,7 @@ namespace Eloquent {
                         kernels[779] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[780] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[781] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[782] = compute_kernel(x,   7.0  , 47.0  , 57.0  , 32.0  , 11.0  , 1.0 );
+                        kernels[782] = compute_kernel(x,   7.0  , 50.0  , 59.0  , 33.0  , 11.0  , 1.0 );
                         kernels[783] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[784] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[785] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -842,7 +842,7 @@ namespace Eloquent {
                         kernels[825] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[826] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[827] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[828] = compute_kernel(x,   12.0  , 28.0  , 56.0  , 30.0  , 11.0  , 3.0 );
+                        kernels[828] = compute_kernel(x,   12.0  , 28.0  , 59.0  , 31.0  , 11.0  , 3.0 );
                         kernels[829] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[830] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[831] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -888,7 +888,7 @@ namespace Eloquent {
                         kernels[871] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[872] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[873] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[874] = compute_kernel(x,   4.0  , 31.0  , 59.0  , 34.0  , 16.0  , 4.0 );
+                        kernels[874] = compute_kernel(x,   5.0  , 31.0  , 61.0  , 34.0  , 16.0  , 4.0 );
                         kernels[875] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[876] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[877] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -934,7 +934,7 @@ namespace Eloquent {
                         kernels[917] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[918] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[919] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[920] = compute_kernel(x,   7.0  , 29.0  , 40.0  , 44.0  , 19.0  , 3.0 );
+                        kernels[920] = compute_kernel(x,   8.0  , 29.0  , 40.0  , 45.0  , 20.0  , 3.0 );
                         kernels[921] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[922] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[923] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -980,7 +980,7 @@ namespace Eloquent {
                         kernels[963] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[964] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[965] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[966] = compute_kernel(x,   5.0  , 21.0  , 41.0  , 36.0  , 17.0  , 3.0 );
+                        kernels[966] = compute_kernel(x,   5.0  , 21.0  , 43.0  , 38.0  , 19.0  , 3.0 );
                         kernels[967] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[968] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[969] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -1026,7 +1026,7 @@ namespace Eloquent {
                         kernels[1009] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1010] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1011] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[1012] = compute_kernel(x,   3.0  , 21.0  , 35.0  , 44.0  , 18.0  , 4.0 );
+                        kernels[1012] = compute_kernel(x,   3.0  , 23.0  , 36.0  , 49.0  , 18.0  , 4.0 );
                         kernels[1013] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1014] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1015] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -1072,7 +1072,7 @@ namespace Eloquent {
                         kernels[1055] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1056] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1057] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[1058] = compute_kernel(x,   2.0  , 14.0  , 42.0  , 50.0  , 29.0  , 3.0 );
+                        kernels[1058] = compute_kernel(x,   2.0  , 15.0  , 44.0  , 51.0  , 31.0  , 3.0 );
                         kernels[1059] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1060] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1061] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -1118,7 +1118,7 @@ namespace Eloquent {
                         kernels[1101] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1102] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1103] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[1104] = compute_kernel(x,   1.0  , 17.0  , 36.0  , 47.0  , 27.0  , 6.0 );
+                        kernels[1104] = compute_kernel(x,   1.0  , 17.0  , 37.0  , 48.0  , 27.0  , 6.0 );
                         kernels[1105] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1106] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1107] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -1164,7 +1164,7 @@ namespace Eloquent {
                         kernels[1147] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1148] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1149] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[1150] = compute_kernel(x,   3.0  , 12.0  , 38.0  , 53.0  , 31.0  , 6.0 );
+                        kernels[1150] = compute_kernel(x,   3.0  , 13.0  , 38.0  , 54.0  , 31.0  , 6.0 );
                         kernels[1151] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1152] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1153] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -1210,7 +1210,7 @@ namespace Eloquent {
                         kernels[1193] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1194] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1195] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[1196] = compute_kernel(x,   1.0  , 16.0  , 34.0  , 53.0  , 40.0  , 10.0 );
+                        kernels[1196] = compute_kernel(x,   1.0  , 16.0  , 36.0  , 54.0  , 40.0  , 10.0 );
                         kernels[1197] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1198] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1199] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -1256,7 +1256,7 @@ namespace Eloquent {
                         kernels[1239] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1240] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1241] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[1242] = compute_kernel(x,   0.0  , 4.0  , 35.0  , 38.0  , 39.0  , 11.0 );
+                        kernels[1242] = compute_kernel(x,   0.0  , 4.0  , 36.0  , 38.0  , 42.0  , 11.0 );
                         kernels[1243] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1244] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1245] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -1348,7 +1348,7 @@ namespace Eloquent {
                         kernels[1331] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1332] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1333] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[1334] = compute_kernel(x,   0.0  , 7.0  , 32.0  , 44.0  , 32.0  , 12.0 );
+                        kernels[1334] = compute_kernel(x,   0.0  , 7.0  , 32.0  , 47.0  , 34.0  , 12.0 );
                         kernels[1335] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1336] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1337] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -1394,7 +1394,7 @@ namespace Eloquent {
                         kernels[1377] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1378] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1379] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[1380] = compute_kernel(x,   0.0  , 3.0  , 23.0  , 56.0  , 44.0  , 16.0 );
+                        kernels[1380] = compute_kernel(x,   0.0  , 4.0  , 23.0  , 57.0  , 44.0  , 17.0 );
                         kernels[1381] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1382] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1383] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -1440,7 +1440,7 @@ namespace Eloquent {
                         kernels[1423] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1424] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1425] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[1426] = compute_kernel(x,   0.0  , 3.0  , 12.0  , 46.0  , 41.0  , 20.0 );
+                        kernels[1426] = compute_kernel(x,   0.0  , 3.0  , 13.0  , 47.0  , 45.0  , 21.0 );
                         kernels[1427] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1428] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1429] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -1486,7 +1486,7 @@ namespace Eloquent {
                         kernels[1469] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1470] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1471] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[1472] = compute_kernel(x,   0.0  , 2.0  , 16.0  , 51.0  , 55.0  , 23.0 );
+                        kernels[1472] = compute_kernel(x,   0.0  , 2.0  , 16.0  , 53.0  , 56.0  , 24.0 );
                         kernels[1473] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1474] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1475] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -1532,7 +1532,7 @@ namespace Eloquent {
                         kernels[1515] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1516] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1517] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[1518] = compute_kernel(x,   0.0  , 3.0  , 11.0  , 43.0  , 73.0  , 32.0 );
+                        kernels[1518] = compute_kernel(x,   0.0  , 3.0  , 11.0  , 43.0  , 75.0  , 32.0 );
                         kernels[1519] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1520] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1521] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -1578,7 +1578,7 @@ namespace Eloquent {
                         kernels[1561] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1562] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1563] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[1564] = compute_kernel(x,   1.0  , 0.0  , 11.0  , 36.0  , 53.0  , 36.0 );
+                        kernels[1564] = compute_kernel(x,   1.0  , 0.0  , 11.0  , 38.0  , 53.0  , 39.0 );
                         kernels[1565] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1566] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1567] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -1624,7 +1624,7 @@ namespace Eloquent {
                         kernels[1607] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1608] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1609] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[1610] = compute_kernel(x,   0.0  , 2.0  , 7.0  , 31.0  , 56.0  , 47.0 );
+                        kernels[1610] = compute_kernel(x,   0.0  , 2.0  , 7.0  , 31.0  , 59.0  , 47.0 );
                         kernels[1611] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1612] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1613] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -1670,7 +1670,7 @@ namespace Eloquent {
                         kernels[1653] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1654] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1655] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[1656] = compute_kernel(x,   0.0  , 1.0  , 9.0  , 23.0  , 61.0  , 52.0 );
+                        kernels[1656] = compute_kernel(x,   0.0  , 1.0  , 9.0  , 23.0  , 63.0  , 53.0 );
                         kernels[1657] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1658] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1659] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -1716,7 +1716,7 @@ namespace Eloquent {
                         kernels[1699] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1700] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1701] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[1702] = compute_kernel(x,   0.0  , 0.0  , 3.0  , 23.0  , 61.0  , 52.0 );
+                        kernels[1702] = compute_kernel(x,   0.0  , 0.0  , 3.0  , 23.0  , 62.0  , 57.0 );
                         kernels[1703] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1704] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1705] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -1808,7 +1808,7 @@ namespace Eloquent {
                         kernels[1791] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1792] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1793] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[1794] = compute_kernel(x,   0.0  , 0.0  , 1.0  , 13.0  , 51.0  , 81.0 );
+                        kernels[1794] = compute_kernel(x,   0.0  , 0.0  , 1.0  , 14.0  , 52.0  , 83.0 );
                         kernels[1795] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1796] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1797] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -1854,7 +1854,7 @@ namespace Eloquent {
                         kernels[1837] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1838] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1839] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[1840] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 10.0  , 51.0  , 70.0 );
+                        kernels[1840] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 10.0  , 52.0  , 72.0 );
                         kernels[1841] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1842] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1843] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -1900,7 +1900,7 @@ namespace Eloquent {
                         kernels[1883] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1884] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1885] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[1886] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 4.0  , 44.0  , 90.0 );
+                        kernels[1886] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 4.0  , 44.0  , 91.0 );
                         kernels[1887] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1888] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1889] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -1946,7 +1946,7 @@ namespace Eloquent {
                         kernels[1929] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1930] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1931] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[1932] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 2.0  , 30.0  , 116.0 );
+                        kernels[1932] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 2.0  , 30.0  , 118.0 );
                         kernels[1933] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1934] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1935] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -1992,7 +1992,7 @@ namespace Eloquent {
                         kernels[1975] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1976] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1977] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[1978] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 11.0  , 130.0 );
+                        kernels[1978] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 12.0  , 131.0 );
                         kernels[1979] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1980] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[1981] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
@@ -2038,7 +2038,7 @@ namespace Eloquent {
                         kernels[2021] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[2022] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
                         kernels[2023] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 );
-                        kernels[2024] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 151.0 );
+                        kernels[2024] = compute_kernel(x,   0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 157.0 );
                         decisions[0] = 0.0
                         + kernels[0]
                         + kernels[1]
@@ -8847,7 +8847,7 @@ namespace Eloquent {
                         - kernels[1438]
                         - kernels[1439]
                         ;
-                        decisions[74] = -0.0
+                        decisions[74] = 0.0
                         + kernels[45]
                         + kernels[46]
                         + kernels[47]
@@ -8939,7 +8939,7 @@ namespace Eloquent {
                         - kernels[1483]
                         - kernels[1484]
                         ;
-                        decisions[75] = 0.0
+                        decisions[75] = -0.0
                         + kernels[45]
                         + kernels[46]
                         + kernels[47]
@@ -9123,7 +9123,7 @@ namespace Eloquent {
                         - kernels[1573]
                         - kernels[1574]
                         ;
-                        decisions[77] = 0.0
+                        decisions[77] = -0.0
                         + kernels[45]
                         + kernels[46]
                         + kernels[47]
@@ -9215,7 +9215,7 @@ namespace Eloquent {
                         - kernels[1618]
                         - kernels[1619]
                         ;
-                        decisions[78] = -0.0
+                        decisions[78] = 0.0
                         + kernels[45]
                         + kernels[46]
                         + kernels[47]
@@ -9307,7 +9307,7 @@ namespace Eloquent {
                         - kernels[1663]
                         - kernels[1664]
                         ;
-                        decisions[79] = -0.0
+                        decisions[79] = 0.0
                         + kernels[45]
                         + kernels[46]
                         + kernels[47]
@@ -9491,7 +9491,7 @@ namespace Eloquent {
                         - kernels[1753]
                         - kernels[1754]
                         ;
-                        decisions[81] = -0.0
+                        decisions[81] = 0.0
                         + kernels[45]
                         + kernels[46]
                         + kernels[47]
@@ -9583,7 +9583,7 @@ namespace Eloquent {
                         - kernels[1798]
                         - kernels[1799]
                         ;
-                        decisions[82] = -0.0
+                        decisions[82] = 0.0
                         + kernels[45]
                         + kernels[46]
                         + kernels[47]
@@ -9675,7 +9675,7 @@ namespace Eloquent {
                         - kernels[1843]
                         - kernels[1844]
                         ;
-                        decisions[83] = -0.0
+                        decisions[83] = 0.0
                         + kernels[45]
                         + kernels[46]
                         + kernels[47]
@@ -12803,7 +12803,7 @@ namespace Eloquent {
                         - kernels[1483]
                         - kernels[1484]
                         ;
-                        decisions[117] = 0.0
+                        decisions[117] = -0.0
                         + kernels[90]
                         + kernels[91]
                         + kernels[92]
@@ -13631,7 +13631,7 @@ namespace Eloquent {
                         - kernels[1888]
                         - kernels[1889]
                         ;
-                        decisions[126] = 0.0
+                        decisions[126] = -0.0
                         + kernels[90]
                         + kernels[91]
                         + kernels[92]
@@ -13723,7 +13723,7 @@ namespace Eloquent {
                         - kernels[1933]
                         - kernels[1934]
                         ;
-                        decisions[127] = 0.0
+                        decisions[127] = -0.0
                         + kernels[90]
                         + kernels[91]
                         + kernels[92]
@@ -13815,7 +13815,7 @@ namespace Eloquent {
                         - kernels[1978]
                         - kernels[1979]
                         ;
-                        decisions[128] = -0.0
+                        decisions[128] = 0.0
                         + kernels[90]
                         + kernels[91]
                         + kernels[92]
@@ -17311,7 +17311,7 @@ namespace Eloquent {
                         - kernels[1843]
                         - kernels[1844]
                         ;
-                        decisions[166] = 0.0
+                        decisions[166] = -0.0
                         + kernels[135]
                         + kernels[136]
                         + kernels[137]
@@ -17403,7 +17403,7 @@ namespace Eloquent {
                         - kernels[1888]
                         - kernels[1889]
                         ;
-                        decisions[167] = 0.0
+                        decisions[167] = -0.0
                         + kernels[135]
                         + kernels[136]
                         + kernels[137]
@@ -21175,7 +21175,7 @@ namespace Eloquent {
                         - kernels[1933]
                         - kernels[1934]
                         ;
-                        decisions[208] = 0.0
+                        decisions[208] = -0.0
                         + kernels[180]
                         + kernels[181]
                         + kernels[182]
@@ -21267,7 +21267,7 @@ namespace Eloquent {
                         - kernels[1978]
                         - kernels[1979]
                         ;
-                        decisions[209] = -0.0
+                        decisions[209] = 0.0
                         + kernels[180]
                         + kernels[181]
                         + kernels[182]
@@ -24671,7 +24671,7 @@ namespace Eloquent {
                         - kernels[1888]
                         - kernels[1889]
                         ;
-                        decisions[246] = -0.0
+                        decisions[246] = 0.0
                         + kernels[225]
                         + kernels[226]
                         + kernels[227]
@@ -24763,7 +24763,7 @@ namespace Eloquent {
                         - kernels[1933]
                         - kernels[1934]
                         ;
-                        decisions[247] = 0.0
+                        decisions[247] = -0.0
                         + kernels[225]
                         + kernels[226]
                         + kernels[227]
@@ -28259,7 +28259,7 @@ namespace Eloquent {
                         - kernels[1933]
                         - kernels[1934]
                         ;
-                        decisions[285] = -0.0
+                        decisions[285] = 0.0
                         + kernels[270]
                         + kernels[271]
                         + kernels[272]
@@ -31755,7 +31755,7 @@ namespace Eloquent {
                         - kernels[1978]
                         - kernels[1979]
                         ;
-                        decisions[323] = 0.0
+                        decisions[323] = -0.0
                         + kernels[315]
                         + kernels[316]
                         + kernels[317]
@@ -38103,7 +38103,7 @@ namespace Eloquent {
                         - kernels[1888]
                         - kernels[1889]
                         ;
-                        decisions[392] = -0.0
+                        decisions[392] = 0.0
                         + kernels[405]
                         + kernels[406]
                         + kernels[407]
@@ -38195,7 +38195,7 @@ namespace Eloquent {
                         - kernels[1933]
                         - kernels[1934]
                         ;
-                        decisions[393] = -0.0
+                        decisions[393] = 0.0
                         + kernels[405]
                         + kernels[406]
                         + kernels[407]
@@ -44451,7 +44451,7 @@ namespace Eloquent {
                         - kernels[1978]
                         - kernels[1979]
                         ;
-                        decisions[461] = 0.0
+                        decisions[461] = -0.0
                         + kernels[495]
                         + kernels[496]
                         + kernels[497]
@@ -47211,7 +47211,7 @@ namespace Eloquent {
                         - kernels[1888]
                         - kernels[1889]
                         ;
-                        decisions[491] = 0.0
+                        decisions[491] = -0.0
                         + kernels[540]
                         + kernels[541]
                         + kernels[542]
@@ -47395,7 +47395,7 @@ namespace Eloquent {
                         - kernels[1978]
                         - kernels[1979]
                         ;
-                        decisions[493] = 0.0
+                        decisions[493] = -0.0
                         + kernels[540]
                         + kernels[541]
                         + kernels[542]
@@ -50155,7 +50155,7 @@ namespace Eloquent {
                         - kernels[1933]
                         - kernels[1934]
                         ;
-                        decisions[523] = 0.0
+                        decisions[523] = -0.0
                         + kernels[585]
                         + kernels[586]
                         + kernels[587]
@@ -50247,7 +50247,7 @@ namespace Eloquent {
                         - kernels[1978]
                         - kernels[1979]
                         ;
-                        decisions[524] = -0.0
+                        decisions[524] = 0.0
                         + kernels[585]
                         + kernels[586]
                         + kernels[587]
@@ -52915,7 +52915,7 @@ namespace Eloquent {
                         - kernels[1933]
                         - kernels[1934]
                         ;
-                        decisions[553] = -0.0
+                        decisions[553] = 0.0
                         + kernels[630]
                         + kernels[631]
                         + kernels[632]
@@ -53007,7 +53007,7 @@ namespace Eloquent {
                         - kernels[1978]
                         - kernels[1979]
                         ;
-                        decisions[554] = -0.0
+                        decisions[554] = 0.0
                         + kernels[630]
                         + kernels[631]
                         + kernels[632]
@@ -55583,7 +55583,7 @@ namespace Eloquent {
                         - kernels[1933]
                         - kernels[1934]
                         ;
-                        decisions[582] = 0.0
+                        decisions[582] = -0.0
                         + kernels[675]
                         + kernels[676]
                         + kernels[677]
@@ -58251,7 +58251,7 @@ namespace Eloquent {
                         - kernels[1978]
                         - kernels[1979]
                         ;
-                        decisions[611] = -0.0
+                        decisions[611] = 0.0
                         + kernels[720]
                         + kernels[721]
                         + kernels[722]
@@ -60551,7 +60551,7 @@ namespace Eloquent {
                         - kernels[1888]
                         - kernels[1889]
                         ;
-                        decisions[636] = 0.0
+                        decisions[636] = -0.0
                         + kernels[765]
                         + kernels[766]
                         + kernels[767]
@@ -60643,7 +60643,7 @@ namespace Eloquent {
                         - kernels[1933]
                         - kernels[1934]
                         ;
-                        decisions[637] = 0.0
+                        decisions[637] = -0.0
                         + kernels[765]
                         + kernels[766]
                         + kernels[767]
@@ -67635,7 +67635,7 @@ namespace Eloquent {
                         - kernels[1978]
                         - kernels[1979]
                         ;
-                        decisions[713] = -0.0
+                        decisions[713] = 0.0
                         + kernels[900]
                         + kernels[901]
                         + kernels[902]
@@ -69751,7 +69751,7 @@ namespace Eloquent {
                         - kernels[1978]
                         - kernels[1979]
                         ;
-                        decisions[736] = 0.0
+                        decisions[736] = -0.0
                         + kernels[945]
                         + kernels[946]
                         + kernels[947]
@@ -75547,7 +75547,7 @@ namespace Eloquent {
                         - kernels[1978]
                         - kernels[1979]
                         ;
-                        decisions[799] = -0.0
+                        decisions[799] = 0.0
                         + kernels[1080]
                         + kernels[1081]
                         + kernels[1082]
@@ -81987,7 +81987,7 @@ namespace Eloquent {
                         - kernels[1978]
                         - kernels[1979]
                         ;
-                        decisions[869] = 0.0
+                        decisions[869] = -0.0
                         + kernels[1260]
                         + kernels[1261]
                         + kernels[1262]
@@ -84655,7 +84655,7 @@ namespace Eloquent {
                         - kernels[1978]
                         - kernels[1979]
                         ;
-                        decisions[898] = -0.0
+                        decisions[898] = 0.0
                         + kernels[1350]
                         + kernels[1351]
                         + kernels[1352]
@@ -85851,7 +85851,7 @@ namespace Eloquent {
                         - kernels[1978]
                         - kernels[1979]
                         ;
-                        decisions[911] = 0.0
+                        decisions[911] = -0.0
                         + kernels[1395]
                         + kernels[1396]
                         + kernels[1397]
@@ -86955,7 +86955,7 @@ namespace Eloquent {
                         - kernels[1978]
                         - kernels[1979]
                         ;
-                        decisions[923] = -0.0
+                        decisions[923] = 0.0
                         + kernels[1440]
                         + kernels[1441]
                         + kernels[1442]
@@ -87967,7 +87967,7 @@ namespace Eloquent {
                         - kernels[1978]
                         - kernels[1979]
                         ;
-                        decisions[934] = 0.0
+                        decisions[934] = -0.0
                         + kernels[1485]
                         + kernels[1486]
                         + kernels[1487]
@@ -88887,7 +88887,7 @@ namespace Eloquent {
                         - kernels[1978]
                         - kernels[1979]
                         ;
-                        decisions[944] = 0.0
+                        decisions[944] = -0.0
                         + kernels[1530]
                         + kernels[1531]
                         + kernels[1532]
@@ -89715,7 +89715,7 @@ namespace Eloquent {
                         - kernels[1978]
                         - kernels[1979]
                         ;
-                        decisions[953] = 0.0
+                        decisions[953] = -0.0
                         + kernels[1575]
                         + kernels[1576]
                         + kernels[1577]
@@ -90451,7 +90451,7 @@ namespace Eloquent {
                         - kernels[1978]
                         - kernels[1979]
                         ;
-                        decisions[961] = 0.0
+                        decisions[961] = -0.0
                         + kernels[1620]
                         + kernels[1621]
                         + kernels[1622]
@@ -91095,7 +91095,7 @@ namespace Eloquent {
                         - kernels[1978]
                         - kernels[1979]
                         ;
-                        decisions[968] = 0.0
+                        decisions[968] = -0.0
                         + kernels[1665]
                         + kernels[1666]
                         + kernels[1667]
@@ -91647,7 +91647,7 @@ namespace Eloquent {
                         - kernels[1978]
                         - kernels[1979]
                         ;
-                        decisions[974] = 0.0
+                        decisions[974] = -0.0
                         + kernels[1710]
                         + kernels[1711]
                         + kernels[1712]
@@ -92475,7 +92475,7 @@ namespace Eloquent {
                         - kernels[1978]
                         - kernels[1979]
                         ;
-                        decisions[983] = 0.0
+                        decisions[983] = -0.0
                         + kernels[1800]
                         + kernels[1801]
                         + kernels[1802]
