@@ -38,6 +38,15 @@ results:
  - model_lotto645.h
  - model_lotto645_predicts_method.h
  - model_lotto645_results_winning_numbers.h
+
+
+// Android App
+APK requires Network permission to get a last winning numbers.
+You can also type the numbers if you don't want using Network.
+Or you can ignore that.
+
+안드로이드 앱에서 지난 번 당첨번호를 가져오기 위해 네트워크를 사용합니다.
+네트워크 사용을 원하지 않으면 당첨번호를 직접 입력하거나 해당 기능(버튼)을 사용하지 않으면 됩니다.
 ```
 
 
