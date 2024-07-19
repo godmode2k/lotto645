@@ -34,7 +34,7 @@ $ pip install https://github.com/eloquentarduino/micromlgen.git
 
 
 
-$ python3 test_lotto645.py
+$ python3 test_lotto645_tmp2.py
 ```
 
 
@@ -43,5 +43,5 @@ Screenshots
 ----------
 
 > Android App
-<img src="https://github.com/godmode2k/lotto645/raw/main/Android/Screenshot_1676280079.png" width="40%" height="40%">
+<img src="https://github.com/godmode2k/lotto645/raw/main/screenshot.jpg" width="40%" height="40%">
 

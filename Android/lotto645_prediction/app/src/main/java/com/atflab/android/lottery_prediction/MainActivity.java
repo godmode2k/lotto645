@@ -125,7 +125,10 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this,
                 new String[]{
                         Manifest.permission.INTERNET,
-                        Manifest.permission.READ_EXTERNAL_STORAGE},
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.ACCESS_NETWORK_STATE,
+                        Manifest.permission.INTERNET
+                },
                 100);   // 100: my request code
         }
         else {

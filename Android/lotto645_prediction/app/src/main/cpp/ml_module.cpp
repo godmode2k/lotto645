@@ -105,7 +105,12 @@ extern "C" {
 #define MAX_MATCH_NUMBER  6
 
 // for display last game (number of games: no.1 ~ present)
-#define LAST_GAME   "1 ~ 1083회\n(2023년 09월 02일 추첨까지)"
+//#define LAST_GAME   "1 ~ 1125회\n(2024년 06월 22일 추첨까지)"
+// SEE: model_lotto645_predicts_method.h
+
+
+#include "lotto645_predicts_method.cpp"
+
 
 //int main(int argc, char* argv[]) {
 //    if ( argc < 2 ) {
@@ -121,9 +126,12 @@ int main_ml(int _total_generate, int _total_games, std::vector<char*>*& ret_resu
     int total_games = _total_games;
 
     // for display last game (number of games: no.1 ~ present)
-    const char* last_game = "no.1057"; // range: no.1 ~ present
+    //const char* last_game = "no.1057"; // range: no.1 ~ present
+    // SEE: model_lotto645_predicts_method.h
 
-    int result_won[] = { 8, 13, 19, 27, 40, 45, 12 }; // ignore
+    //int result_won[] = { 8, 13, 19, 27, 40, 45, 12 }; // ignore
+    // SEE: model_lotto645_predicts_method.h
+    //
     const char* result_won_game = last_game; // ignore
     std::vector<int> result_matched_all;
     std::vector<int> result_matched_one_game;

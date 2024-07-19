@@ -35,6 +35,23 @@
             app:layout_constraintTop_toTopOf="parent"
             >
             <EditText
+                android:id="@+id/EditText_algorithm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:hint="algo."
+                android:inputType="none"
+                android:enabled="false"
+                android:focusable="false"
+                android:text="1"/>
+            <Button
+                android:id="@+id/Button_algorithm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:textStyle="bold"
+                android:text="Algo." />
+            <EditText
                 android:id="@+id/EditText_generate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -54,9 +71,92 @@
                 android:id="@+id/Button_generate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
+                android:layout_weight="3"
                 android:textStyle="bold"
                 android:text="제발!" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="당첨번호\n확인"/>
+            <EditText
+                android:id="@+id/EditText_winning_num1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:hint="1"
+                android:inputType="numberDecimal"
+                android:text=""/>
+            <EditText
+                android:id="@+id/EditText_winning_num2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:hint="2"
+                android:inputType="numberDecimal"
+                android:text=""/>
+            <EditText
+                android:id="@+id/EditText_winning_num3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:hint="3"
+                android:inputType="numberDecimal"
+                android:text=""/>
+            <EditText
+                android:id="@+id/EditText_winning_num4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:hint="4"
+                android:inputType="numberDecimal"
+                android:text=""/>
+            <EditText
+                android:id="@+id/EditText_winning_num5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:hint="5"
+                android:inputType="numberDecimal"
+                android:text=""/>
+            <EditText
+                android:id="@+id/EditText_winning_num6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:hint="6"
+                android:inputType="numberDecimal"
+                android:text=""/>
+            <EditText
+                android:id="@+id/EditText_winning_num7_bonus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:hint="7b"
+                android:inputType="numberDecimal"
+                android:text=""/>
+            <Button
+                android:id="@+id/Button_checks_numbers_clear"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="지움" />
+            <Button
+                android:id="@+id/Button_checks_numbers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="확인" />
         </LinearLayout>
         <ScrollView
             android:layout_width="match_parent"

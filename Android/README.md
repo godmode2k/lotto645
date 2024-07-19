@@ -33,10 +33,14 @@ or
 $ pip install https://github.com/eloquentarduino/micromlgen.git
 
 
-
-$ python3 test_lotto645.py
-results: model_lotto645.h, numbers
+$ python3 test_lotto645_tmp2.py
+results:
+ - model_lotto645.h
+ - model_lotto645_predicts_method.h
+ - model_lotto645_results_winning_numbers.h
 ```
+
+
 
 Android App
 ----------
@@ -45,33 +49,42 @@ $ cd lotto645_prediction/app/src/main/cpp/
 
 // Download (Excel: xls) all results
 // https://www.dhlottery.co.kr/gameResult.do?method=byWin
-lotto645_당첨번호1054회차까지.xls
+//
+// e.g., lotto645 당첨번호 1128회차까지
+// https://dhlottery.co.kr/gameResult.do?method=allWinExel&gubun=byWin&nowPage=
+// &drwNoStart=1&drwNoEnd=1128
+
+Rename download file:
+ - lotto645_당첨번호1128회차까지.xls
 
 
 (Edit)
-test_lotto645.py: 188
+test_lotto645_tmp2.py: 188
 
-xls_filename = "./lotto645_당첨번호1054회차까지.xls"
+_xls_filename = "./lotto645_당첨번호1128회차까지.xls"
 
-$ python3 test_lotto645.py
-results: model_lotto645.h, numbers
+$ python3 test_lotto645_tmp2.py
+results:
+ - model_lotto645.h
+ - model_lotto645_predicts_method.h
+ - model_lotto645_results_winning_numbers.h
+ - numbers
 
-(Note)
- - ml_module.cpp requires model_lotto645.h
+(NOTE)
+ - ml_module.cpp requires {
+    model_lotto645.h,
+    model_lotto645_predicts_method.h,
+    model_lotto645_results_winning_numbers.h
+ }
 
 
 
-(Edit)
-ml_module.cpp: 107
-
-// for display last game (number of games: no.1 ~ present)
-#define LAST_GAME   "1 ~ 1054회\n(2023년 02월 11일 추첨)"
-
+---------------------------------------------
 Rebuild/Generate signed APK Android App
+---------------------------------------------
 results:
  - library (.so): lotto645_prediction/app/src/main/jniLibs/ (SEE: platforms)
  - lotto645_prediction/app/release/app-release.apk
-
 
 ---------------------------------------------
 Updates library (.so) without reinstall APK
@@ -96,5 +109,5 @@ Screenshots
 ----------
 
 > Android App
-<img src="https://github.com/godmode2k/lotto645/raw/main/Android/Screenshot_1676280079.png" width="40%" height="40%">
+<img src="https://github.com/godmode2k/lotto645/raw/main/screenshot.jpg" width="40%" height="40%">
 

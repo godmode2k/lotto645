@@ -38,10 +38,13 @@ package com.atflab.android.lottery_prediction;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import java.util.List;
 
 public class App extends Application {
+    private static final String TAG = "App";
+
     private Context m_context = null;
     private List<String> m_list_result = null;
     private String m_str_result = null;
@@ -86,5 +89,29 @@ public class App extends Application {
 
     public String get_str_result() {
         return m_str_result;
+    }
+
+    public boolean network_online() {
+        boolean state = false;
+
+        // Source: https://stackoverflow.com/questions/4238921/detect-whether-there-is-an-internet-connection-available-on-android
+        boolean haveConnectedWifi = false;
+        boolean haveConnectedMobile = false;
+        android.net.ConnectivityManager cm = (android.net.ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        android.net.NetworkInfo[] netInfo = cm.getAllNetworkInfo();
+        for ( android.net.NetworkInfo ni : netInfo ) {
+            if (ni.getTypeName().equalsIgnoreCase("WIFI"))
+                if (ni.isConnected())
+                    haveConnectedWifi = true;
+            if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
+                if (ni.isConnected())
+                    haveConnectedMobile = true;
+        }
+        state = haveConnectedWifi || haveConnectedMobile;
+
+        if ( state ) Log.d( TAG, "Network: online" );
+        else Log.d( TAG, "Network: offline" );
+
+        return state;
     }
 }
