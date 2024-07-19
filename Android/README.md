@@ -56,6 +56,7 @@ Android App
 ```sh
 $ cd lotto645_prediction/app/src/main/cpp/
 
+1. Download winning list
 // Download (Excel: xls) all results
 // https://www.dhlottery.co.kr/gameResult.do?method=byWin
 //
@@ -66,12 +67,10 @@ $ cd lotto645_prediction/app/src/main/cpp/
 Rename download file:
  - lotto645_당첨번호1128회차까지.xls
 
-
-(Edit)
-test_lotto645_tmp2.py: 188
-
+2. (Edit) test_lotto645_tmp2.py: 188
 _xls_filename = "./lotto645_당첨번호1128회차까지.xls"
 
+3. Generate codes
 $ python3 test_lotto645_tmp2.py
 results:
  - model_lotto645.h
@@ -86,6 +85,14 @@ results:
     model_lotto645_results_winning_numbers.h
  }
 
+4. Copy below files to "lotto645_prediction/app/src/main/cpp/"
+{
+    model_lotto645.h,
+    model_lotto645_predicts_method.h,
+    model_lotto645_results_winning_numbers.h
+}
+
+5. then, rebuild APK
 
 
 ---------------------------------------------
