@@ -139,6 +139,16 @@ public class HomeFragment extends Fragment {
             //for ( int i = 0; i < result.size(); i++ ) {
             //    Log.d( TAG, "[" + i + "] " + result.get(i).toString() );
             //}
+
+            String res = m_main_app.get_current_updates_info();
+            if ( res == null ) {
+                res = "...";
+            }
+            // updates.txt: 1,2024.07.26
+            TextView tv = (TextView)root.findViewById(R.id.TextView_update_status);
+            if ( tv != null ) {
+                tv.setText( res );
+            }
         }
 
         final EditText edittext_algorithm = (EditText)root.findViewById(R.id.EditText_algorithm);
@@ -159,6 +169,7 @@ public class HomeFragment extends Fragment {
         m_edittext_winning_num7_b = (EditText)root.findViewById(R.id.EditText_winning_num7_bonus);
         final Button button_checks_numbers = (Button)root.findViewById(R.id.Button_checks_numbers);
         Button button_checks_numbers_clear = (Button)root.findViewById(R.id.Button_checks_numbers_clear);
+        Button button_checks_update = (Button)root.findViewById(R.id.Button_checks_update);
 
         Arrays.fill( m_this_weekly_winning_numbers, -1 );
 
@@ -407,6 +418,15 @@ public class HomeFragment extends Fragment {
             });
         }
 
+        if ( button_checks_update != null ) {
+            button_checks_update.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    m_main_app.updates( getActivity() );
+                }
+            });
+        }
+
         return root;
     }
 
@@ -476,21 +496,30 @@ public class HomeFragment extends Fragment {
         Log.d(TAG, "download full path filename = " + ml_so_download_full_pathname);
 
 
-        try {
-            // /data/data/<package>/files/liblottery_prediction.so
-            if ((new File(ml_so_app_full_pathname).exists())) {
-                if ((new File(ml_so_app_full_pathname)).delete()) {
-                    Log.d(TAG, "deleted directory: " + ml_so_app_full_pathname);
-                } else {
-                    Log.d(TAG, "[Error] deleted directory: " + ml_so_app_full_pathname);
-                }
-            }
-        } catch (Exception e_all) {
-            e_all.printStackTrace();
-        }
+        //try {
+        //    // /data/data/<package>/files/liblottery_prediction.so
+        //    if ((new File(ml_so_app_full_pathname).exists())) {
+        //        if ((new File(ml_so_app_full_pathname)).delete()) {
+        //            Log.d(TAG, "deleted directory: " + ml_so_app_full_pathname);
+        //        } else {
+        //            Log.d(TAG, "[Error] deleted directory: " + ml_so_app_full_pathname);
+        //        }
+        //    }
+        //} catch (Exception e_all) {
+        //    e_all.printStackTrace();
+        //}
 
         if ((new File(ml_so_download_full_pathname).exists())) {
             try {
+                // /data/data/<package>/files/liblottery_prediction.so
+                if ((new File(ml_so_app_full_pathname).exists())) {
+                    if ((new File(ml_so_app_full_pathname)).delete()) {
+                        Log.d(TAG, "deleted directory: " + ml_so_app_full_pathname);
+                    } else {
+                        Log.d(TAG, "[Error] deleted directory: " + ml_so_app_full_pathname);
+                    }
+                }
+
                 // /Download/liblottery_prediction.so
                 inputStream = new FileInputStream(new File(ml_so_download_full_pathname));
                 outputStream = new FileOutputStream(new File(ml_so_app_full_pathname));
@@ -501,9 +530,14 @@ public class HomeFragment extends Fragment {
                 inChannel.transferTo(0, inChannel.size(), outChannel);
                 inputStream.close();
                 outputStream.close();
+
+                Log.d( TAG,"load ML module: copied .so file from downloaded (external-storage:/Download/) to internal (" + ml_so_app_full_pathname + ")" );
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+        else {
+            //
         }
 
         if (!(new File(ml_so_app_full_pathname).exists())) {
@@ -512,7 +546,7 @@ public class HomeFragment extends Fragment {
             Log.d( TAG,"load ML module: pre-installed done..." );
         }
         else {
-            Log.d( TAG,"load ML module: downloaded (external-storage:/Download/" );
+            Log.d( TAG,"load ML module: downloaded (" + ml_so_app_full_pathname +")" );
             System.load( ml_so_app_full_pathname );
             Log.d( TAG,"load ML module: downloaded done..." );
         }

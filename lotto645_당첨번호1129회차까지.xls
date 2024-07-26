@@ -58,7 +58,39 @@
 	    	
 			<tr>
 			
-				<td bgcolor='#ccffff'  rowspan="28" align="center">2024</td>
+				<td bgcolor='#ccffff'  rowspan="29" align="center">2024</td>
+							
+				<td align="right">1129</td>
+				<td align="center">2024.07.20</td>
+				<td align="right" bgcolor='#ffff99'>11</td>
+				<td align="right">2,369,567,660원</td>
+				
+				<td align="right" bgcolor='#ffff99'>107</td>
+				<td align="right">40,600,069원</td>
+				
+				<td align="right" bgcolor='#ffff99'>3,142</td>
+				<td align="right">1,382,625원</td>
+				
+				<td align="right" bgcolor='#ffff99'>154,322</td>
+				<td align="right">50,000원</td>
+				
+				<td align="right" bgcolor='#ffff99'>2,542,398</td>
+				<td align="right">5,000원</td>
+				
+				<td>5</td>
+				<td>10</td>
+				<td>11</td>
+				<td>17</td>
+				<td>28</td>
+				<td>34</td>
+				<td>22</td>
+				
+			</tr>
+			
+			
+		
+	    	
+			<tr>
 							
 				<td align="right">1128</td>
 				<td align="center">2024.07.13</td>
