@@ -584,7 +584,7 @@ public class HomeFragment extends Fragment {
                 "[네트워크] 당첨번호를 가져옵니다.\n"
                         + "[+] 수동으로 입력해도 됩니다.\n"
                         + "[+] 초기화된 경우에만 동작합니다.",
-                Toast.LENGTH_LONG).show();
+                Toast.LENGTH_SHORT).show();
 
         task.execute( algorithm, generate, total_games, textview_result );
     }
