@@ -184,8 +184,8 @@ print()
 #
 # Excel (.xls) file (NOT modified)
 # ---------------------------------
-# https://dhlottery.co.kr/gameResult.do?method=allWinExel&gubun=byWin&nowPage=&drwNoStart=1&drwNoEnd=1143
-_xls_filename = "./lotto645_당첨번호1143회차까지.xls"
+# https://dhlottery.co.kr/gameResult.do?method=allWinExel&gubun=byWin&nowPage=&drwNoStart=1&drwNoEnd=1144
+_xls_filename = "./lotto645_당첨번호1144회차까지.xls"
 xls_filename = _xls_filename
 xls_filename2 = _xls_filename # comparison
 #df = pd.read_excel( xls_filename )
