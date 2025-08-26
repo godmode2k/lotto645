@@ -551,7 +551,7 @@ public class App extends Application {
 
                 result[0] = has_updates;
                 result[1] = has_updates_flag_download_apk; // default: false
-                result[2] = current_updates_date; // default: "0"
+                result[2] = new_updates_date; // default: "0"
 
                 if (has_updates) {
                     // update file
