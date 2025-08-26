@@ -48,6 +48,10 @@ import numpy as np
 
 from sklearn.svm import SVC
 
+import sys
+import traceback
+from urllib import request
+
 
 
 """
@@ -185,7 +189,25 @@ print()
 # Excel (.xls) file (NOT modified)
 # ---------------------------------
 # https://dhlottery.co.kr/gameResult.do?method=allWinExel&gubun=byWin&nowPage=&drwNoStart=1&drwNoEnd=1144
-_xls_filename = "./lotto645_당첨번호1144회차까지.xls"
+_xls_last_game_num = "1186" # (2025년 08월 23일 추첨)
+_xls_filename = "./lotto645_당첨번호" + _xls_last_game_num + "회차까지.xls"
+#
+# Download xls file
+SRC_XLS_URL = "https://dhlottery.co.kr/gameResult.do?method=allWinExel&gubun=byWin&nowPage=&drwNoStart=1&drwNoEnd=" + _xls_last_game_num
+try:
+    print( "Download XLS file..." )
+    request.urlretrieve( SRC_XLS_URL, _xls_filename )
+    print( "Downloaded..." )
+except Exception as e:
+    traceback.print_exc()
+    print( "error = ", e )
+    sys.exit()
+#
+#
+# NOTE: model_lotto645_predicts_method.h (below auto-generated)
+# #define MAX_ALGORITHM
+#    
+#
 xls_filename = _xls_filename
 xls_filename2 = _xls_filename # comparison
 #df = pd.read_excel( xls_filename )
@@ -759,10 +781,12 @@ print( odd_even_code_str )
 
 
 
+# #define MAX_ALGORITHM 4    //! NOTE...
 # #define LAST_GAME   "1 ~ 1125회\n(2024년 06월 22일 추첨까지)"
 # const char* last_game = "no.1057"; // range: no.1 ~ present
 # int result_won[] = { 8, 13, 19, 27, 40, 45, 12 };
 last_game_info_str = "" \
+    + str( "#define MAX_ALGORITHM 4\n" ) \
     + str( '#define LAST_GAME   "1 ~ ' + str(last_game_result[0]) + '회\\n(' + str(last_game_result[1]) + ' 추첨까지)"\n') \
     + str( 'const char* last_game = "no.' + str(last_game_result[0]) + '"; // range: no.1 ~ present\n') \
     + str( "int result_won[] = { " ) \

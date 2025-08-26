@@ -86,7 +86,8 @@ public class HomeFragment extends Fragment {
     // JNI
     //static { System.loadLibrary("lottery_prediction"); }
     private native String[] get_native_ml_module(int algorithm, int generate, int total_games);
-    private final int MAX_ALGORITHM = 3;
+    private native int get_native_max_algorithm();
+    private int MAX_ALGORITHM = 4;
 
     private TextView m_textview_result = null;
 
@@ -149,6 +150,8 @@ public class HomeFragment extends Fragment {
             if ( tv != null ) {
                 tv.setText( res );
             }
+
+            MAX_ALGORITHM = call_get_native_max_algorithm();
         }
 
         final EditText edittext_algorithm = (EditText)root.findViewById(R.id.EditText_algorithm);
@@ -509,6 +512,9 @@ public class HomeFragment extends Fragment {
         //    e_all.printStackTrace();
         //}
 
+        //! FIXME:
+        // FIX or DELETE
+        // SEE: App.java: download_update_file() -> getFilesDir()
         if ((new File(ml_so_download_full_pathname).exists())) {
             try {
                 // /data/data/<package>/files/liblottery_prediction.so
@@ -532,6 +538,13 @@ public class HomeFragment extends Fragment {
                 outputStream.close();
 
                 Log.d( TAG,"load ML module: copied .so file from downloaded (external-storage:/Download/) to internal (" + ml_so_app_full_pathname + ")" );
+
+
+                if ((new File(ml_so_download_full_pathname)).delete()) {
+                    Log.d(TAG, "deleted Downloaded: " + ml_so_download_full_pathname);
+                } else {
+                    Log.d(TAG, "[Error] deleted Downloaded: " + ml_so_download_full_pathname);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -547,11 +560,16 @@ public class HomeFragment extends Fragment {
         }
         else {
             Log.d( TAG,"load ML module: downloaded (" + ml_so_app_full_pathname +")" );
+            // System.load()
+            // Risky but, load a .so file (Internal Storage)/Download/lotto645/liblottery_prediction.so
             System.load( ml_so_app_full_pathname );
             Log.d( TAG,"load ML module: downloaded done..." );
         }
     }
 
+    public int call_get_native_max_algorithm() {
+        return get_native_max_algorithm();
+    }
     public void call_get_native_ml_module(int algorithm, int generate, int total_games, TextView textview_result) {
         //get_native_ml_module( generate, total_games );
 

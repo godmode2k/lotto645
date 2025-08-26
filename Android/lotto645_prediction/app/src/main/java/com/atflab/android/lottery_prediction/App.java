@@ -38,10 +38,15 @@ package com.atflab.android.lottery_prediction;
 
 import android.app.Application;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -50,7 +55,9 @@ import com.atflab.android.lottery_prediction.ui.home.HomeFragment;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.List;
 
 public class App extends Application {
@@ -83,6 +90,7 @@ public class App extends Application {
     private String REQ_URL_BASE = "https://github.com/godmode2k/lotto645/raw/main/updates/";
     private String REQ_URL_CHECK_UPDATE = REQ_URL_BASE + m_ml_so_updates;
     private String REQ_URL_DOWNLOAD_UPDATES = REQ_URL_BASE + m_ml_so;
+    private String REQ_URL_BASE_APK = "https://github.com/godmode2k/lotto645/raw/main/"; // Git repo home
 
 
     @Override
@@ -133,6 +141,27 @@ public class App extends Application {
         }
         m_list_result = null;
         m_str_result = "";
+    }
+
+    // Download directory: Environment.DIRECTORY_DOWNLOADS
+    // - GetPublicPath(Environment.DIRECTORY_DOWNLOADS)
+    public String GetPublicPath(String target_dir) {
+        try {
+            String strFilePath = "./";
+            String strFilePathInt = "";
+            //String strFilePathExt = "/sdcard/";
+            String strFilePathExt = Environment.getExternalStoragePublicDirectory(target_dir).getPath();
+
+            // Get absolute path of the SD card
+            // e.g., "/mnt/sdcard/"
+            strFilePath = strFilePathExt + "/";
+
+            return strFilePath;
+        }
+        catch ( Exception e ) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public void set_list_result(List<String> result) {
@@ -217,12 +246,38 @@ public class App extends Application {
 
             m_cancel_process = false;
 
-            boolean update = false;
-            if (check_for_updates()) {
-                return download_update_file();
+            // -1: no updates, 0: false (fail), 1: true (success, download .so), 2: true (success, download .apk)
+            int updated = -1;
+
+            Object check_updates[] = check_for_updates();
+            check_updates[0] = true;
+            check_updates[1] = true;
+            if ( (boolean)check_updates[0] ) {
+                String REQ_URL = "";
+                String save_filename = "";
+                String save_dir = "";
+
+                // Download .so: liblottery_prediction.so
+                REQ_URL = REQ_URL_DOWNLOAD_UPDATES;
+                save_filename = "liblottery_prediction.so";
+                updated = download_update_file( REQ_URL, save_filename )? 1 : 0;
+
+                // Download APK: app-release_YYYY.MM.DD_lotto645번호생성.apk
+                if ( (boolean)check_updates[1] ) {
+                    //save_filename = "app-release_" + "2024.11.04" + "_lotto645번호생성.apk"; // test
+                    save_filename = "app-release_" + (String)check_updates[2] + "_lotto645번호생성.apk";
+                    save_dir = "lotto645"; // (Download)/lotto645
+                    REQ_URL = REQ_URL_BASE_APK + save_filename;
+
+                    final int old_updated = updated;
+                    updated += download_file( REQ_URL, save_filename, true, save_dir )? 1 : 0;
+
+                    // fail
+                    if ( old_updated == updated ) updated = 0;
+                }
             }
 
-            return update;
+            return updated;
         }
 
         @Override
@@ -244,19 +299,30 @@ public class App extends Application {
                 m_progress_dialog.dismiss();
             }
 
-            boolean result = (Boolean)o;
+            // -1: no updates, 0: false (fail), 1: true (success, download .so), 2: true (success, download .apk)
+            int result = (int)o;
             String message = "";
-            if ( result ) {
+            if ( result == -1 ) {
+                message = "[업데이트] 업데이트가 없습니다.";
+            }
+            else if ( result == 0 ) {
+                message = "[업데이트] 업데이트를 실패했습니다.";
+            }
+            else if ( result == 1 ) {
                 message = "[업데이트] 완료!\n앱을 다시 실행합니다!"
                     + "실행이 안되면 앱을 완전히 종료 후 다시 실행해 주세요!";
             }
+            else if ( result == 2 ) {
+                message = "[업데이트] APK 다운로드 완료!\n"
+                        + "앱 삭제 후 다운받은 APK를 다시 설치해 주세요! (다운로드 디렉터리에서 확인)";
+            }
             else {
-                message = "[업데이트] 업데이트가 없습니다.";
+                message = "Error...";
             }
 
             Toast.makeText(m_context, message, Toast.LENGTH_LONG).show();
 
-            if ( result ) {
+            if ( result == 1 ) {
                 // Restart App
 
                 // Source: https://stackoverflow.com/questions/6609414/how-do-i-programmatically-restart-an-android-app
@@ -269,6 +335,9 @@ public class App extends Application {
                 mainIntent.setPackage(m_context.getPackageName());
                 m_context.startActivity(mainIntent);
                 Runtime.getRuntime().exit(0);
+            }
+            else if ( result == 2 ) {
+                //Runtime.getRuntime().exit(0);
             }
         }
     }
@@ -364,16 +433,21 @@ public class App extends Application {
         return redirected_url;
     }
 
-    private boolean check_for_updates() {
+    private Object[] check_for_updates() {
         Log.d( TAG, "Check for updates..." );
 
+        // updates.txt: 1,2024.07.26,[y|n]
+        Object result[] = new Object[]{ false, false, "" };
+
         if ( !network_online() ) {
-            return false;
+            Arrays.fill( result, false );
+            return result;
         }
 
         int current_updates = 0; // just a counting number
         String current_updates_date = ""; // 2024.07.26
         boolean has_updates = false;
+        Boolean has_updates_flag_download_apk = false; // 1,2024.07.26,[y|n]
 
         String res = get_current_updates_info();
         if ( res == null ) {
@@ -381,7 +455,7 @@ public class App extends Application {
             Log.d( TAG, "initialize update: set to '0,0'" );
             res = "0,0";
         }
-        // updates.txt: 1,2024.07.26
+        // updates.txt: 1,2024.07.26,[y|n]
         String update_count = res.split(",")[0];
         current_updates_date = res.split(",")[1];
         current_updates = Integer.parseInt(update_count);
@@ -406,20 +480,23 @@ public class App extends Application {
             // handle the redirect url
             String redirected_url = handle_redirect( REQ_URL );
             if ( redirected_url == null ) {
-                return false;
+                Arrays.fill( result, false );
+                return result;
             }
 
             //java.net.URL url = new java.net.URL(REQ_URL);
             java.net.URL url = new java.net.URL(redirected_url);
             if (url == null) {
                 Log.d(TAG, "URL == NULL");
-                return false;
+                Arrays.fill( result, false );
+                return result;
             }
 
             conn = (java.net.HttpURLConnection) url.openConnection();
             if (conn == null) {
                 Log.d(TAG, "URLConnection == NULL");
-                return false;
+                Arrays.fill( result, false );
+                return result;
             }
 
 
@@ -456,9 +533,14 @@ public class App extends Application {
                 is = null;
                 br = null;
 
-                // updates.txt: 1,2024.07.26
+                // updates.txt: 1,2024.07.26,[y|n]
                 String new_updates_count = response.split( "," )[0];
                 String new_updates_date = response.split( "," )[1];
+                // 1,2024.07.26,[y|n]
+                if ( response.split( "," ).length > 2 ) {
+                    has_updates_flag_download_apk =
+                            (response.split(",")[2] == "y")? true : false;
+                }
                 has_updates = (Integer.parseInt(new_updates_count) > current_updates);
 
                 if ( Integer.parseInt(new_updates_count) == 0
@@ -466,6 +548,10 @@ public class App extends Application {
                         && !(new File( getFilesDir(), m_ml_so_updates)).exists() ) {
                     has_updates = true;
                 }
+
+                result[0] = has_updates;
+                result[1] = has_updates_flag_download_apk; // default: false
+                result[2] = current_updates_date; // default: "0"
 
                 if (has_updates) {
                     // update file
@@ -485,6 +571,7 @@ public class App extends Application {
                     }
                 }
                 Log.d( TAG, "has updates: " + has_updates );
+                Log.d( TAG, "has updates: download APK: " + has_updates_flag_download_apk );
                 Log.d( TAG, "updates: current: " + current_updates + ", new: " + new_updates_count );
                 Log.d( TAG, "updates: current: " + current_updates_date + ", new: " + new_updates_date );
 
@@ -606,21 +693,29 @@ public class App extends Application {
         }
         catch (Exception e) {
             e.printStackTrace();
+            Arrays.fill( result, false );
         }
 
-        return has_updates;
+        return result;
     }
 
-    private boolean download_update_file() {
+    private boolean download_update_file(String REQ_URL, String save_filename) {
         Log.d( TAG, "download updates..." );
 
         if ( !network_online() ) {
             return false;
         }
 
+        if ( REQ_URL.isEmpty() || save_filename.isEmpty() ) {
+            return false;
+        }
+
+        Log.d( TAG, "URL = " + REQ_URL );
+        Log.d( TAG, "Save filename = " + save_filename );
+
         String m_cookie = null;
         try {
-            String REQ_URL = REQ_URL_DOWNLOAD_UPDATES;
+            //String REQ_URL = REQ_URL_DOWNLOAD_UPDATES;
             java.net.HttpURLConnection conn = null;
 
             //java.io.InputStream in_stream = null;
@@ -674,11 +769,18 @@ public class App extends Application {
                 java.io.OutputStream output = null;
                 byte[] buffer = new byte[4 * 1024];
                 int bytes = 0;
-                file = new java.io.File(getFilesDir(), "liblottery_prediction.so");
+                //file = new java.io.File(getFilesDir(), "liblottery_prediction.so");
+
+                // Download: liblottery_prediction.so
+                file = new java.io.File(getFilesDir(), save_filename);
+
                 if (file == null) {
                     Log.d(TAG, "file == NULL");
                     return false;
                 }
+
+                Log.d(TAG, "file = " + file.getAbsolutePath() );
+
                 output = new java.io.FileOutputStream(file);
                 if (output == null) {
                     Log.d(TAG, "output == NULL");
@@ -805,6 +907,238 @@ public class App extends Application {
         }
         catch ( Exception e) {
             e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean download_file(String REQ_URL, String save_filename, Boolean into_public_download, String save_dir) {
+        Log.d( TAG, "download updates..." );
+
+        if ( !network_online() ) {
+            return false;
+        }
+
+        if ( REQ_URL.isEmpty() || save_filename.isEmpty() ) {
+            return false;
+        }
+
+        Log.d( TAG, "URL = " + REQ_URL );
+        Log.d( TAG, "Save filename = " + save_filename );
+        Log.d( TAG, "Save directory = " + save_dir );
+
+        String m_cookie = null;
+        try {
+            //String REQ_URL = REQ_URL_DOWNLOAD_UPDATES;
+            java.net.HttpURLConnection conn = null;
+
+            //java.io.InputStream in_stream = null;
+            java.io.OutputStream out_stream = null;
+            //java.io.BufferedReader breader = null;
+            java.io.BufferedWriter bwriter = null;
+
+            int response_code = 0;
+            String response = null;
+
+
+            // handle the redirect url
+            String redirected_url = handle_redirect( REQ_URL );
+            if ( redirected_url == null ) {
+                return false;
+            }
+
+            //java.net.URL url = new java.net.URL(REQ_URL);
+            java.net.URL url = new java.net.URL(redirected_url);
+            if (url == null) {
+                Log.d(TAG, "URL == NULL");
+                return false;
+            }
+
+            conn = (java.net.HttpURLConnection) url.openConnection();
+            if (conn == null) {
+                Log.d(TAG, "URLConnection == NULL");
+                return false;
+            }
+
+            //conn.setRequestProperty( "User-Agent", "mobile_app" );
+            //conn.setRequestProperty( "Content-Type", "application/x-www-form-urlencoded" );
+            conn.setReadTimeout(15000);
+            conn.setConnectTimeout(15000);
+            conn.setRequestMethod("POST");
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+            conn.setInstanceFollowRedirects(true);
+
+            //! session id
+            //{
+            //    if ( m_cookie != null ) {
+            //        conn.setRequestProperty( "cookie", m_cookie );
+            //    }
+            //}
+
+
+            {
+                java.io.InputStream is = url.openStream();
+                java.io.File file = null;
+                java.io.OutputStream output = null;
+                byte[] buffer = new byte[4 * 1024];
+                int bytes = 0;
+
+                if ( into_public_download ) {
+                    // Download: APK
+                    //file = new java.io.File( new_path, save_filename );
+                    //file = new java.io.File( new_path, "/app-release_" + "2024.11.04" + "_lotto645.apk" );
+
+                    Uri collection;
+                    ContentResolver resolver = m_context.getContentResolver();
+                    ContentValues contentValues = new ContentValues();
+
+                    contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, save_filename);
+                    //contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "text/plain"); // test
+                    contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH,
+                            Environment.DIRECTORY_DOWNLOADS + File.separator + save_dir);
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        collection = MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
+                    } else {
+                        collection = MediaStore.Files.getContentUri("external");
+                    }
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        contentValues.put(MediaStore.MediaColumns.IS_PENDING, 1);
+                    }
+
+                    Uri fileUri = resolver.insert(collection, contentValues);
+
+                    if (fileUri == null) {
+                        Log.d(TAG, "output == NULL");
+                        return false;
+                    }
+
+                    //try (OutputStream outputStream = resolver.openOutputStream(fileUri)) {
+                    //    outputStream.write(content.getBytes());
+                    //    outputStream.flush();
+                    //    Toast.makeText(m_context, "File saved to Downloads", Toast.LENGTH_SHORT).show();
+                    //}
+                    //catch (IOException e) {
+                    //    e.printStackTrace();
+                    //    Toast.makeText(m_context, "Failed to save file", Toast.LENGTH_SHORT).show();
+                    //}
+
+                    //output = new java.io.FileOutputStream(file);
+                    output = resolver.openOutputStream(fileUri);
+                    if (output == null) {
+                        Log.d(TAG, "output == NULL");
+                        return false;
+                    }
+
+                    Log.d(TAG, "file (URI) = " + fileUri.toString() );
+                    Log.d(TAG, "pathname = " + Environment.DIRECTORY_DOWNLOADS + "/" + save_dir + "/" + save_filename );
+
+                    while ((bytes = is.read(buffer)) > 0) {
+                        output.write(buffer, 0, bytes);
+                    }
+                    output.flush();
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        contentValues.clear();
+                        contentValues.put(MediaStore.MediaColumns.IS_PENDING, 0);
+                        resolver.update(fileUri, contentValues, null, null);
+                    }
+                }
+                else {
+                    // Internal Private Own Directory
+                    // Download: liblottery_prediction.so
+                    file = new java.io.File(getFilesDir(), save_filename);
+
+                    Log.d(TAG, "file = " + file.getAbsolutePath() );
+
+                    output = new java.io.FileOutputStream(file);
+                    if (output == null) {
+                        Log.d(TAG, "output == NULL");
+                        return false;
+                    }
+
+                    while ((bytes = is.read(buffer)) > 0) {
+                        output.write(buffer, 0, bytes);
+                    }
+                    output.flush();
+                }
+
+                output = null;
+                file = null;
+
+                conn.disconnect();
+                conn = null;
+            }
+
+            Log.d(TAG, "download updates: done");
+        }
+        catch ( Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    //public boolean download_contents(final String save_filename, final String contents) {
+    public boolean download_contents(final String save_filename, final byte[] contents) {
+        try {
+            Uri collection;
+            ContentResolver resolver = m_context.getContentResolver();
+            ContentValues contentValues = new android.content.ContentValues();
+
+            contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, save_filename);
+            contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "text/plain");
+            contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                collection = MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
+            } else {
+                collection = MediaStore.Files.getContentUri("external");
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                contentValues.put(MediaStore.MediaColumns.IS_PENDING, 1);
+            }
+
+//            File home_dir = new File(new_path);
+//            if (!home_dir.exists()) {
+//                if (home_dir.mkdir()) {
+//                    Log.d(TAG, "home directory created: " + home_dir.getAbsolutePath());
+//                } else {
+//                    Log.d(TAG, "home directory created [FAIL]: " + home_dir.getAbsolutePath());
+//                    return 0;
+//                }
+//            }
+
+            Uri fileUri = resolver.insert(collection, contentValues);
+            if (fileUri != null) {
+                try (OutputStream outputStream = resolver.openOutputStream(fileUri)) {
+                    //outputStream.write(content.getBytes());
+                    outputStream.write( contents );
+                    outputStream.flush();
+                    //Toast.makeText(m_context, "File saved to Downloads", Toast.LENGTH_SHORT).show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    //Toast.makeText(m_context, "Failed to save file", Toast.LENGTH_SHORT).show();
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    contentValues.clear();
+                    contentValues.put(MediaStore.MediaColumns.IS_PENDING, 0);
+                    resolver.update(fileUri, contentValues, null, null);
+                }
+            } else {
+                //Toast.makeText(m_context, "Failed to create file", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
 
         return true;

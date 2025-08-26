@@ -48,6 +48,23 @@
 
 #include <cstdarg>
 #include <cmath>
+
+// method4 {
+//#include <iostream>
+//#include <cstdio>
+//#include <cstring>
+//#include <vector>
+//#include <cstdlib> // rand()
+//#include <ctime> // time(), localtime()
+//#include <algorithm> // std::shuffle
+
+#include <random> // std::default_random_engine and std::random_device
+#include <chrono> // std::chrono::system_clock
+
+//#include "model_lotto645_predicts_method.h"
+//#include "model_lotto645_results_winning_numbers.h"
+// method4 }
+
 #include "model_lotto645.h"
 
 /*
@@ -110,6 +127,7 @@ extern "C" {
 
 
 #include "lotto645_predicts_method.cpp"
+#include "method4.cpp"
 
 
 //int main(int argc, char* argv[]) {

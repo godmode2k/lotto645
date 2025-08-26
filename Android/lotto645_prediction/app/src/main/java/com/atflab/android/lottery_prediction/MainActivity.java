@@ -125,9 +125,9 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this,
                 new String[]{
                         Manifest.permission.INTERNET,
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.ACCESS_NETWORK_STATE,
-                        Manifest.permission.INTERNET
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
                 },
                 100);   // 100: my request code
         }
@@ -217,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case 100: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.d( TAG, "granted..." );
+                    Log.d( TAG, "permission granted..." );
                 }
             }
         }

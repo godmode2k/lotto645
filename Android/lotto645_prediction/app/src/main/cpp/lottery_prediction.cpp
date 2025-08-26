@@ -71,6 +71,17 @@
 extern "C" {
 #endif
 
+JNIEXPORT jint JNICALL
+Java_com_atflab_android_lottery_1prediction_ui_home_HomeFragment_get_1native_1max_1algorithm(
+    JNIEnv *env, jobject thiz) {
+    // TODO: implement get_native_max_algorithms()
+
+    LOGD( "get_native_max_algorithms(): internal" );
+    LOGD( "get_native_max_algorithms(): MAX_ALGORITHM = %d", MAX_ALGORITHM );
+
+    return MAX_ALGORITHM;
+}
+
 JNIEXPORT jobjectArray JNICALL
 // /MainActivity.java
 //Java_com_atflab_android_lottery_1prediction_MainActivity_get_1native_1ml_1module(JNIEnv *env, jobject thiz, jint _generate) {
@@ -105,6 +116,9 @@ Java_com_atflab_android_lottery_1prediction_ui_home_HomeFragment_get_1native_1ml
             odd_even( null_result, result_float );
             method3( result, result_float );
             break;
+        case 4:
+            method4( total_games, result );
+            break;
         default:
             main_ml( generate, total_games, result );
             break;
@@ -112,6 +126,7 @@ Java_com_atflab_android_lottery_1prediction_ui_home_HomeFragment_get_1native_1ml
 
     ret = (jobjectArray)env->NewObjectArray( result->size(), env->FindClass("java/lang/String"), env->NewStringUTF("") );
 
+    LOGD( "get_native_ml_module(): algorithm: %d", _algorithm );
     LOGD( "get_native_ml_module(): generate (repeat): %d", generate );
     LOGD( "get_native_ml_module(): total games: %d", total_games );
     LOGD( "get_native_ml_module(): results: size = %d", result->size() );
