@@ -616,7 +616,7 @@ void _method4(int total_games, std::vector<char*>*& ret_result) {
         int sort_20_29[10] = { 0, };
         int sort_30_39[10] = { 0, };
         int sort_40_45[6 ] = { 0, };
-        memcpy( sort_01_09, stat_sum_range[0 ], sizeof(stat_sum_range[0]) * 9  ); // 1 ~ 9
+        memcpy( sort_01_09, stat_sum_range[1 ], sizeof(stat_sum_range[0]) * 9  ); // 1 ~ 9
         memcpy( sort_10_19, stat_sum_range[10], sizeof(stat_sum_range[0]) * 10 );
         memcpy( sort_20_29, stat_sum_range[20], sizeof(stat_sum_range[0]) * 10 );
         memcpy( sort_30_39, stat_sum_range[30], sizeof(stat_sum_range[0]) * 10 );
@@ -627,6 +627,8 @@ void _method4(int total_games, std::vector<char*>*& ret_result) {
             printf( "[01: 01..09]\n" );
             for ( int i = 1; i < 10; i++ ) { printf( "%4d", i ); } printf( "\n" );
             for ( auto x: sort_01_09 ) { printf( "%4d", x ); } printf( "\n" );
+            //printf( "check...\n" );
+            //for ( int i = 0; i < 10; i++ ) { printf( "%4d", *(stat_sum_range[i]) ); } printf( "\n" );
         }
         if ( _10 ) {
             printf( "[10: 10..19]\n" );
@@ -1013,17 +1015,23 @@ void method4(int total_games, std::vector<char*>*& ret_result) {
 
 #if 0
 int main(void) {
-    method4();
+    //method4();
 
     /*
     {
-        std::vector<int*>* result = new std::vector<int*>;
-        method4( result, result );
-        std::cout << "\n\n" << std::endl;
+        const int total_games = 5;
+        //std::vector<int*>* result = new std::vector<int*>;
+        std::vector<char*>* result = new std::vector<char*>;
 
-        std::cout << "result:" << std::endl;
-        for ( auto x: *result ) { printf( "%2d ", x[0] ); } printf( "\n" );
+        method4( total_games, result );
 
+        //printf( "------------------------------------------\n" );
+        //printf( "test from main()\n" );
+        //printf( "------------------------------------------\n" );
+        //std::cout << "result:" << std::endl;
+        //for ( auto x: *result ) { printf( "%s\n", x ); } printf( "\n" );
+
+        // Integer
         //std::vector<int*>::iterator iter;
         //for ( iter = result->begin(); iter != result->end(); ++iter ) {
         //    int* val = (*iter); delete[] val; val = NULL;
@@ -1032,8 +1040,13 @@ int main(void) {
         //delete result;
         //result = NULL;
         //
-        for ( auto x: *result ) { int* _x = x; delete[] x; }
+        //for ( auto x: *result ) { int* _x = x; delete[] _x; }
+
+        for ( auto x: *result ) { char* _x = x; delete[] _x; }
+
         result->clear();
+        delete result;
+        result = NULL;
     }
     */
 

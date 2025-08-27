@@ -250,8 +250,10 @@ public class App extends Application {
             int updated = -1;
 
             Object check_updates[] = check_for_updates();
-            check_updates[0] = true;
-            check_updates[1] = true;
+            // test
+            //check_updates[0] = true;
+            //check_updates[1] = true;
+
             if ( (boolean)check_updates[0] ) {
                 String REQ_URL = "";
                 String save_filename = "";
