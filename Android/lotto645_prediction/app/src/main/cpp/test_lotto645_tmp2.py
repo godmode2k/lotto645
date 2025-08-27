@@ -32,7 +32,7 @@ Created on Sun Apr 25 14:29:15 2021
 # Note:
 # -----------------------------------------------------------------
 # 1. Dependencies
-#   $ pip install numpy
+#   $ pip install numpy pandas lxml
 #   $ pip install scikit-learn
 #
 #   $ pip install micromlgen
