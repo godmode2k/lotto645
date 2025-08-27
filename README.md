@@ -24,9 +24,8 @@ Android:
 Installation and Run
 ----------
 ```sh
-$ pip3 install numpy
-$ pip3 install pandas
-$ pip3 install sklearn
+$ pip install numpy pandas lxml
+$ pip install scikit-learn
 
 $ pip install micromlgen
 or
