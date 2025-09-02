@@ -254,7 +254,12 @@ public class App extends Application {
             //check_updates[0] = true;
             //check_updates[1] = true;
 
+            Log.d( TAG, "check_update[0] = " + (boolean)check_updates[0] );
+            Log.d( TAG, "check_update[1] = " + (boolean)check_updates[1] );
+
             if ( (boolean)check_updates[0] ) {
+                Log.d( TAG, "check_update[0]: download liblottery_prediction.so file..." );
+
                 String REQ_URL = "";
                 String save_filename = "";
                 String save_dir = "";
@@ -266,6 +271,8 @@ public class App extends Application {
 
                 // Download APK: app-release_YYYY.MM.DD_lotto645번호생성.apk
                 if ( (boolean)check_updates[1] ) {
+                    Log.d( TAG, "check_update[1]: download APK file..." );
+
                     //save_filename = "app-release_" + "2024.11.04" + "_lotto645번호생성.apk"; // test
                     save_filename = "app-release_" + (String)check_updates[2] + "_lotto645번호생성.apk";
                     save_dir = "lotto645"; // (Download)/lotto645
@@ -535,13 +542,15 @@ public class App extends Application {
                 is = null;
                 br = null;
 
+
                 // updates.txt: 1,2024.07.26,[y|n]
                 String new_updates_count = response.split( "," )[0];
                 String new_updates_date = response.split( "," )[1];
                 // 1,2024.07.26,[y|n]
                 if ( response.split( "," ).length > 2 ) {
-                    has_updates_flag_download_apk =
-                            (response.split(",")[2] == "y")? true : false;
+                    String str_flag = response.split(",")[2].toString().trim();
+                    Log.d( TAG, "download APK flag = " + str_flag );
+                    has_updates_flag_download_apk = (str_flag.equals("y"))? true : false;
                 }
                 has_updates = (Integer.parseInt(new_updates_count) > current_updates);
 

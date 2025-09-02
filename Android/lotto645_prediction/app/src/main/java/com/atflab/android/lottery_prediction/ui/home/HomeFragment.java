@@ -540,11 +540,11 @@ public class HomeFragment extends Fragment {
                 Log.d( TAG,"load ML module: copied .so file from downloaded (external-storage:/Download/) to internal (" + ml_so_app_full_pathname + ")" );
 
 
-                if ((new File(ml_so_download_full_pathname)).delete()) {
-                    Log.d(TAG, "deleted Downloaded: " + ml_so_download_full_pathname);
-                } else {
-                    Log.d(TAG, "[Error] deleted Downloaded: " + ml_so_download_full_pathname);
-                }
+                //if ((new File(ml_so_download_full_pathname)).delete()) {
+                //    Log.d(TAG, "deleted Downloaded: " + ml_so_download_full_pathname);
+                //} else {
+                //    Log.d(TAG, "[Error] deleted Downloaded: " + ml_so_download_full_pathname);
+                //}
             } catch (Exception e) {
                 e.printStackTrace();
             }
