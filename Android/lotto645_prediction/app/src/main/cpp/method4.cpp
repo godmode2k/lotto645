@@ -45,6 +45,38 @@ void _method4(int total_games, std::vector<char*>*& ret_result) {
     //std::sort( arr, arr + 5 ); std::sort( std::begin(arr), std::end(arr) );
     //auto sort_arr = []( const array<int, 2>& s1, const array<int, 2>& s2 ) { return s1[1] < s2[1]; };
     //std::sort( arr, arr + 5, sort_arr ); std::sort( std::begin(arr), std::end(arr), sort_arr );
+    //
+    // sort 2d array: 2d array to vector, sort
+    //{
+    //    int arr[9][2] = { {0, 0} };
+    //    for ( int i = 1; i < 10; i++ ) {
+    //        arr[i-1][0] = arr[i-1];
+    //        arr[i-1][1] = i;
+    //    }
+    //
+    //    std::vector<std::vector<int>> vec_arr;
+    //    for ( int i = 1; i < 10; i++ ) {
+    //        vec_arr.push_back( { arr[i-1], i } );
+    //    }
+    //    auto comp_2d_array_asc = [](const std::vector<int>& row1, const std::vector<int>& row2) {
+    //        return row1[0] < row2[0];
+    //    };
+    //    auto comp_2d_array_desc = [](const std::vector<int>& row1, const std::vector<int>& row2) {
+    //        return row1[0] > row2[0];
+    //    };
+    //    std::sort( vec_arr.begin(), vec_arr.end(), comp_2d_array_desc );
+    //}
+
+
+    //auto comp_2d_array_asc = [](const std::vector<int>& row1, const std::vector<int>& row2) {
+    //    return row1[0] < row2[0];
+    //};
+    //auto comp_2d_array_desc = [](const std::vector<int>& row1, const std::vector<int>& row2) {
+    //    return row1[0] > row2[0];
+    //};
+    auto comp_2d_array_desc = [](const auto& row1, const auto& row2) {
+        return row1[0] > row2[0];
+    };
 
 
     auto shuffle_range_and_pick_one = [](const int start, const int end) {
@@ -123,13 +155,6 @@ void _method4(int total_games, std::vector<char*>*& ret_result) {
 
         // pick number ranges by desc
         float sums_sort[MAX_PICK_RANGE] = { sum01, sum10, sum20, sum30, sum40 };
-        //printf( "(sorted) sum = " );
-        //for ( auto x: sums_sort ) { printf( "%2.1f ", x ); } printf( "\n" );
-        //std::sort( sums_sort, sums_sort + MAX_PICK_RANGE, std::greater<float>() );
-        std::sort( std::begin(sums_sort), std::end(sums_sort), std::greater<float>() );
-        printf( "(sorted) sum = " );
-        for ( auto x: sums_sort ) { printf( "%2.1f ", x ); } printf( "\n" );
-
         int sums_sort_idx[MAX_PICK_RANGE] = { 0, };
         //char tag_pick_3[20];
         //char tag_pick_2[20];
@@ -143,6 +168,28 @@ void _method4(int total_games, std::vector<char*>*& ret_result) {
         //float tag_pick_2_avg = (tag_pick_2_sum / stats_result_size);
         float tag_pick_avg = 0.f;
         float tag_pick_avg_others = 0.f;
+
+        //printf( "(sorted) sum = " );
+        ////for ( auto x: sums_sort ) { printf( "%2.1f ", x ); } printf( "\n" );
+        ////std::sort( sums_sort, sums_sort + MAX_PICK_RANGE, std::greater<float>() );
+        //
+        //! FIXME: if sum01 == sum10 ?
+        // SEE: below vector sort
+        //std::sort( std::begin(sums_sort), std::end(sums_sort), std::greater<float>() );
+
+        {
+            std::vector<std::vector<float>> vec_sums_sort;
+            for ( int i = 0; i < MAX_PICK_RANGE; i++ ) {
+                vec_sums_sort.push_back( { sums_sort[i], (i < 1)? 1 : (float)(i*10) } );
+            }
+            std::sort( vec_sums_sort.begin(), vec_sums_sort.end(), comp_2d_array_desc );
+            for ( int i = 0; i < MAX_PICK_RANGE; i++ ) {
+                sums_sort[i] = vec_sums_sort[i][0]; // value
+                sums_sort_idx[i] = vec_sums_sort[i][1]; // actual array position
+            }
+        }
+        printf( "(sorted) sum = " );
+        for ( auto x: sums_sort ) { printf( "%2.1f ", x ); } printf( "\n" );
 
 
         /*
@@ -182,17 +229,21 @@ void _method4(int total_games, std::vector<char*>*& ret_result) {
 
 
         {
-            for ( int i = 0; i < (int)(sizeof(sums_sort)/sizeof(sums_sort)[0]); i++ ) {
-                if      ( sums_sort[i] == sum01 ) sums_sort_idx[i] = 1;
-                else if ( sums_sort[i] == sum10 ) sums_sort_idx[i] = 10;
-                else if ( sums_sort[i] == sum20 ) sums_sort_idx[i] = 20;
-                else if ( sums_sort[i] == sum30 ) sums_sort_idx[i] = 30;
-                else if ( sums_sort[i] == sum40 ) sums_sort_idx[i] = 40;
-            }
+            //for ( int i = 0; i < (int)(sizeof(sums_sort)/sizeof(sums_sort)[0]); i++ ) {
+            //    //! FIXME: if sum01 == sum10 ?
+            //    // SEE: above vector sort
+            //    if      ( sums_sort[i] == sum01 ) sums_sort_idx[i] = 1;
+            //    else if ( sums_sort[i] == sum10 ) sums_sort_idx[i] = 10;
+            //    else if ( sums_sort[i] == sum20 ) sums_sort_idx[i] = 20;
+            //    else if ( sums_sort[i] == sum30 ) sums_sort_idx[i] = 30;
+            //    else if ( sums_sort[i] == sum40 ) sums_sort_idx[i] = 40;
+            //}
 
             int sort_pick_idx[MAX_PICK] = { 0, };
             int sort_pick_idx_others[MAX_PICK_OTHERS] = { 0, };
+            // pick first 3 index sorted by desc(greater)
             memcpy( sort_pick_idx, sums_sort_idx, sizeof(sums_sort_idx[0]) * 3 );
+            // pick others (2 index) sorted by desc(greater)
             memcpy( sort_pick_idx_others, sums_sort_idx + 3, sizeof(sums_sort_idx[0]) * 2 );
 
             printf( "sort_pick_idx = " );
@@ -278,6 +329,7 @@ void _method4(int total_games, std::vector<char*>*& ret_result) {
             //printf( "tag pick (others) = %s\n", tag_pick_others );
         }
 
+
         printf( "----------------------------------------------------------------\n"
                 //"     01     10     20     30     40       10+20+30   01+40\n"
                 "     01     10     20     30     40       %s      %6s\n"
@@ -310,7 +362,7 @@ void _method4(int total_games, std::vector<char*>*& ret_result) {
                 //(stats_result_size/(sum10 + sum20 + sum30)), (stats_result_size/sum_01_40)
         );
     }
-    printf( "\n" );
+    printf( "\n\n" );
 
 
     /*
@@ -509,9 +561,13 @@ void _method4(int total_games, std::vector<char*>*& ret_result) {
             }
         }
 
+#ifdef ENABLE_LOG
         const int stat_sum_range_offset = 10;
+#endif
+
         int stat_sum_range[10+10+10+10+10][1] = { {0,}, }; // 01 ~ 45
         //const int stat_sum_range_size = sizeof(stat_sum_range)/sizeof(stat_sum_range[0]);
+#ifdef ENABLE_LOG
         printf( "total (sum_<range>): %d (total winning: %d)\n", stats_range_idx, stats_result_size );
         printf( "[01..09]: %s, [10..19]: %s, [20..29]: %s, [30..39]: %s, [40..45]: %s\n",
                 (_01)? "TRUE" : "FALSE", (_10)? "TRUE" : "FALSE", (_20)? "TRUE" : "FALSE",
@@ -521,6 +577,7 @@ void _method4(int total_games, std::vector<char*>*& ret_result) {
                 (stats_result_size - stats_range_idx),
                 (((float)(stats_result_size - stats_range_idx) / stats_result_size) * 100)
         );
+#endif
 
         for ( auto x: stats_range_result ) {
             bool found = false;
@@ -566,36 +623,46 @@ void _method4(int total_games, std::vector<char*>*& ret_result) {
 
             // 1 ~ 9
             if ( _01 && i == 9 ) {
+#ifdef ENABLE_LOG
                 printf( "[%2d]: [%2d~%2d] num = %2d, count = %4d\n",
                         i, (stat_sum_range_offset) - i, i, val_idx, val );
+#endif
                 max_count_idx[0] = val_idx;
                 val = 0;
             }
             // 10 ~ 19
             else if ( _10 && i == 19 ) {
+#ifdef ENABLE_LOG
                 printf( "[%2d]: [%2d~%2d] num = %2d, count = %4d\n",
                         i, (i-stat_sum_range_offset) + 1, i, val_idx, val );
+#endif
                 max_count_idx[1] = val_idx;
                 val = 0;
             }
             // 20 ~ 29
             else if ( _20 && i == 29 ) {
+#ifdef ENABLE_LOG
                 printf( "[%2d]: [%2d~%2d] num = %2d, count = %4d\n",
                         i, (i-stat_sum_range_offset) + 1, i, val_idx, val );
+#endif
                 max_count_idx[2] = val_idx;
                 val = 0;
             }
             // 30 ~ 39
             else if ( _30 && i == 39 ) {
+#ifdef ENABLE_LOG
                 printf( "[%2d]: [%2d~%2d] num = %2d, count = %4d\n",
                         i, (i-stat_sum_range_offset) + 1, i, val_idx, val );
+#endif
                 max_count_idx[3] = val_idx;
                 val = 0;
             }
             // 40 ~ 45
             else if ( _40 && i == 44 ) {
+#ifdef ENABLE_LOG
                 printf( "[%2d]: [%2d~%2d] num = %2d, count = %4d\n",
                         i, (i-4), (i + 1), val_idx, val );
+#endif
                 max_count_idx[4] = val_idx;
                 val = 0;
             }
@@ -621,34 +688,45 @@ void _method4(int total_games, std::vector<char*>*& ret_result) {
         memcpy( sort_20_29, stat_sum_range[20], sizeof(stat_sum_range[0]) * 10 );
         memcpy( sort_30_39, stat_sum_range[30], sizeof(stat_sum_range[0]) * 10 );
         memcpy( sort_40_45, stat_sum_range[40], sizeof(stat_sum_range[0]) * 6  );
-        //printf( "%d, %d, %d, %d, %d\n", sort_01_09[0], sort_10_19[0], sort_20_29[0], sort_30_39[0], sort_40_45[0] );
+        //printf( "%d, %d, %d, %d, %d\n",
+        //    sort_01_09[0], sort_10_19[0], sort_20_29[0], sort_30_39[0], sort_40_45[0] );
 
         if ( _01 ) {
+#ifdef ENABLE_LOG
             printf( "[01: 01..09]\n" );
             for ( int i = 1; i < 10; i++ ) { printf( "%4d", i ); } printf( "\n" );
             for ( auto x: sort_01_09 ) { printf( "%4d", x ); } printf( "\n" );
+#endif
             //printf( "check...\n" );
             //for ( int i = 0; i < 10; i++ ) { printf( "%4d", *(stat_sum_range[i]) ); } printf( "\n" );
         }
         if ( _10 ) {
+#ifdef ENABLE_LOG
             printf( "[10: 10..19]\n" );
             for ( int i = 10; i < 20; i++ ) { printf( "%4d", i ); } printf( "\n" );
             for ( auto x: sort_10_19 ) { printf( "%4d", x ); } printf( "\n" );
+#endif
         }
         if ( _20 ) {
+#ifdef ENABLE_LOG
             printf( "[20: 20..29]\n" );
             for ( int i = 20; i < 30; i++ ) { printf( "%4d", i ); } printf( "\n" );
             for ( auto x: sort_20_29 ) { printf( "%4d", x ); } printf( "\n" );
+#endif
         }
         if ( _30 ) {
+#ifdef ENABLE_LOG
             printf( "[30: 30..39]\n" );
             for ( int i = 30; i < 40; i++ ) { printf( "%4d", i ); } printf( "\n" );
             for ( auto x: sort_30_39 ) { printf( "%4d", x ); } printf( "\n" );
+#endif
         }
         if ( _40 ) {
+#ifdef ENABLE_LOG
             printf( "[40: 40..45]\n" );
             for ( int i = 40; i < 45+1; i++ ) { printf( "%4d", i ); } printf( "\n" );
             for ( auto x: sort_40_45 ) { printf( "%4d", x ); } printf( "\n" );
+#endif
         }
         //printf( "----------\n" );
 
@@ -657,7 +735,7 @@ void _method4(int total_games, std::vector<char*>*& ret_result) {
 
         // pick 4 numbers: e.g., 10..19 (2), 20..29 (1), 30..39 (1)
         // pick 2 numbers: e.g, 01..09 (1), 40..45 (1)
-        printf( "\n[pick numbers...]\n" );
+//        printf( "\n[pick numbers...]\n" );
         //max_predictions
 
         // pick 4 numbers
@@ -707,7 +785,7 @@ void _method4(int total_games, std::vector<char*>*& ret_result) {
             //const int shuffle_result_len = 10;
             //int shuffle_result[shuffle_result_len] = { 0, };
             //shuffle_range( 0, 10, -1, shuffle_result, shuffle_result_len );
-            //printf( "(shffle) result = \n" );
+            //printf( "(shuffle) result = \n" );
             //for ( auto x: shuffle_result ) { printf( "%d ", x ); } printf( "\n" );
 
 
@@ -737,7 +815,9 @@ void _method4(int total_games, std::vector<char*>*& ret_result) {
 
                 if ( found ) {
                     // shuffle: 0 ~ 9
+#ifdef ENABLE_LOG
                     printf( "target range: " );
+
                     for ( int j = start; j < end; j++ ) {
                         //numbers[j] = j;
                         if ( i == 0 && j == 0 ) continue;
@@ -746,6 +826,7 @@ void _method4(int total_games, std::vector<char*>*& ret_result) {
                     }
                     printf( "offset = %d", offset );
                     printf( "\n" );
+#endif
                     for ( int j = start; j < end; j++ ) { numbers[j] = j; }
                     //shuffle_range( 0, 0, -1, numbers, (int)(sizeof(numbers)/sizeof(numbers[0])) );
 
@@ -818,9 +899,11 @@ void _method4(int total_games, std::vector<char*>*& ret_result) {
                             (pivot_halves_out_2 == pivot_3rds_out) );
 
 
+#ifdef ENABLE_LOG
                     printf( "pick positions: (%d), [mid: %d, %d, %d~%d] = %d, %d, %d\n",
                             val, pivot_halves_1, pivot_halves_2, pivot_3rds_1, pivot_3rds_2,
                             pivot_halves_out_1, pivot_halves_out_2, pivot_3rds_out );
+#endif
 
 
                     // 4. pick one number in 4 numbers
@@ -831,16 +914,23 @@ void _method4(int total_games, std::vector<char*>*& ret_result) {
                     box[2] = numbers[pivot_halves_out_2] + offset;
                     box[3] = numbers[pivot_3rds_out] + offset;
 
+#ifdef ENABLE_LOG
                     printf( "box = " );
                     for ( auto x: box ) { printf( "%d ", x ); } printf( "\n" );
+#endif
 
                     shuffle_range( 0, 0, -1, box, BOX_LEN );
-                    printf( "(shffle) box = " );
+
+#ifdef ENABLE_LOG
+                    printf( "(shuffle) box = " );
                     for ( auto x: box ) { printf( "%d ", x ); } printf( "\n" );
+#endif
 
 
+#ifdef ENABLE_LOG
                     // pick one: box[0]
                     printf( "pick one: box[0] = %d\n", box[0] );
+#endif
 
                     //! NOTE: actual array position
                     // [0]: 01..09  
@@ -851,11 +941,177 @@ void _method4(int total_games, std::vector<char*>*& ret_result) {
                     // results: actual array position
                     results[i] = box[0];
 
-                    printf( "\n" );
+//                    printf( "\n" );
                 }
             }
         }
-    };
+    }; // auto func_range = []() {}
+
+
+    // for range 01..09
+    //auto func_range_01_09_picks_2_num = [&](auto& result_picks, const bool display_info = false)
+    //auto func_range_01_09_picks_2_num = [&](int (&result_picks)[2], const bool display_info = false)
+    auto func_range_01_09_picks_2_num = [&](int result_picks[2], const bool display_info = false)
+    {
+        int stats_01_result[1+6] = { 0, };
+        int count01_has_over_2 = 0;
+        int count01_has_01_01_10_20_30 = 0; // [01..09]x2, ..., without [40..45]
+        int stats_01_09_result[9] = { 0, };
+
+        for ( auto x: results_winning_numbers ) {
+            int count01_within_2 = 0;
+            int count01 = 0;
+            int count10 = 0;
+            int count20 = 0;
+            int count30 = 0;
+            int count40 = 0;
+
+            int _tmp = 0;
+            for ( int y = 1; y < (int)sizeof(x); y++ ) {
+                if      ( x[y] >  0  && x[y] <  10 ) ++_tmp;
+
+                if ( _tmp >= 2 ) {
+                    if ( x[y] >= 0 && x[y] < 10 ) { stats_01_09_result[x[y]] += 1; }
+                }
+
+                if      ( x[y] >= 0  && x[y] <  10 ) ++count01;
+                else if ( x[y] >= 10 && x[y] <  20 ) ++count10;
+                else if ( x[y] >= 20 && x[y] <  30 ) ++count20;
+                else if ( x[y] >= 30 && x[y] <  40 ) ++count30;
+                else if ( x[y] >= 40 && x[y] <= 45 ) ++count40;
+            }
+            if ( _tmp >= 2 ) {
+                ++count01_within_2;
+                if ( count01 > 0 && count10 > 0 && count20 > 0 && count30 > 0 )
+                    ++count01_has_01_01_10_20_30;
+            }
+            else continue;
+
+            ++count01_has_over_2;
+            stats_01_result[0] += count01_within_2;
+            stats_01_result[1] += count01;
+            stats_01_result[2] += count10;
+            stats_01_result[3] += count20;
+            stats_01_result[4] += count30;
+            stats_01_result[5] += count40;
+            stats_01_result[6] = 0; // blank
+        }
+
+
+        //const float all = (stats_01_result[1] + stats_01_result[2] + stats_01_result[3]
+        //        + stats_01_result[4] + stats_01_result[5]);
+
+        // sort (desc): 60:40
+        int stats_01_09_result_sort_6_to_4[9] = { 0 }; // sorted by desc: 6:4
+        //int stats_01_09_result_sort[9][2] = { {0, 0} };
+        //for ( int i = 1; i < 10; i++ ) {
+        //    stats_01_09_result_sort[i-1][0] = stats_01_09_result[i-1];
+        //    stats_01_09_result_sort[i-1][1] = i;
+        //}
+        std::vector<std::vector<int>> vec_stats_01_09_result_sort;
+        for ( int i = 1; i < 10; i++ ) {
+            vec_stats_01_09_result_sort.push_back( { stats_01_09_result[i-1], i } );
+        }
+        std::sort( vec_stats_01_09_result_sort.begin(), vec_stats_01_09_result_sort.end(),
+                comp_2d_array_desc );
+        for ( int i = 0; i < 10-1; i++ ) {
+            stats_01_09_result_sort_6_to_4[i] = vec_stats_01_09_result_sort[i][1];
+        }
+
+        // random pick (60:40), each one
+        auto shuffle_array_pick_one = [](const int arr[], const int len) {
+            std::vector<int> v( len );
+
+            for ( int i = 0; i < len; i++ ) { v[i] = arr[i]; }
+            //for ( int i = 0; i < len; i++ ) { printf( "%2d ", v[i] ); } printf( "\n" );
+
+            unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+            std::default_random_engine rng(seed); // or std::mt19937
+
+            //std::random_device rd;
+            //std::mt19937 rng(rd());
+
+            std::shuffle( std::begin(v), std::end(v), rng );
+
+            // pick one
+            return v[0];
+        };
+
+
+        int rate_6_idx = 0;
+
+        if ( display_info ) {
+            printf( "[01..09]: count >= 2\n" );
+            printf( "----------------------------------------------------------------\n"
+                    "     01     10     20     30     40     (true, false, ALL)\n"
+                    "----------------------------------------------------------------\n"
+                    "sum: %d   %d    %d    %d    %d    (%d, %d, %d)\n"
+                    "     -----------------------------------------------------------\n"
+                    "avg: %.3f  %.3f  %.3f  %.3f  %.3f            <-- ([01..09] count >= 2: %d)\n"
+                    "----------------------------------------------------------------\n",
+                    stats_01_result[1], stats_01_result[2], stats_01_result[3],
+                    stats_01_result[4], stats_01_result[5], stats_01_result[0],
+                    (stats_result_size - count01_has_over_2), stats_result_size,
+                    (stats_01_result[1] / (float)stats_01_result[0]),
+                    (stats_01_result[2] / (float)stats_01_result[0]),
+                    (stats_01_result[3] / (float)stats_01_result[0]),
+                    (stats_01_result[4] / (float)stats_01_result[0]),
+                    (stats_01_result[5] / (float)stats_01_result[0]),
+                    stats_01_result[0]
+            );
+            printf( "[40..45]: incl. %d (%.3f%%), exc. %d (%.3f%%)\n"
+                    "----------------------------------------------------------------\n",
+                    (stats_01_result[0] - count01_has_01_01_10_20_30),
+                    (((stats_01_result[0] - count01_has_01_01_10_20_30) / (float)stats_01_result[0]) * 100),
+                    count01_has_01_01_10_20_30,
+                    ((count01_has_01_01_10_20_30 / (float)stats_01_result[0]) * 100)
+            );
+            printf( "\t[01..09]\n" );
+            printf( "\t-------------------------------------------------------------------------\n" );
+            printf( "\t" );
+            for ( int i = 1; i < 10; i++ ) { printf( "%d\t", i ); } printf( "\n" );
+            printf( "\t-------------------------------------------------------------------------\n" );
+            int stats_01_09_result_sum = 0;
+            for ( auto x: stats_01_09_result ) { stats_01_09_result_sum += x; }
+            printf( "sum: \t" );
+            for ( auto x: stats_01_09_result ) { printf( "%d\t", x ); } printf( "\n" );
+            printf( "\t-------------------------------------------------------------------------\n" );
+            printf( "avg: \t" );
+            for ( auto x: stats_01_09_result ) {
+                printf( "%.3f\t", (x / (float)stats_01_09_result_sum) * 100 );
+            } printf( "\n" );
+            printf( "----------------------------------------------------------------\n" );
+            printf( "sorted: desc\n" );
+            printf( "\t" );
+            for ( auto x: vec_stats_01_09_result_sort ) { printf( "%d\t", x[1] ); } printf( "\n" );
+            printf( "\t" );
+            for ( auto x: vec_stats_01_09_result_sort ) { printf( "%d\t", x[0] ); } printf( "\n" );
+            printf( "----------------------------------------------------------------\n" );
+            printf( "range 60%% : 40%%\n" );
+            float j = 0.f;
+            for ( int i = 0; i < (int)vec_stats_01_09_result_sort.size(); i++ ) {
+                j += ((vec_stats_01_09_result_sort[i][0] / (float)stats_01_09_result_sum) * 100);
+                if ( j > 60.f ) { rate_6_idx = i; break; }
+            }
+            printf( "60%%: \t" );
+            for ( int i = 0; i < (int)vec_stats_01_09_result_sort.size(); i++ ) {
+                if ( i == rate_6_idx+1 ) { printf( "\n40%%: \t" ); }
+                printf( "%d\t", vec_stats_01_09_result_sort[i][1] );
+            } printf( "\n" );
+            printf( "\n" );
+        }
+
+
+        result_picks[0] = shuffle_array_pick_one( stats_01_09_result_sort_6_to_4, (rate_6_idx + 1) );
+        result_picks[1] = shuffle_array_pick_one( stats_01_09_result_sort_6_to_4 + (rate_6_idx + 1),
+                (sizeof(stats_01_09_result_sort_6_to_4) / sizeof(stats_01_09_result_sort_6_to_4[0]))
+                - (rate_6_idx + 1) );
+        //printf( "picks: %2d, %2d\n", result_picks[0], result_picks[1] );
+    }; // for range 01..09: auto func_range_01_09_picks_2_num = []() {}
+    //int picks_2_num_range_01_09[2] = { 0, };
+    //bool display_info = true;
+    //func_range_01_09_picks_2_num( picks_2_num_range_01_09, display_info );
+
 
     //printf( "--------------------------------------------------------------------\n" );
 
@@ -872,19 +1128,22 @@ void _method4(int total_games, std::vector<char*>*& ret_result) {
         // [4]: 40..45
         int results[5] = { 0, };
 
+        // func_range_01_09_picks_2_num() {}
+        bool display_info = true; // only once at first
+
         for ( int i = 0; i < MAX_PREDICTIONS; i++ ) {
             memset( results, 0x0, sizeof(results) );
 
             // pair [10..19, 20..29, 30..39]
             func_range( false, true, true, true, false, results );
 
-            printf( "\n" );
+//            printf( "\n" );
 
             // pair [01..09, 40..45]
             func_range( true, false, false, false, true, results );
 
             {
-                // for replace range 20..29 with range 40..45, at [4]
+                // for replace range 40..45 with range 20..29, at [4]
                 // pair [20..29]
                 int tmp[5] = { 0, };
                 do {
@@ -911,8 +1170,10 @@ void _method4(int total_games, std::vector<char*>*& ret_result) {
             */
 
 
+#ifdef ENABLE_LOG
             printf( "results (5 numbers) = " );
             for ( auto x: results ) { printf( "%d ", x ); } printf( "\n" );
+#endif
 
             // last one number
             // select ranges: 01, 10, 20, 30, 40
@@ -924,7 +1185,9 @@ void _method4(int total_games, std::vector<char*>*& ret_result) {
             
             do {
                 last_one = shuffle_range_and_pick_one( 1, 45+1 );
+#ifdef ENABLE_LOG
                 printf( "result (last pick one, 1 number) = %d\n", last_one );
+#endif
             } while ( (results[0] == last_one) ||
                     (results[1] == last_one) ||
                     (results[2] == last_one) ||
@@ -938,6 +1201,32 @@ void _method4(int total_games, std::vector<char*>*& ret_result) {
             // ignore sizeof(): sizeof(predictions_results[i][0]) > sizeof(results)
             memcpy( predictions_results[i], results, sizeof(results) );
             predictions_results[i][MAX_NUMBERS_PER_GAME-1] = last_one;
+
+
+            // range 01..09 picks 2 numbers
+            // this is for last row per 5 games
+            {
+                // MAX_PREDICTIONS (== 5)
+                if ( (i > 0) && ((i+1) % 5) == 0 ) {
+                    int picks_2_num_range_01_09[2] = { 0, };
+                    func_range_01_09_picks_2_num( picks_2_num_range_01_09, display_info );
+                    display_info = false; // only once at first
+
+#ifdef ENABLE_LOG
+                    // last row per 5 games
+                    printf( "before:\n" );
+                    for ( auto x: predictions_results[i] ) { printf( "%2d ", x ); } printf( "\n" );
+#endif
+
+                    predictions_results[i][0] = picks_2_num_range_01_09[0];
+                    predictions_results[i][MAX_NUMBERS_PER_GAME-1] = picks_2_num_range_01_09[1];
+
+#ifdef ENABLE_LOG
+                    printf( "after:\n" );
+                    for ( auto x: predictions_results[i] ) { printf( "%2d ", x ); } printf( "\n" );
+#endif
+                }
+            }
         }
     }
     printf( "\n" );
@@ -957,9 +1246,17 @@ void _method4(int total_games, std::vector<char*>*& ret_result) {
         printf( "------------------------------------------\n" );
         printf( "[Predictions] %d games\n", MAX_PREDICTIONS );
         printf( "------------------------------------------\n" );
+        //printf( "     " );
+        //for ( int i = 0; i < MAX_NUMBERS_PER_GAME; i++ ) { printf( "%2d ", i ); } printf( "\n" );
         for ( int i = 0; i < MAX_PREDICTIONS; i++ ) {
             printf( "[%2d] ", i );
             for ( auto x: predictions_results[i] ) printf( "%2d ", x );
+            if ( (i > 0) && ((i+1) % 5) == 0 ) {
+                // range 01..09 picks 2 numbers
+                // this is for last row per 5 games
+                printf( "\t<-- (for [01..09]x2 pattern: [0] and [5] always in the range [01..09],\n"
+                        "\t\t\t\tlast row per 5 games)" );
+            }
             printf( "\n" );
         }
         printf( "------------------------------------------\n" );

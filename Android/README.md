@@ -101,6 +101,15 @@ results:
     model_lotto645_predicts_method.h,
     model_lotto645_results_winning_numbers.h
  }
+ - MAX_ALGORITHM {
+    test_lotto645_tmp2.py
+        last_game_info_str = " ... "
+        "#define MAX_ALGORITHM 4": adjust the number for add/delete your algorithm.
+
+    lottery_prediction.cpp
+        JNI function
+        get_native_max_algorithms() { return MAX_ALGORITHM; }
+ }
 
 4. Copy below files to "lotto645_prediction/app/src/main/cpp/"
 {

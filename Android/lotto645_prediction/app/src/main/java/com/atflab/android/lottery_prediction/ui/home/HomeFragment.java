@@ -272,6 +272,19 @@ public class HomeFragment extends Fragment {
                             m_edittext_winning_num5 != null &&
                             m_edittext_winning_num6 != null &&
                             m_edittext_winning_num7_b!= null ) {
+                        if ( m_edittext_winning_num1.getText().toString().isEmpty() ||
+                                m_edittext_winning_num2.getText().toString().isEmpty() ||
+                                m_edittext_winning_num3.getText().toString().isEmpty() ||
+                                m_edittext_winning_num4.getText().toString().isEmpty() ||
+                                m_edittext_winning_num5.getText().toString().isEmpty() ||
+                                m_edittext_winning_num6.getText().toString().isEmpty() ||
+                                m_edittext_winning_num7_b.getText().toString().isEmpty() ) {
+                            Log.d( TAG, "[Error] Empty winning numbers..." );
+                            button_checks_numbers.setEnabled( true );
+                            Toast.makeText(m_main_app,
+                                    "당첨번호 확인에 번호가 없습니다.\n[제발!] 버튼을 눌러서 번호를 먼저 생성해 주세요.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         int n1 = Integer.parseInt(m_edittext_winning_num1.getText().toString());
                         int n2 = Integer.parseInt(m_edittext_winning_num2.getText().toString());
                         int n3 = Integer.parseInt(m_edittext_winning_num3.getText().toString());
@@ -598,11 +611,11 @@ public class HomeFragment extends Fragment {
             return;
         }
 
-        Toast.makeText(this.getActivity(),
-                "[네트워크] 당첨번호를 가져옵니다.\n"
-                        + "[+] 수동으로 입력해도 됩니다.\n"
-                        + "[+] 초기화된 경우에만 동작합니다.",
-                Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this.getActivity(),
+        //        "[네트워크] 당첨번호를 가져옵니다.\n"
+        //                + "[+] 수동으로 입력해도 됩니다.\n"
+        //                + "[+] 초기화된 경우에만 동작합니다.",
+        //        Toast.LENGTH_SHORT).show();
 
         task.execute( algorithm, generate, total_games, textview_result );
     }
