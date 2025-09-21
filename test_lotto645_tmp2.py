@@ -189,7 +189,7 @@ print()
 # Excel (.xls) file (NOT modified)
 # ---------------------------------
 # https://dhlottery.co.kr/gameResult.do?method=allWinExel&gubun=byWin&nowPage=&drwNoStart=1&drwNoEnd=1144
-_xls_last_game_num = "1189" # (2025년 09월 13일 추첨)
+_xls_last_game_num = "1190" # (2025년 09월 20일 추첨)
 _xls_filename = "./lotto645_당첨번호" + _xls_last_game_num + "회차까지.xls"
 #
 # Download xls file
