@@ -1,6 +1,7 @@
 <resources>
     <!-- <string name="app_name">I will win the Lotto645 today</string> -->
-    <string name="app_name">이번 주는 꼭 당첨될 거야!</string>
+    <!--<string name="app_name">이번 주는 꼭 당첨될 거야!</string>-->
+    <string name="app_name">로또6/45 번호 예측</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>

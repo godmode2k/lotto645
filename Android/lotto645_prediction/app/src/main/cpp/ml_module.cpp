@@ -128,6 +128,7 @@ extern "C" {
 
 #include "lotto645_predicts_method.cpp"
 #include "method4.cpp"
+#include "method5.cpp"
 
 
 //int main(int argc, char* argv[]) {

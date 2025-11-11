@@ -189,7 +189,39 @@ print()
 # Excel (.xls) file (NOT modified)
 # ---------------------------------
 # https://dhlottery.co.kr/gameResult.do?method=allWinExel&gubun=byWin&nowPage=&drwNoStart=1&drwNoEnd=1144
-_xls_last_game_num = "1190" # (2025년 09월 20일 추첨)
+FETCH_SRC_URL = "https://dhlottery.co.kr/gameResult.do?method=byWin"
+#_xls_last_game_num = "1197" # (2025년 11월 08일 추첨)
+_xls_last_game_num = "0"
+try:
+    response = request.urlopen( FETCH_SRC_URL )
+    html = str( response.read().decode('EUC-KR') )
+    html = html.split( "\n" )
+    for i in range(0, 30):
+        """
+        <!DOCTYPE html>
+        <html lang="ko">
+        <head>
+        <meta charset="EUC-KR">
+        <meta id="utitle" name="title" content="동행복권">
+        <meta id="desc" name="description" content="동행복권 1197회 당첨번호 1,5,7,26,28,43+30. 1등 총 13명, 1인당 당첨금액 2,205,089,827원.">
+        <title>로또6/45 - 회차별 당첨번호</title>
+        <title>동행복권</title>
+        """
+        
+        line = html[i]
+        line_pos = line.find( "content=\"동행복권" )
+        if ( line_pos >= 0 ):
+            if ( line.find( "name=\"description\"" ) >= 0 ):
+                pos_start = line.find( "동행복권" )
+                pos_end = line.find( "회" )
+                _xls_last_game_num = str( line[pos_start+len("동행복권 "):pos_end] )
+                print( "last game number = ", _xls_last_game_num )
+                break
+except Exception as e:
+    traceback.print_exc()
+    print( "error = ", e )
+    sys.exit()
+
 _xls_filename = "./lotto645_당첨번호" + _xls_last_game_num + "회차까지.xls"
 #
 # Download xls file
@@ -785,8 +817,9 @@ print( odd_even_code_str )
 # #define LAST_GAME   "1 ~ 1125회\n(2024년 06월 22일 추첨까지)"
 # const char* last_game = "no.1057"; // range: no.1 ~ present
 # int result_won[] = { 8, 13, 19, 27, 40, 45, 12 };
+MAX_ALGORITHM = "5"
 last_game_info_str = "" \
-    + str( "#define MAX_ALGORITHM 4\n" ) \
+    + str( '#define MAX_ALGORITHM ' + str(MAX_ALGORITHM) + "\n" ) \
     + str( '#define LAST_GAME   "1 ~ ' + str(last_game_result[0]) + '회\\n(' + str(last_game_result[1]) + ' 추첨까지)"\n') \
     + str( 'const char* last_game = "no.' + str(last_game_result[0]) + '"; // range: no.1 ~ present\n') \
     + str( "int result_won[] = { " ) \
@@ -1159,6 +1192,7 @@ df2_4 = { "4": df2[16] }
 df2_5 = { "5": df2[17] }
 df2_6 = { "6": df2[18] }
 df2_b = { "bonus": df2[19] }
+df2_winners = { "winners": df2[3] }
 
 df2_1_count = df2_1["1"].value_counts()
 df2_2_count = df2_2["2"].value_counts()
@@ -1167,6 +1201,7 @@ df2_4_count = df2_4["4"].value_counts()
 df2_5_count = df2_5["5"].value_counts()
 df2_6_count = df2_6["6"].value_counts()
 df2_b_count = df2_b["bonus"].value_counts()
+df2_winners_count = df2_winners["winners"].value_counts()
 
 df2_game_merge = pd.merge( df2_1["1"], df2_2["2"], left_index=True, right_index=True, how="outer", suffixes=('_1', '_2')) # 'count_1', 'count_2'
 df2_game_merge = pd.merge( df2_game_merge, df2_3["3"], left_index=True, right_index=True, how="outer", suffixes=('', '')) # 'count' (current column label) // not duplicate label
@@ -1174,6 +1209,7 @@ df2_game_merge = pd.merge( df2_game_merge, df2_4["4"], left_index=True, right_in
 df2_game_merge = pd.merge( df2_game_merge, df2_5["5"], left_index=True, right_index=True, how="outer", suffixes=('', '')) # 'count' // not duplicate label
 df2_game_merge = pd.merge( df2_game_merge, df2_6["6"], left_index=True, right_index=True, how="outer", suffixes=('_5', '_6')) # 'count_5', 'count_6'
 df2_game_merge = pd.merge( df2_game_merge, df2_b["bonus"], left_index=True, right_index=True, how="outer", suffixes=('', '')) # 'count' (bonus column) // not duplicate label
+df2_game_merge = pd.merge( df2_game_merge, df2_winners["winners"], left_index=True, right_index=True, how="outer", suffixes=('', '')) # 'count' (winners column) // not duplicate label
 #---
 
 df_game_merge_test = df2_game_merge.copy()
@@ -1188,7 +1224,11 @@ result_matched_total_6 = int(0)
 result_matched_total = list()
 
 # { no., 1~6+bonus }
-results_winning_numbers_code_str = "int results_winning_numbers[][1+7] = {\n"
+results_winning_numbers_code_str = "// [N] [1] [2] [3] [4] [5] [6] [bonus]\n"
+results_winning_numbers_code_str += "int results_winning_numbers[][1+7] = {\n"
+# { no., winners, 1~6+bonus }
+results_winning_numbers_with_winners_code_str = "// [N] [winners] [1] [2] [3] [4] [5] [6] [bonus]\n"
+results_winning_numbers_with_winners_code_str += "int results_winning_numbers_with_winners[][1+8] = {\n"
     
 for i in range(test_start_from, len(df_game_merge_test.index)):
     #print( df_game_merge_test.iloc[[i]] )
@@ -1207,6 +1247,18 @@ for i in range(test_start_from, len(df_game_merge_test.index)):
         + str(df_game_merge_test.iloc[[i]].values[0][6]) + ", " \
         + "},\n"
     #print( results_winning_numbers_code_str )
+    
+    results_winning_numbers_with_winners_code_str += "    { " \
+        + str(df.iloc[i][1]) + ", " \
+        + str(df_game_merge_test.iloc[[i]].values[0][7]) + ", " \
+        + str(df_game_merge_test.iloc[[i]].values[0][0]) + ", " \
+        + str(df_game_merge_test.iloc[[i]].values[0][1]) + ", " \
+        + str(df_game_merge_test.iloc[[i]].values[0][2]) + ", " \
+        + str(df_game_merge_test.iloc[[i]].values[0][3]) + ", " \
+        + str(df_game_merge_test.iloc[[i]].values[0][4]) + ", " \
+        + str(df_game_merge_test.iloc[[i]].values[0][5]) + ", " \
+        + str(df_game_merge_test.iloc[[i]].values[0][6]) + ", " \
+        + "},\n"
 
     
 
@@ -1241,6 +1293,7 @@ for i in range(test_start_from, len(df_game_merge_test.index)):
     #print()
 
 results_winning_numbers_code_str += str("};")
+results_winning_numbers_with_winners_code_str += str("};")
 
 print( "matched total from 1 to last game result")
 print( "matched total 1: ", result_matched_total_1 )
@@ -1261,6 +1314,7 @@ c_code_str = \
     "#ifndef __RESULTS_WINNING_NUMBERS__\n" + \
     "#define __RESULTS_WINNING_NUMBERS__\n\n" + \
     results_winning_numbers_code_str + "\n\n" + \
+    results_winning_numbers_with_winners_code_str + "\n\n" + \
     "#endif // __RESULTS_WINNING_NUMBERS__"
 
 print( "writing model_lotto645_results_winning_numbers.h ..." )

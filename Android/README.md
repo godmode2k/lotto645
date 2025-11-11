@@ -14,7 +14,7 @@ Python: v3.7.4
 sklearn, micromlgen
 
 Android:
- - Android Studio
+ - Android Studio (android-studio-2024.2.1.12, gradle 8.9)
  - Android 11
  - NDK
 ```
@@ -55,12 +55,14 @@ Or you can ignore that.
  -
  - 이제 업데이트시에 APK 재설치가 필요할 경우, APK 파일을 내장메모리 <Download/lotto645> 디렉터리에 다운로드합니다.
  - 설치되어 있는 앱은 삭제하고 새버전으로 다시 설치해주면 됩니다.
+ - Android Studio 변경
 
 2. 번호생성 알고리즘
- - 번호생성 알고리즘(4)이 추가되었습니다.
+ - 번호생성 알고리즘(5)이 추가되었습니다.
 
 3. test_lotto645_tmp2.py
- - _xls_last_game_num = "1186" 에서 원하는 회차번호만 변경하면 해당 xls 파일을 다운로드합니다.
+ - 마지막 회차번호를 자동으로 가져와서 해당 xls 파일을 다운로드합니다.
+ - 코드 수정없이 실행하면 됩니다.
 ```
 
 
@@ -84,8 +86,8 @@ $ cd lotto645_prediction/app/src/main/cpp/
 //2. (Edit) test_lotto645_tmp2.py: 188
 //_xls_filename = "./lotto645_당첨번호1128회차까지.xls"
 
-2. (Edit) test_lotto645_tmp2.py:
-_xls_last_game_num = "1186"    # last game number
+//2. (Edit) test_lotto645_tmp2.py:
+//_xls_last_game_num = "1186"    # last game number
 
 3. Generate codes
 $ python3 test_lotto645_tmp2.py
@@ -151,5 +153,8 @@ Screenshots
 ----------
 
 > Android App
-<img src="https://github.com/godmode2k/lotto645/raw/main/screenshot.jpg" width="40%" height="40%">
+<img src="https://github.com/godmode2k/lotto645/raw/main/screenshot_20251109_01.jpg" width="40%" height="40%">
+
+> Android App
+<img src="https://github.com/godmode2k/lotto645/raw/main/screenshot_20251109_02.jpg" width="40%" height="40%">
 

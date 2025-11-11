@@ -47,16 +47,27 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.Html;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.atflab.android.lottery_prediction.ui.home.HomeFragment;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -91,6 +102,9 @@ public class App extends Application {
     private String REQ_URL_CHECK_UPDATE = REQ_URL_BASE + m_ml_so_updates;
     private String REQ_URL_DOWNLOAD_UPDATES = REQ_URL_BASE + m_ml_so;
     private String REQ_URL_BASE_APK = "https://github.com/godmode2k/lotto645/raw/main/"; // Git repo home
+
+    private final String HISTORY_DIR = "lotto645"; // (Download)/lotto645
+    private final String HISTORY_FILENAME = "generated.json";
 
 
     @Override
@@ -172,13 +186,13 @@ public class App extends Application {
         return m_list_result;
     }
 
-    public void set_str_result(String result) {
-        m_str_result = result;
-    }
+    //public void set_str_result(String result) {
+    //    m_str_result = result;
+    //}
 
-    public String get_str_result() {
-        return m_str_result;
-    }
+    //public String get_str_result() {
+    //    return m_str_result;
+    //}
 
     public boolean network_online() {
         boolean state = false;
@@ -1094,16 +1108,40 @@ public class App extends Application {
         return true;
     }
 
-    //public boolean download_contents(final String save_filename, final String contents) {
-    public boolean download_contents(final String save_filename, final byte[] contents) {
+    //public boolean saveas_contents(final String dir, final String filename, final String contents) {
+    /*
+    //! FIXME:
+    // - [generate] -> /Download/lotto645/generated.json -> stop app -> restart app -> [generate] -> okay
+    // - [generate] -> /Download/lotto645/generated.json -> delete app -> install app -> start app -> [generate] -> file permission denied
+    public boolean saveas_contents(final String dir, final String filename, final byte[] contents) {
+        final String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();
+        final String full_filename = path + File.separator + dir + File.separator + filename;
+
         try {
             Uri collection;
             ContentResolver resolver = m_context.getContentResolver();
             ContentValues contentValues = new android.content.ContentValues();
 
-            contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, save_filename);
-            contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "text/plain");
-            contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS);
+            contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, filename);
+            //contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "text/plain");
+            contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + File.separator + dir);
+
+            {
+                // delete file exist
+                //final String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();
+                //final String full_filename = path + File.separator + HISTORY_DIR + File.separator + HISTORY_FILENAME;
+                Log.d( TAG, "saveas_contents: full pathname = " + full_filename );
+
+                File delete_file = new File(full_filename);
+                if (delete_file.exists()) {
+                    if ( delete_file.delete() ) {
+                        Log.d( TAG, "saveas_contents: deleted..." );
+                    }
+                    else {
+                        Log.d( TAG, "saveas_contents: failed to delete..." );
+                    }
+                }
+            }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 collection = MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
@@ -1125,6 +1163,7 @@ public class App extends Application {
 //                }
 //            }
 
+
             Uri fileUri = resolver.insert(collection, contentValues);
             if (fileUri != null) {
                 try (OutputStream outputStream = resolver.openOutputStream(fileUri)) {
@@ -1144,14 +1183,400 @@ public class App extends Application {
                 }
             } else {
                 //Toast.makeText(m_context, "Failed to create file", Toast.LENGTH_SHORT).show();
+                Log.d( TAG, "saveas_contents: failed to save as...: URI error..." );
                 return false;
             }
+
+            // Old version, USE URI version
+            //
+            //final String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();
+            //final String full_filename = path + File.separator + HISTORY_DIR + File.separator + HISTORY_FILENAME;
+            //Log.d( TAG, "full full_filename = " + full_filename );
+            //
+            //Uri fileUri = Uri.fromFile( new File(full_filename) );
+            //if (fileUri != null) {
+            //    try (OutputStream outputStream = getContentResolver().openOutputStream(fileUri)) {
+            //        //outputStream.write(content.getBytes());
+            //        outputStream.write( contents );
+            //        outputStream.flush();
+            //    } catch (IOException e) {
+            //        e.printStackTrace();
+            //    }
+            //} else {
+            //    Log.d( TAG, "saveas_contents: failed to save as..." );
+            //    return false;
+            //}
+
+            Log.d( TAG, "saveas_contents: saved..." );
         }
         catch (Exception e) {
+            Log.d( TAG, "saveas_contents: failed to save as..." );
             e.printStackTrace();
             return false;
         }
 
+        return true;
+    }
+    */
+
+    public boolean saveas_contents(final boolean is_public_dir, final String dir, final String filename, final byte[] contents) {
+        String base_path = "";
+        String path = "";
+        String full_filename = "";
+
+        if ( is_public_dir ) {
+            base_path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();
+        }
+        else {
+            base_path = getApplicationContext().getFilesDir().getAbsolutePath(); // /data/data/<package>/files/
+        }
+
+        if ( dir == null ) {
+            // /data/data/<package>/files/
+            path = base_path;
+        }
+        else {
+            if ( dir.isEmpty() ) {
+                path = base_path;
+            }
+            else {
+                // URI or non-URI
+                path = base_path + File.separator + dir;
+            }
+        }
+
+        full_filename = path + File.separator + filename;
+
+        try {
+            if ( is_public_dir ) {
+                Uri collection;
+                ContentResolver resolver = m_context.getContentResolver();
+                ContentValues contentValues = new android.content.ContentValues();
+
+                contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, filename);
+                //contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "text/plain");
+                contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + File.separator + dir);
+
+                {
+                    // delete file exist
+                    //final String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();
+                    //final String full_filename = path + File.separator + HISTORY_DIR + File.separator + HISTORY_FILENAME;
+                    Log.d(TAG, "saveas_contents: full pathname = " + full_filename);
+
+                    File delete_file = new File(full_filename);
+                    if (delete_file.exists()) {
+                        if (delete_file.delete()) {
+                            Log.d(TAG, "saveas_contents: deleted...");
+                        } else {
+                            Log.d(TAG, "saveas_contents: failed to delete...");
+                        }
+                    }
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    collection = MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
+                } else {
+                    collection = MediaStore.Files.getContentUri("external");
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    contentValues.put(MediaStore.MediaColumns.IS_PENDING, 1);
+                }
+
+//            File home_dir = new File(new_path);
+//            if (!home_dir.exists()) {
+//                if (home_dir.mkdir()) {
+//                    Log.d(TAG, "home directory created: " + home_dir.getAbsolutePath());
+//                } else {
+//                    Log.d(TAG, "home directory created [FAIL]: " + home_dir.getAbsolutePath());
+//                    return 0;
+//                }
+//            }
+
+
+                Uri fileUri = resolver.insert(collection, contentValues);
+                if (fileUri != null) {
+                    try (OutputStream outputStream = resolver.openOutputStream(fileUri)) {
+                        //outputStream.write(content.getBytes());
+                        outputStream.write(contents);
+                        outputStream.flush();
+                        //Toast.makeText(m_context, "File saved to Downloads", Toast.LENGTH_SHORT).show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        //Toast.makeText(m_context, "Failed to save file", Toast.LENGTH_SHORT).show();
+                    }
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        contentValues.clear();
+                        contentValues.put(MediaStore.MediaColumns.IS_PENDING, 0);
+                        resolver.update(fileUri, contentValues, null, null);
+                    }
+                } else {
+                    //Toast.makeText(m_context, "Failed to create file", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "saveas_contents: failed to save as...: URI error...");
+                    return false;
+                }
+
+                // Old version, USE URI version
+                //
+                //final String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();
+                //final String full_filename = path + File.separator + HISTORY_DIR + File.separator + HISTORY_FILENAME;
+                //Log.d( TAG, "full full_filename = " + full_filename );
+                //
+                //Uri fileUri = Uri.fromFile( new File(full_filename) );
+                //if (fileUri != null) {
+                //    try (OutputStream outputStream = getContentResolver().openOutputStream(fileUri)) {
+                //        //outputStream.write(content.getBytes());
+                //        outputStream.write( contents );
+                //        outputStream.flush();
+                //    } catch (IOException e) {
+                //        e.printStackTrace();
+                //    }
+                //} else {
+                //    Log.d( TAG, "saveas_contents: failed to save as..." );
+                //    return false;
+                //}
+            }
+            else {
+                if ( dir != null && !dir.isEmpty() ) {
+                    File home_dir = new File(path);
+                    if (!home_dir.exists()) {
+                        if (home_dir.mkdir()) {
+                            Log.d(TAG, "home directory created: " + path);
+                        } else {
+                            Log.d(TAG, "home directory created [FAIL]: " + path);
+                        }
+                    }
+                }
+
+                {
+                    // delete file exist
+                    //final String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();
+                    //final String full_filename = path + File.separator + HISTORY_DIR + File.separator + HISTORY_FILENAME;
+                    Log.d(TAG, "saveas_contents: full pathname = " + full_filename);
+
+                    File delete_file = new File( full_filename );
+                    if (delete_file.exists()) {
+                        if (delete_file.delete()) {
+                            Log.d(TAG, "saveas_contents: deleted...");
+                        } else {
+                            Log.d(TAG, "saveas_contents: failed to delete...");
+                        }
+                    }
+                }
+
+                File f = new File( full_filename );
+                if ( !f.exists() ) {
+                    Log.d(TAG, "saveas_contents: file not found, creating...");
+                    f.createNewFile();
+                }
+                if ( f.exists() ) {
+                    Log.d(TAG, "saveas_contents: file found, writing...");
+                    OutputStream os = new FileOutputStream(f);
+                    if (os != null) {
+                        os.write( contents );
+                        os.flush();
+                        os.close();
+                        os = null;
+                    }
+                }
+                else {
+                    //Toast.makeText(m_context, "Failed to create file", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "saveas_contents: failed to save as...: file not found...");
+                    return false;
+                }
+            }
+
+            Log.d( TAG, "saveas_contents: saved..." );
+        }
+        catch (Exception e) {
+            Log.d( TAG, "saveas_contents: failed to save as..." );
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean save_history(final ArrayList<int[]> val, final String datetime, String val_result) {
+        // history generated
+        // file path: /Download/lotto645/generated.json
+        // {
+        //     "generated": [
+        //         { "date": "20251022090000", "numbers": [ [0, ], ], "result": "..." }
+        //     ]
+        // }
+
+        try {
+            JsonObject obj_export = new JsonObject();
+            JsonArray arr_root = new JsonArray();
+            JsonObject obj = new JsonObject();
+            JsonArray arr = new JsonArray();
+            for ( int[] x: val ) {
+                JsonArray _arr = new JsonArray();
+                for (int i: x) { _arr.add(i); }
+                arr.add( _arr );
+            }
+            obj.addProperty("date", datetime);
+            obj.add("numbers", arr);
+            obj.addProperty("result", val_result );
+            arr_root.add( obj );
+            obj_export.add( "generated", arr_root );
+
+            Gson gson = new Gson();
+            String json_generated = gson.toJson(obj_export);
+            Log.d(TAG, "JSON generated = \n" + json_generated);
+
+            saveas_contents( false, HISTORY_DIR, HISTORY_FILENAME, json_generated.getBytes() );
+        } catch( Exception e ) {
+            e.printStackTrace();
+        }
+
+        return true;
+    }
+
+    public boolean load_contents(final boolean is_public_dir, final String dir, final String filename) {
+        String base_path = "";
+        String path = "";
+        String full_filename = "";
+
+        if ( is_public_dir ) {
+            base_path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();
+        }
+        else {
+            base_path = getApplicationContext().getFilesDir().getAbsolutePath(); // /data/data/<package>/files/
+        }
+
+        if ( dir == null ) {
+            // /data/data/<package>/files/
+            path = base_path;
+        }
+        else {
+            if ( dir.isEmpty() ) {
+                path = base_path;
+            }
+            else {
+                // URI or non-URI
+                path = base_path + File.separator + dir;
+            }
+        }
+
+        full_filename = path + File.separator + filename;
+
+        return true;
+    }
+
+    // result:
+    //  - final android.widget.TextView tv_result
+    //  - ArrayList<int[]> result_generated_numbers
+    public boolean load_history(final boolean is_public_dir, final android.widget.TextView tv_result, ArrayList<int[]> result_generated_numbers) {
+        String base_path = "";
+        String path = "";
+        String dir = "";
+        String full_filename = "";
+
+        String json_str = "";
+
+        if ( is_public_dir ) {
+            base_path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();
+        }
+        else {
+            base_path = getApplicationContext().getFilesDir().getAbsolutePath(); // /data/data/<package>/files/
+        }
+
+        path = base_path + File.separator + HISTORY_DIR;
+        full_filename = path + File.separator + HISTORY_FILENAME;
+
+
+        //Log.d( TAG, "load_history: " + Environment.DIRECTORY_DOWNLOADS + "/" + HISTORY_DIR + "/" + HISTORY_FILENAME );
+
+        try {
+            //final String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();
+            //final String filename = path + File.separator + HISTORY_DIR + File.separator + HISTORY_FILENAME;
+            Log.d( TAG, "full pathname = " + full_filename );
+
+            if ( !new File(full_filename).exists() ) {
+                Log.d(TAG, "load_history: failed to open a history file, file not found, ignore...");
+            }
+
+            Uri fileUri = Uri.fromFile( new File(full_filename) );
+            if ( fileUri != null ) {
+                String line = null;
+                BufferedReader br = null;
+                InputStream is = getContentResolver().openInputStream(fileUri);
+
+                br = new BufferedReader( new InputStreamReader(is) );
+
+                while ( true ) {
+                    line = br.readLine();
+                    if ( line == null ) break;
+                    json_str += line;
+                }
+
+                if ( br != null ) br.close();
+                if ( is != null ) is.close();
+                br = null;
+                is = null;
+            } else {
+                Log.d( TAG, "load_history: failed to open a history file: URI error..." );
+                return false;
+            }
+
+            {
+                // history generated
+                // file path: /Download/lotto645/generated.json
+                // {
+                //     "generated": [
+                //         { "date": "20251022090000", "numbers": [ [0, ], ], "result": "..." }
+                //     ]
+                // }
+
+                Log.d(TAG, "JSON = \n" + json_str );
+
+                //JSONObject obj_export = new JSONObject(json_str.replace("\\", ""));
+                JSONObject obj_export = new JSONObject(json_str);
+                JSONArray arr_root = new JSONArray();
+                JSONObject obj = new JSONObject();
+                JSONArray arr_numbers = new JSONArray();
+                String result = "";
+
+                arr_root = (JSONArray) obj_export.get("generated");
+                obj = (JSONObject) arr_root.get(0);
+                arr_numbers = (JSONArray) obj.get("numbers");
+                result = (String)obj.get("result");
+
+                for ( int i = 0; i < arr_numbers.length(); i++ ) {
+                    JSONArray arr = (JSONArray)arr_numbers.get(i);
+                    int v[] = {
+                            (int)arr.get(0),
+                            (int)arr.get(1),
+                            (int)arr.get(2),
+                            (int)arr.get(3),
+                            (int)arr.get(4),
+                            (int)arr.get(5)
+                    };
+                    result_generated_numbers.add( v );
+                }
+
+                String _result = "";
+                for ( int[] x: result_generated_numbers ) {
+                    for ( int y: x ) { _result += y + ", "; }
+                    _result += "\n";
+                }
+                Log.d( TAG, _result );
+                Log.d( TAG, result );
+
+                if (tv_result != null) {
+                    tv_result.setText(Html.fromHtml(result.replace("\n", "<br>")));
+                }
+            }
+        } catch (Exception e ) {
+            Log.d( TAG, "load_history: failed" );
+            e.printStackTrace();
+            return false;
+        }
+
+        Log.d( TAG, "load_history: done..." );
         return true;
     }
 }

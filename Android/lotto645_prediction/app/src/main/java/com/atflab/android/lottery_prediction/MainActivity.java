@@ -40,10 +40,17 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+//import com.google.android.gms.ads.AdListener;
+//import com.google.android.gms.ads.AdRequest;
+//import com.google.android.gms.ads.AdSize;
+//import com.google.android.gms.ads.AdView;
+//import com.google.android.gms.ads.LoadAdError;
+//import com.google.android.gms.ads.MobileAds;
+//import com.google.android.material.floatingactionbutton.FloatingActionButton;
+//import com.google.android.material.snackbar.Snackbar;
 
 import android.os.Environment;
 import android.util.Log;
@@ -66,6 +73,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -88,6 +96,15 @@ public class MainActivity extends AppCompatActivity {
     //static { System.loadLibrary("lottery_prediction"); }
     private native String[] get_native_ml_module(int generate);
     */
+
+    /*
+    // ADs Platform: Admob
+    private AdView m_adView = null;
+    //private static final String AD_UNIT_ID = "";
+    private static final String AD_UNIT_ID = "";
+    */
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,6 +170,23 @@ public class MainActivity extends AppCompatActivity {
             Log.d( TAG, "[" + i + "] " + result.get(i).toString() );
         }
         */
+
+        /*
+        {
+            // ADs Platform: Admob
+            new Thread(
+                    () -> {
+                        // Initialize the Google Mobile Ads SDK on a background thread.
+                        MobileAds.initialize(this, initializationStatus -> {});
+                        // [START_EXCLUDE silent]
+                        // Load an ad on the main thread.
+                        //runOnUiThread(this::loadBanner);
+                        // [END_EXCLUDE]
+                    })
+                    .start();
+            init_ads();
+        }
+        */
     }
 
     @Override
@@ -181,6 +215,15 @@ public class MainActivity extends AppCompatActivity {
             m_main_app.release();
         }
 
+        /*
+        {
+            // ADs Platform: Admob
+            if (m_adView != null) {
+                m_adView.destroy();
+            }
+        }
+        */
+
         System.gc();
     }
 
@@ -197,6 +240,29 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+
+        /*
+        {
+            // ADs Platform: Admob
+            if (m_adView != null) {
+                m_adView.pause();
+            }
+        }
+        */
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        /*
+        {
+            // ADs Platform: Admob
+            if (m_adView != null) {
+                m_adView.resume();
+            }
+        }
+        */
     }
 
     @Override
@@ -295,4 +361,94 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     */
+
+/*
+    // ADs Platform: Admob
+    private void init_ads() {
+        try {
+            // Create an ad.
+            m_adView = new AdView( this );
+            //m_adView = (AdView)findViewById( R.id.MainAdView );
+
+            if ( m_adView != null ) {
+                m_adView.setAdSize( AdSize.BANNER );
+                //m_adView.setAdSize( AdSize.SMART_BANNER );
+                m_adView.setAdUnitId( AD_UNIT_ID );
+                m_adView.setVisibility( View.VISIBLE );
+
+                m_adView.setAdListener( new AdListener() {
+                    @Override
+                    public void onAdLoaded() {
+                        // TODO Auto-generated method stub
+                        super.onAdLoaded();
+
+                        runOnUiThread( new Runnable() {
+                            @Override
+                            public void run() {
+                                // TODO Auto-generated method stub
+
+                                if ( m_adView != null ) {
+                                    m_adView.setBackgroundColor( Color.BLACK );
+                                }
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(LoadAdError loadAdError) {
+                        super.onAdFailedToLoad(loadAdError);
+
+                        Log.d( TAG, "init_ads(): onAdFailedToLoad(): errorCode = " + loadAdError );
+                    }
+                });
+
+                // Add the AdView to the view hierarchy. The view will have no size
+                // until the ad is loaded.
+                LinearLayout layout = (LinearLayout)findViewById( R.id.LinearLayout_main );
+                if ( layout != null ) {
+                    layout.addView( m_adView );
+
+//                    //! TEST on emulator
+//                    {
+//                        // Create an ad request. Check logcat output for the hashed device ID to
+//                        // get test ads on a physical device.
+//                        AdRequest adRequest = new AdRequest.Builder()
+//                                // TEST
+//                                //.addTestDevice( AdRequest.DEVICE_ID_EMULATOR )
+//                                //.addTestDevice( "1828867FE015CA65794D661950A59EA3" )
+//                                .build();
+//
+//                        if ( adRequest != null ) {
+//                            Log.d( TAG, "init_ads(): request ads" );
+//                            // Start loading the ad in the background.
+//                            m_adView.loadAd( adRequest );
+//                        }
+//                        else {
+//                            MainActivity.this.finish();
+//                        }
+//                    }
+
+                    //! Real device
+                    m_adView.loadAd( new AdRequest.Builder().build() );
+                }
+                else {
+                    Log.d( TAG, "init_ads(): m_adView == NULL" );
+                    MainActivity.this.finish();
+                }
+            }
+            else {
+                Log.d( TAG, "init_ads(): m_adView == NULL" );
+                MainActivity.this.finish();
+            }
+        }
+        catch( Exception e ) {
+            Log.d( TAG, "init_ads(): Exception: " + e.getMessage() );
+            e.getStackTrace();
+
+            MainActivity.this.finish();
+        }
+    } // void init_ads() {}
+*/
+
+
 }

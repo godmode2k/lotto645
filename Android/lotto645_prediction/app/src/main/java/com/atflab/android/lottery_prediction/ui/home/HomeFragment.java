@@ -39,7 +39,9 @@ package com.atflab.android.lottery_prediction.ui.home;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -64,6 +66,12 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.atflab.android.lottery_prediction.App;
 import com.atflab.android.lottery_prediction.R;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -88,6 +96,9 @@ public class HomeFragment extends Fragment {
     private native String[] get_native_ml_module(int algorithm, int generate, int total_games);
     private native int get_native_max_algorithm();
     private int MAX_ALGORITHM = 4;
+
+    // Donation URL
+    private final String DONATION_URL = "https://github.com/godmode2k/godmode2k";
 
     private TextView m_textview_result = null;
 
@@ -176,20 +187,36 @@ public class HomeFragment extends Fragment {
 
         Arrays.fill( m_this_weekly_winning_numbers, -1 );
 
+        Button button_donation_link = (Button)root.findViewById(R.id.Button_donation_link);
+
+        if ( edittext_algorithm != null ) {
+            final String _val = "  /  " + MAX_ALGORITHM;
+            String val = "1" + _val;
+            edittext_algorithm.setText( val );
+        }
+
+        // load history generated
+        m_main_app.load_history( false, m_textview_result, m_generated_numbers );
+
+
 
         if ( button_algorithm != null ) {
             button_algorithm.setOnClickListener(new View.OnClickListener() {
+                final String _val = "  /  " + MAX_ALGORITHM;
                 @Override
                 public void onClick(View view) {
-                    int algorithm = Integer.parseInt( edittext_algorithm.getText().toString() );
+                    //int algorithm = Integer.parseInt( edittext_algorithm.getText().toString() );
+                    int algorithm = Integer.parseInt( edittext_algorithm.getText().toString().split("/")[0].trim() );
                     if ( algorithm+1 > MAX_ALGORITHM ) {
-                        edittext_algorithm.setText( "1" );
+                        String val = "1" + _val;
+                        edittext_algorithm.setText( val );
 
                         edittext_generate.setEnabled( true );
                         editText_total_games.setEnabled( true );
                     }
                     else {
-                        edittext_algorithm.setText( String.valueOf(algorithm + 1) );
+                        String val = (algorithm + 1) + _val;
+                        edittext_algorithm.setText( val );
                         edittext_generate.setEnabled( false );
                         editText_total_games.setEnabled( false );
                     }
@@ -216,7 +243,8 @@ public class HomeFragment extends Fragment {
                     //int generate = 300;
                     //get_native_ml_module( generate );
 
-                    int algorithm = Integer.parseInt( edittext_algorithm.getText().toString() );
+                    //int algorithm = Integer.parseInt( edittext_algorithm.getText().toString() );
+                    int algorithm = Integer.parseInt( edittext_algorithm.getText().toString().split("/")[0].trim() );
                     int generate = Integer.parseInt( edittext_generate.getText().toString() );
                     int total_games = Integer.parseInt( editText_total_games.getText().toString() );
 
@@ -282,7 +310,16 @@ public class HomeFragment extends Fragment {
                             Log.d( TAG, "[Error] Empty winning numbers..." );
                             button_checks_numbers.setEnabled( true );
                             Toast.makeText(m_main_app,
-                                    "당첨번호 확인에 번호가 없습니다.\n[제발!] 버튼을 눌러서 번호를 먼저 생성해 주세요.", Toast.LENGTH_SHORT).show();
+                                    //"당첨번호 확인에 번호가 없습니다.\n[제발!] 버튼을 눌러서 번호를 먼저 생성해 주세요.", Toast.LENGTH_SHORT).show();
+                                    "당첨번호 확인에 번호가 없습니다. 가져오는 중.. 한 번 더 눌러주세요.", Toast.LENGTH_SHORT).show();
+
+                            // get this weekly winning numbers if an empty.
+                            new Thread(
+                                    () -> {
+                                        Log.d(TAG, "fetching winning numbers...");
+                                        get_this_weekly_winning_numbers();
+                                    })
+                                    .start();
                             return;
                         }
                         int n1 = Integer.parseInt(m_edittext_winning_num1.getText().toString());
@@ -299,6 +336,7 @@ public class HomeFragment extends Fragment {
                         int result_matched_total_4 = 0;
                         int result_matched_total_5 = 0;
                         int result_matched_total_6 = 0;
+                        int result_matched_total_7 = 0; // bonus
 
                         int winning_numbers[] = new int[7];
                         winning_numbers[0] = n1;
@@ -320,6 +358,13 @@ public class HomeFragment extends Fragment {
                             for ( int val: val_arr ) {
                                 for( int wnum: winning_numbers ) {
                                     if ( val == wnum ) {
+                                        // bonus
+                                        if ( val == winning_numbers[6] ) {
+                                            result_matched_total_7 += 1;
+                                            val_arr_pos[val_arr_i] = 1;
+                                            continue;
+                                        }
+
                                         matched_count += 1;
                                         val_arr_pos[val_arr_i] = 1;
                                     }
@@ -347,36 +392,37 @@ public class HomeFragment extends Fragment {
 
                                 String str_numbers[] = {
                                     String.format( "%d", matched_count ),
-                                    ((val_arr_pos[0] > 0) ? "<b> <font color='red'>" : "") + String.format( "%s", ((val_arr[0] > 9) ? val_arr[0] : "0" + val_arr[0]) ) + ((val_arr_pos[0] > 0) ? "</b>" : ""),
-                                    ((val_arr_pos[1] > 0) ? "<b> <font color='red'>" : "") + String.format( "%s", ((val_arr[1] > 9) ? val_arr[1] : "0" + val_arr[1]) ) + ((val_arr_pos[1] > 0) ? "</b>" : ""),
-                                    ((val_arr_pos[2] > 0) ? "<b> <font color='red'>" : "") + String.format( "%s", ((val_arr[2] > 9) ? val_arr[2] : "0" + val_arr[2]) ) + ((val_arr_pos[2] > 0) ? "</b>" : ""),
-                                    ((val_arr_pos[3] > 0) ? "<b> <font color='red'>" : "") + String.format( "%s", ((val_arr[3] > 9) ? val_arr[3] : "0" + val_arr[3]) ) + ((val_arr_pos[3] > 0) ? "</b>" : ""),
-                                    ((val_arr_pos[4] > 0) ? "<b> <font color='red'>" : "") + String.format( "%s", ((val_arr[4] > 9) ? val_arr[4] : "0" + val_arr[4]) ) + ((val_arr_pos[4] > 0) ? "</b>" : ""),
-                                    ((val_arr_pos[5] > 0) ? "<b> <font color='red'>" : "") + String.format( "%s", ((val_arr[5] > 9) ? val_arr[5] : "0" + val_arr[5]) ) + ((val_arr_pos[5] > 0) ? "</b>" : "")
+                                    ((val_arr_pos[0] > 0) ? ((val_arr[0] != n7_b) ? "<b> <font color='red'>" : "<b> <font color='blue'>") : "") + String.format( "%s", ((val_arr[0] > 9) ? val_arr[0] : "0" + val_arr[0]) ) + ((val_arr_pos[0] > 0) ? "</b>" : ""),
+                                    ((val_arr_pos[1] > 0) ? ((val_arr[1] != n7_b) ? "<b> <font color='red'>" : "<b> <font color='blue'>") : "") + String.format( "%s", ((val_arr[1] > 9) ? val_arr[1] : "0" + val_arr[1]) ) + ((val_arr_pos[1] > 0) ? "</b>" : ""),
+                                    ((val_arr_pos[2] > 0) ? ((val_arr[2] != n7_b) ? "<b> <font color='red'>" : "<b> <font color='blue'>") : "") + String.format( "%s", ((val_arr[2] > 9) ? val_arr[2] : "0" + val_arr[2]) ) + ((val_arr_pos[2] > 0) ? "</b>" : ""),
+                                    ((val_arr_pos[3] > 0) ? ((val_arr[3] != n7_b) ? "<b> <font color='red'>" : "<b> <font color='blue'>") : "") + String.format( "%s", ((val_arr[3] > 9) ? val_arr[3] : "0" + val_arr[3]) ) + ((val_arr_pos[3] > 0) ? "</b>" : ""),
+                                    ((val_arr_pos[4] > 0) ? ((val_arr[4] != n7_b) ? "<b> <font color='red'>" : "<b> <font color='blue'>") : "") + String.format( "%s", ((val_arr[4] > 9) ? val_arr[4] : "0" + val_arr[4]) ) + ((val_arr_pos[4] > 0) ? "</b>" : ""),
+                                    ((val_arr_pos[5] > 0) ? ((val_arr[5] != n7_b) ? "<b> <font color='red'>" : "<b> <font color='blue'>") : "") + String.format( "%s", ((val_arr[5] > 9) ? val_arr[5] : "0" + val_arr[5]) ) + ((val_arr_pos[5] > 0) ? "</b>" : "")
                                 };
                                 res_str_numbers.add( str_numbers );
                             }
                             else {
                                 String str_numbers[] = {
-                                    String.format("%d", matched_count),
-                                    String.format( "<del>%s</del>", ((val_arr[0] > 9) ? val_arr[0] : "0" + val_arr[0]) ),
-                                    String.format( "<del>%s</del>", ((val_arr[1] > 9) ? val_arr[1] : "0" + val_arr[1]) ),
-                                    String.format( "<del>%s</del>", ((val_arr[2] > 9) ? val_arr[2] : "0" + val_arr[2]) ),
-                                    String.format( "<del>%s</del>", ((val_arr[3] > 9) ? val_arr[3] : "0" + val_arr[3]) ),
-                                    String.format( "<del>%s</del>", ((val_arr[4] > 9) ? val_arr[4] : "0" + val_arr[4]) ),
-                                    String.format( "<del>%s</del>", ((val_arr[5] > 9) ? val_arr[5] : "0" + val_arr[5]) )
+                                    String.format( "%d", matched_count ),
+                                    String.format( "<del>%s</del>", ((val_arr[0] == n7_b) ? "<b> <font color='blue'>" : "") + ((val_arr[0] > 9) ? val_arr[0] : "0" + val_arr[0]) ),
+                                    String.format( "<del>%s</del>", ((val_arr[1] == n7_b) ? "<b> <font color='blue'>" : "") + ((val_arr[1] > 9) ? val_arr[1] : "0" + val_arr[1]) ),
+                                    String.format( "<del>%s</del>", ((val_arr[2] == n7_b) ? "<b> <font color='blue'>" : "") + ((val_arr[2] > 9) ? val_arr[2] : "0" + val_arr[2]) ),
+                                    String.format( "<del>%s</del>", ((val_arr[3] == n7_b) ? "<b> <font color='blue'>" : "") + ((val_arr[3] > 9) ? val_arr[3] : "0" + val_arr[3]) ),
+                                    String.format( "<del>%s</del>", ((val_arr[4] == n7_b) ? "<b> <font color='blue'>" : "") + ((val_arr[4] > 9) ? val_arr[4] : "0" + val_arr[4]) ),
+                                    String.format( "<del>%s</del>", ((val_arr[5] == n7_b) ? "<b> <font color='blue'>" : "") + ((val_arr[5] > 9) ? val_arr[5] : "0" + val_arr[5]) )
                                 };
                                 res_str_numbers.add( str_numbers );
                             }
                         }
 
-                        res_str += "1개 일치: " + result_matched_total_1 + "\n";
-                        res_str += "2개 일치: " + result_matched_total_2 + "\n";
-                        res_str += "3개 일치: " + result_matched_total_3 + "\n";
-                        res_str += "4개 일치: " + result_matched_total_4 + "\n";
-                        res_str += "5개 일치: " + result_matched_total_5 + "\n";
-                        res_str += "6개 일치: " + result_matched_total_6 + "\n\n";
-                        res_str += "일치개수 | 예측번호" + "\n";
+                        res_str += "1개 일치: " + ((result_matched_total_1 >= 0) ? result_matched_total_1 : 0) + "\n";
+                        res_str += "2개 일치: " + ((result_matched_total_2 >= 0) ? result_matched_total_2 : 0) + "\n";
+                        res_str += "3개 일치: " + ((result_matched_total_3 >= 0) ? result_matched_total_3 : 0) + "\n";
+                        res_str += "4개 일치: " + ((result_matched_total_4 >= 0) ? result_matched_total_4 : 0) + "\n";
+                        res_str += "5개 일치: " + ((result_matched_total_5 >= 0) ? result_matched_total_5 : 0) + "\n";
+                        res_str += "6개 일치: " + ((result_matched_total_6 >= 0) ? result_matched_total_6 : 0) + "\n";
+                        res_str += "보너스 일치: " + result_matched_total_7 + "\n\n";
+                        res_str += "일치 개수 (보너스 제외) => 예측 번호" + "\n";
 
                         Collections.sort(res_str_numbers, new Comparator<String[]>() {
                             @Override
@@ -443,6 +489,17 @@ public class HomeFragment extends Fragment {
             });
         }
 
+        if ( button_donation_link != null ) {
+            button_donation_link.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Donation URL
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(DONATION_URL));
+                    startActivity( intent );
+                }
+            });
+        }
+
         return root;
     }
 
@@ -465,9 +522,9 @@ public class HomeFragment extends Fragment {
     public void onPause() {
         super.onPause();
 
-        if ( m_main_app != null && m_textview_result != null ) {
-            m_main_app.set_str_result( m_textview_result.getText().toString() );
-        }
+        //if ( m_main_app != null && m_textview_result != null ) {
+        //    m_main_app.set_str_result( m_textview_result.getText().toString() );
+        //}
     }
 
     @Override
@@ -475,9 +532,9 @@ public class HomeFragment extends Fragment {
         super.onResume();
 
         // reload result
-        if ( m_main_app != null && m_textview_result != null ) {
-            m_textview_result.setText(m_main_app.get_str_result());
-        }
+        //if ( m_main_app != null && m_textview_result != null ) {
+        //    m_textview_result.setText(m_main_app.get_str_result());
+        //}
     }
 
 
@@ -623,6 +680,7 @@ public class HomeFragment extends Fragment {
     public class JNITask extends AsyncTask<Object, Object, Object> {
         private TextView m_textview_result = null;
         private String m_datetime = null;
+        private String m_datetime_num = null;
 
         @Override
         protected Object doInBackground(Object... objects) {
@@ -633,7 +691,10 @@ public class HomeFragment extends Fragment {
             final int total_games = (Integer)objects[2];
             m_textview_result = (TextView)objects[3];
 
-            get_this_weekly_winning_numbers();
+
+            // SEE: button_checks_numbers.setOnClickListener()
+            //get_this_weekly_winning_numbers();
+
 
             {
                 java.util.TimeZone tz;
@@ -644,6 +705,25 @@ public class HomeFragment extends Fragment {
                 java.util.Date date = new java.util.Date();
 
                 m_datetime = "[번호 생성]\n날짜: " + df.format(date) + "\n\n";
+            }
+            {
+                // history generated
+                // file path: /Download/lotto645/generated.json
+
+                // 24 hour format
+                java.util.TimeZone tz;
+                java.text.SimpleDateFormat df = new java.text.SimpleDateFormat(
+                        "yyyyMMddHHmmss", Locale.KOREAN);
+                tz = java.util.TimeZone.getTimeZone( "Asia/Seoul" );
+                df.setTimeZone( tz );
+                java.util.Date date = new java.util.Date();
+
+                // timestamp
+                //final String timestamp = String.valueOf( date.getTime() );
+                //Log.d( TAG, "timestamp = " + timestamp );
+                //Log.d( TAG, "timestamp to DateFormat = " + df.format(timestamp) );
+
+                m_datetime_num = "" + df.format(date);
             }
 
             m_cancel_process = false;
@@ -753,6 +833,17 @@ public class HomeFragment extends Fragment {
 
             if ( m_textview_result != null ) {
                 m_textview_result.setText( Html.fromHtml(result.replace("\n", "<br>")) );
+            }
+
+            {
+                // history generated
+                // file path: /Download/lotto645/generated.json
+                // {
+                //     "generated": [
+                //         { "date": "20251022090000", "numbers": [ [0, ], ], "result": "..." }
+                //     ]
+                // }
+                m_main_app.save_history( m_generated_numbers, m_datetime_num, result );
             }
         }
 
@@ -952,30 +1043,34 @@ public class HomeFragment extends Fragment {
                                 //for ( String x: str1 ) { Log.d(TAG, "str1 = " + x ); }
                                 //for ( String x: str2 ) { Log.d(TAG, "str2 = " + x ); }
 
-                                m_this_weekly_winning_numbers[0] = Integer.parseInt( str1[0] ); // #1
-                                m_this_weekly_winning_numbers[1] = Integer.parseInt( str1[1] ); // #2
-                                m_this_weekly_winning_numbers[2] = Integer.parseInt( str1[2] ); // #3
-                                m_this_weekly_winning_numbers[3] = Integer.parseInt( str1[3] ); // #4
-                                m_this_weekly_winning_numbers[4] = Integer.parseInt( str1[4] ); // #5
-                                m_this_weekly_winning_numbers[5] = Integer.parseInt( str1[5] ); // #6
-                                m_this_weekly_winning_numbers[6] = Integer.parseInt( str2[0] ); // bonus
+                                try {
+                                    m_this_weekly_winning_numbers[0] = Integer.parseInt( str1[0] ); // #1
+                                    m_this_weekly_winning_numbers[1] = Integer.parseInt( str1[1] ); // #2
+                                    m_this_weekly_winning_numbers[2] = Integer.parseInt( str1[2] ); // #3
+                                    m_this_weekly_winning_numbers[3] = Integer.parseInt( str1[3] ); // #4
+                                    m_this_weekly_winning_numbers[4] = Integer.parseInt( str1[4] ); // #5
+                                    m_this_weekly_winning_numbers[5] = Integer.parseInt( str1[5] ); // #6
+                                    m_this_weekly_winning_numbers[6] = Integer.parseInt( str2[0] ); // bonus
 
-                                //Log.d( TAG, "--> [ " +
-                                //        m_this_weekly_winning_numbers[0] + ", " +
-                                //        m_this_weekly_winning_numbers[1] + ", " +
-                                //        m_this_weekly_winning_numbers[2] + ", " +
-                                //        m_this_weekly_winning_numbers[3] + ", " +
-                                //        m_this_weekly_winning_numbers[4] + ", " +
-                                //        m_this_weekly_winning_numbers[5] + ", " +
-                                //        m_this_weekly_winning_numbers[6] + " ]" );
+                                    //Log.d( TAG, "--> [ " +
+                                    //        m_this_weekly_winning_numbers[0] + ", " +
+                                    //        m_this_weekly_winning_numbers[1] + ", " +
+                                    //        m_this_weekly_winning_numbers[2] + ", " +
+                                    //        m_this_weekly_winning_numbers[3] + ", " +
+                                    //        m_this_weekly_winning_numbers[4] + ", " +
+                                    //        m_this_weekly_winning_numbers[5] + ", " +
+                                    //        m_this_weekly_winning_numbers[6] + " ]" );
 
-                                m_edittext_winning_num1.setText( "" + m_this_weekly_winning_numbers[0] );
-                                m_edittext_winning_num2.setText( "" + m_this_weekly_winning_numbers[1] );
-                                m_edittext_winning_num3.setText( "" + m_this_weekly_winning_numbers[2] );
-                                m_edittext_winning_num4.setText( "" + m_this_weekly_winning_numbers[3] );
-                                m_edittext_winning_num5.setText( "" + m_this_weekly_winning_numbers[4] );
-                                m_edittext_winning_num6.setText( "" + m_this_weekly_winning_numbers[5] );
-                                m_edittext_winning_num7_b.setText( "" + m_this_weekly_winning_numbers[6] );
+                                    m_edittext_winning_num1.setText( "" + m_this_weekly_winning_numbers[0] );
+                                    m_edittext_winning_num2.setText( "" + m_this_weekly_winning_numbers[1] );
+                                    m_edittext_winning_num3.setText( "" + m_this_weekly_winning_numbers[2] );
+                                    m_edittext_winning_num4.setText( "" + m_this_weekly_winning_numbers[3] );
+                                    m_edittext_winning_num5.setText( "" + m_this_weekly_winning_numbers[4] );
+                                    m_edittext_winning_num6.setText( "" + m_this_weekly_winning_numbers[5] );
+                                    m_edittext_winning_num7_b.setText( "" + m_this_weekly_winning_numbers[6] );
+                                } catch ( Exception e ) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                     }
@@ -984,6 +1079,7 @@ public class HomeFragment extends Fragment {
         }
         catch ( Exception e) {
             e.printStackTrace();
+            return;
         }
     }
 }

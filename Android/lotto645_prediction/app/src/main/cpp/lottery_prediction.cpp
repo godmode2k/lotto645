@@ -119,6 +119,9 @@ Java_com_atflab_android_lottery_1prediction_ui_home_HomeFragment_get_1native_1ml
         case 4:
             method4( total_games, result );
             break;
+        case 5:
+            method5( total_games, result );
+            break;
         default:
             main_ml( generate, total_games, result );
             break;
