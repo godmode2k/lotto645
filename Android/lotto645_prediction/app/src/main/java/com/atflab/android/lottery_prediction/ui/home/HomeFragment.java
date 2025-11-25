@@ -681,6 +681,7 @@ public class HomeFragment extends Fragment {
         private TextView m_textview_result = null;
         private String m_datetime = null;
         private String m_datetime_num = null;
+        private int m_algorithm = 0;
 
         @Override
         protected Object doInBackground(Object... objects) {
@@ -689,7 +690,9 @@ public class HomeFragment extends Fragment {
             final int algorithm = (Integer)objects[0];
             final int generate = (Integer)objects[1];
             final int total_games = (Integer)objects[2];
+
             m_textview_result = (TextView)objects[3];
+            m_algorithm = algorithm;
 
 
             // SEE: button_checks_numbers.setOnClickListener()
@@ -704,7 +707,8 @@ public class HomeFragment extends Fragment {
                 df.setTimeZone( tz );
                 java.util.Date date = new java.util.Date();
 
-                m_datetime = "[번호 생성]\n날짜: " + df.format(date) + "\n\n";
+                m_datetime = "[번호 생성]\n날짜: " + df.format(date) + "\n";
+                m_datetime += "알고리즘: " + m_algorithm + "\n\n";
             }
             {
                 // history generated
@@ -815,6 +819,23 @@ public class HomeFragment extends Fragment {
                 }
 
                 String a[] = list_result.get(i).toString().split(",");
+
+                //! TODO: sort (algorithm 1 ~: cpp files)
+                /*
+                {
+                    //Arrays.sort(a);
+                    Arrays.sort(a, new Comparator<String>() {
+                        @Override
+                        public int compare(String s, String t1) {
+                            //return 0;
+                            int n1 = Integer.parseInt( s.trim() );
+                            int n2 = Integer.parseInt( t1.trim() );
+                            return Integer.compare( n1, n2 );
+                        }
+                    });
+                }
+                */
+
                 //Log.d( TAG, "==> " + list_result.get(i).toString() );
                 //Log.d( TAG, "--> " + a[0].trim() + "-" + a[1].trim() + "-" + a[2].trim() + "-" + a[3].trim() + "-" + a[4].trim() + "-" + a[5].trim() + "-" );
                 int generated_numbers[] = {
@@ -840,10 +861,10 @@ public class HomeFragment extends Fragment {
                 // file path: /Download/lotto645/generated.json
                 // {
                 //     "generated": [
-                //         { "date": "20251022090000", "numbers": [ [0, ], ], "result": "..." }
+                //         { "date": "20251022090000", "numbers": [ [0, ], ], "algorithm": 1, "result": "..." }
                 //     ]
                 // }
-                m_main_app.save_history( m_generated_numbers, m_datetime_num, result );
+                m_main_app.save_history( m_generated_numbers, m_datetime_num, m_algorithm, result );
             }
         }
 

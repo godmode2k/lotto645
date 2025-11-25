@@ -1398,12 +1398,12 @@ public class App extends Application {
         return true;
     }
 
-    public boolean save_history(final ArrayList<int[]> val, final String datetime, String val_result) {
+    public boolean save_history(final ArrayList<int[]> val, final String datetime, final int algorithm, String val_result) {
         // history generated
         // file path: /Download/lotto645/generated.json
         // {
         //     "generated": [
-        //         { "date": "20251022090000", "numbers": [ [0, ], ], "result": "..." }
+        //         { "date": "20251022090000", "numbers": [ [0, ], ], "algorithm": 1, "result": "..." }
         //     ]
         // }
 
@@ -1419,6 +1419,7 @@ public class App extends Application {
             }
             obj.addProperty("date", datetime);
             obj.add("numbers", arr);
+            obj.addProperty("algorithm", algorithm );
             obj.addProperty("result", val_result );
             arr_root.add( obj );
             obj_export.add( "generated", arr_root );
@@ -1527,7 +1528,7 @@ public class App extends Application {
                 // file path: /Download/lotto645/generated.json
                 // {
                 //     "generated": [
-                //         { "date": "20251022090000", "numbers": [ [0, ], ], "result": "..." }
+                //         { "date": "20251022090000", "numbers": [ [0, ], ], "algorithm": 1, "result": "..." }
                 //     ]
                 // }
 
@@ -1538,11 +1539,13 @@ public class App extends Application {
                 JSONArray arr_root = new JSONArray();
                 JSONObject obj = new JSONObject();
                 JSONArray arr_numbers = new JSONArray();
+                int algorithm = 0;
                 String result = "";
 
                 arr_root = (JSONArray) obj_export.get("generated");
                 obj = (JSONObject) arr_root.get(0);
                 arr_numbers = (JSONArray) obj.get("numbers");
+                algorithm = (int)obj.get("algorithm");
                 result = (String)obj.get("result");
 
                 for ( int i = 0; i < arr_numbers.length(); i++ ) {
