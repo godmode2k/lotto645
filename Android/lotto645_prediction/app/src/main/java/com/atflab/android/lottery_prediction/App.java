@@ -332,12 +332,11 @@ public class App extends Application {
                 message = "[업데이트] 업데이트를 실패했습니다.";
             }
             else if ( result == 1 ) {
-                message = "[업데이트] 완료!\n앱을 다시 실행합니다!"
-                    + "실행이 안되면 앱을 완전히 종료 후 다시 실행해 주세요!";
+                message = "[업데이트] 완료!\n앱을 다시 실행합니다!";
             }
             else if ( result == 2 ) {
-                message = "[업데이트] APK 다운로드 완료!\n"
-                        + "앱 삭제 후 다운받은 APK를 다시 설치해 주세요! (다운로드 디렉터리에서 확인)";
+                message = "APK 다운로드 완료! (다운로드 경로)\n"
+                        + "APK를 다시 설치해 주세요!";
             }
             else {
                 message = "Error...";
