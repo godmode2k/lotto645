@@ -335,8 +335,7 @@ public class App extends Application {
                 message = "[업데이트] 완료!\n앱을 다시 실행합니다!";
             }
             else if ( result == 2 ) {
-                message = "APK 다운로드 완료! (다운로드 경로)\n"
-                        + "APK를 다시 설치해 주세요!";
+                message = "APK 다운로드 완료! 다시 설치해 주세요!";
             }
             else {
                 message = "Error...";
