@@ -75,7 +75,7 @@ Android App
 $ cd lotto645_prediction/app/src/main/cpp/
 
 2025.01.04 (1205 게임부터)
-다운로드한 Excel(.xslx) 파일을 CSV(encoding=utf-8)로 변환해서 사용해야 됨.
+다운로드한 Excel(.xlsx) 파일을 CSV(encoding=utf-8)로 변환해서 사용해야 됨.
 
 1. 로또645 당첨번호 리스트 다운로드 (Excel 파일: .xlsx)
 https://dhlottery.co.kr/

@@ -249,8 +249,8 @@ except Exception as e:
 # - 어차피 제공해 줄거면 예전처럼 편하게 다운로드 할 수 있게 해주지 이게 뭐라고 암호화까지..
 # -
 # [주의]
-# - 다운로드한 파일이 .xslx file 인데 CSV(utf-8) 로 변환했음
-# - 다운로드한 Excel(.xslx) 파일을 CSV(encoding=utf-8)로 변환해서 사용해야 됨
+# - 다운로드한 파일이 .xlsx file 인데 CSV(utf-8) 로 변환했음
+# - 다운로드한 Excel(.xlsx) 파일을 CSV(encoding=utf-8)로 변환해서 사용해야 됨
 _xls_last_game_num = "1205"
 #_xls_filename = "./lotto645_당첨번호" + _xls_last_game_num + "회차까지.xlsx" # .xls -> .xlsx
 _xls_filename = "./lotto645_당첨번호" + _xls_last_game_num + "회차까지.csv"
@@ -1320,12 +1320,12 @@ print()
 # comparison (future data): x ~ 1112
 # ------------------------------
 #---
-# ~ 1204회차 까지 (.xsl file)
+# ~ 1204회차 까지 (.xls file)
 #df_excel_list2 = pd.read_html( xls_filename2, skiprows=2 ) # utf-8
 #pd.options.display.float_format = "{:,.2f}".format
 #df2 = pd.DataFrame( df_excel_list2[0] )
 #
-# 2026.01.03: 1205회차 부터 ~ (구조가 바뀜) (.xslx file 인데 CSV(utf-8) 로 변환했음)
+# 2026.01.03: 1205회차 부터 ~ (구조가 바뀜) (.xlsx file 인데 CSV(utf-8) 로 변환했음)
 df_excel_list2 = pd.read_csv( xls_filename, skiprows=0 ) # utf-8
 df_excel_list2.head( 0 )
 print( df_excel_list )
