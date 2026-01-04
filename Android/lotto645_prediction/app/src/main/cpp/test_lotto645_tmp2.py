@@ -189,6 +189,9 @@ print()
 # Excel (.xls) file (NOT modified)
 # ---------------------------------
 # https://dhlottery.co.kr/gameResult.do?method=allWinExel&gubun=byWin&nowPage=&drwNoStart=1&drwNoEnd=1144
+
+# ~ 1204회차 까지
+'''
 FETCH_SRC_URL = "https://dhlottery.co.kr/gameResult.do?method=byWin"
 #_xls_last_game_num = "1197" # (2025년 11월 08일 추첨)
 _xls_last_game_num = "0"
@@ -234,6 +237,24 @@ except Exception as e:
     traceback.print_exc()
     print( "error = ", e )
     sys.exit()
+'''
+
+# 2026.01.03: 1205회차 부터 ~ (구조가 바뀜)
+# 마지막 게임 결과
+# https://dhlottery.co.kr/lt645/selectPstLt645Info.do
+#
+# 전체 게임 결과 목록 Excel 파일 다운로드
+# https://dhlottery.co.kr/lt645/excelDown.do?encData=<RSA(256bytes, 512 chars)>
+# - 자주 바뀔수도 있으니, 자동 다운로드 빼고 그냥 예전처럼 직접 다운로드해서 사용하겠음.
+# - 어차피 제공해 줄거면 예전처럼 편하게 다운로드 할 수 있게 해주지 이게 뭐라고 암호화까지..
+# -
+# [주의]
+# - 다운로드한 파일이 .xslx file 인데 CSV(utf-8) 로 변환했음
+# - 다운로드한 Excel(.xslx) 파일을 CSV(encoding=utf-8)로 변환해서 사용해야 됨
+_xls_last_game_num = "1205"
+#_xls_filename = "./lotto645_당첨번호" + _xls_last_game_num + "회차까지.xlsx" # .xls -> .xlsx
+_xls_filename = "./lotto645_당첨번호" + _xls_last_game_num + "회차까지.csv"
+
 #
 #
 # NOTE: model_lotto645_predicts_method.h (below auto-generated)
@@ -248,9 +269,18 @@ xls_filename2 = _xls_filename # comparison
 #pd.options.display.float_format = "{:,.2f}".format
 #df = pd.DataFrame( df_excel_list[1] )
 #
-df_excel_list = pd.read_html( xls_filename, skiprows=2 )
+# ~ 1204회차 까지 (.xsl file)
+#df_excel_list = pd.read_html( xls_filename, skiprows=2 ) # utf-8
+#
+# 2026.01.03: 1205회차 부터 ~ (구조가 바뀜) (.xslx file 인데 CSV(utf-8) 로 변환했음)
+df_excel_list = pd.read_csv( xls_filename, skiprows=0 ) # utf-8
+df_excel_list.head( 0 )
+print( df_excel_list )
+print()
+#
 pd.options.display.float_format = "{:,.2f}".format
-df = pd.DataFrame( df_excel_list[0] )
+#df = pd.DataFrame( df_excel_list[0] )
+# ~ 1204회차 까지
 #print( df[0] ) # 년도
 #print( df[1] ) # 회차
 #print( df[2] ) # 추첨일
@@ -261,6 +291,23 @@ df = pd.DataFrame( df_excel_list[0] )
 #print( df[17] ) # 당첨번호 5
 #print( df[18] ) # 당첨번호 6
 #print( df[19] ) # 당첨번호 보너스
+#
+# 2026.01.03: 1205회차 부터 ~ (구조가 바뀜)
+#print( df[0] ) # index
+#print( df[1] ) # 회차
+#print( df[2] ) # 당첨번호 1
+#print( df[3] ) # 당첨번호 2
+#print( df[4] ) # 당첨번호 3
+#print( df[5] ) # 당첨번호 4
+#print( df[6] ) # 당첨번호 5
+#print( df[7] ) # 당첨번호 6
+#print( df[8] ) # 당첨번호 보너스
+#print( df[9] ) # 순위 ("1등")
+#print( df[10] ) # 당첨게임수 ("xx 명")
+#print( df[11] ) # 1게임등 당첨금액 ("xxx,xxx,... 원")
+# ...
+
+
 
 # result:
 #        0     1           2   3               4   5   ...  14  15  16  17  18  19
@@ -270,6 +317,8 @@ df = pd.DataFrame( df_excel_list[0] )
 #1082  2002     1  2002.12.07   0              0원   1  ...  23  29  33  37  40  16
 
 
+# ~ 1204회차 까지
+"""
 last_game_result = list(
     [
          df.iloc[0][1],  # 회차
@@ -285,7 +334,28 @@ last_game_result = list(
     ]
     ]
 )
+"""
+#
+# 2026.01.03: 1205회차 부터 ~ (구조가 바뀜)
+last_game_result = list(   
+    [
+         df_excel_list.iloc[0][1],  # 회차
+         "(unknown)",
+    [
+        df_excel_list.iloc[0][2], # 당첨번호 1
+        df_excel_list.iloc[0][3], # 당첨번호 2
+        df_excel_list.iloc[0][4], # 당첨번호 3
+        df_excel_list.iloc[0][5], # 당첨번호 4
+        df_excel_list.iloc[0][6], # 당첨번호 5
+        df_excel_list.iloc[0][7], # 당첨번호 6
+        df_excel_list.iloc[0][8]  # 당첨번호 보너스
+    ]
+    ]
+)
 print( "last game result = ", last_game_result )
+
+#print( df_excel_list.loc[0]) # row
+#print( df_excel_list.iloc[:, 1]) # col: 회차
 
 
 
@@ -308,6 +378,8 @@ del df_6["6"][:2]
 del df_b["bonus"][:2]
 '''
 
+# ~ 1204회차 까지
+"""
 df_1 = { "1": df[13] } # start at [2]: df[13][2]
 df_2 = { "2": df[14] }
 df_3 = { "3": df[15] }
@@ -315,6 +387,16 @@ df_4 = { "4": df[16] }
 df_5 = { "5": df[17] }
 df_6 = { "6": df[18] }
 df_b = { "bonus": df[19] }
+"""
+#
+# 2026.01.03: 1205회차 부터 ~ (구조가 바뀜)
+df_1 = { "1": df_excel_list.iloc[:, 2] } # start at [:, 2] ~ [:, 8]
+df_2 = { "2": df_excel_list.iloc[:, 3] }
+df_3 = { "3": df_excel_list.iloc[:, 4] }
+df_4 = { "4": df_excel_list.iloc[:, 5] }
+df_5 = { "5": df_excel_list.iloc[:, 6] }
+df_6 = { "6": df_excel_list.iloc[:, 7] }
+df_b = { "bonus": df_excel_list.iloc[:, 8] }
 
 #print( df_1["1"][1] )
 #print( df_1["1"] )
@@ -427,7 +509,7 @@ df_game_merge = pd.merge( df_game_merge, df_4["4"], left_index=True, right_index
 df_game_merge = pd.merge( df_game_merge, df_5["5"], left_index=True, right_index=True, how="outer", suffixes=('', '')) # 'count' // not duplicate label
 df_game_merge = pd.merge( df_game_merge, df_6["6"], left_index=True, right_index=True, how="outer", suffixes=('_5', '_6')) # 'count_5', 'count_6'
 df_game_merge = pd.merge( df_game_merge, df_b["bonus"], left_index=True, right_index=True, how="outer", suffixes=('', '')) # 'count' (bonus column) // not duplicate label
-#print( df_game_merge )
+print( df_game_merge )
 #print()
 
 # result:
@@ -443,23 +525,39 @@ df_game_merge = pd.merge( df_game_merge, df_b["bonus"], left_index=True, right_i
 
 # ----------
 
-#print( list(df_game_merge.iloc[0]) )
+print( list(df_game_merge.iloc[0]) )
+
+#_idx = int(0) # 2026.01.03: 1205회차 부터 ~ (구조가 바뀜)
+#df_game_merge.fillna(0).apply(
+#    lambda x: print(x[_idx], x[_idx+1], x[_idx+2], x[_idx+3], x[_idx+4], x[_idx+5], x[_idx+6]), axis=1)
+
 
 
 df_game_merge_with_odd_even = df_game_merge.copy()
+#_idx = int(13) # ~ 1204회차 까지
+_idx = int(0) # 2026.01.03: 1205회차 부터 ~ (구조가 바뀜)
 df_game_merge_with_odd_even["odd"] = df_game_merge.fillna(0).apply(
     # 1, 2, 3, 4, 5, 6, bonus
-    lambda x: x[13]%2 + x[14]%2 + x[15]%2 + x[16]%2 + x[17]%2 + x[18]%2 + x[19]%2, axis=1)
+    #lambda x: x[13]%2 + x[14]%2 + x[15]%2 + x[16]%2 + x[17]%2 + x[18]%2 + x[19]%2, axis=1)
+    lambda x: x[_idx]%2 + x[_idx+1]%2 + x[_idx+2]%2 + x[_idx+3]%2 + x[_idx+4]%2 + x[_idx+5]%2 + x[_idx+6]%2, axis=1)
 df_game_merge_with_odd_even["even"] = df_game_merge.fillna(0).apply(
     # 1, 2, 3, 4, 5, 6, bonus
     lambda x: 
-        (1 if (x[13]%2 == 0) else 0) +
-        (1 if (x[14]%2 == 0) else 0) + 
-        (1 if (x[15]%2 == 0) else 0) + 
-        (1 if (x[16]%2 == 0) else 0) + 
-        (1 if (x[17]%2 == 0) else 0) + 
-        (1 if (x[18]%2 == 0) else 0) + 
-        (1 if (x[19]%2 == 0) else 0), axis=1)
+        #(1 if (x[13]%2 == 0) else 0) +
+        #(1 if (x[14]%2 == 0) else 0) + 
+        #(1 if (x[15]%2 == 0) else 0) + 
+        #(1 if (x[16]%2 == 0) else 0) + 
+        #(1 if (x[17]%2 == 0) else 0) + 
+        #(1 if (x[18]%2 == 0) else 0) + 
+        #(1 if (x[19]%2 == 0) else 0), axis=1)
+    
+        (1 if (x[_idx]%2 == 0) else 0) +
+        (1 if (x[_idx+1]%2 == 0) else 0) + 
+        (1 if (x[_idx+2]%2 == 0) else 0) + 
+        (1 if (x[_idx+3]%2 == 0) else 0) + 
+        (1 if (x[_idx+4]%2 == 0) else 0) + 
+        (1 if (x[_idx+5]%2 == 0) else 0) + 
+        (1 if (x[_idx+6]%2 == 0) else 0), axis=1)
 print( df_game_merge_with_odd_even )
 print()
 
@@ -492,7 +590,8 @@ print()
 df_game_merge_with_per_game = df_game_merge.copy()
 df_game_merge_with_per_game["sum_per_game"] = df_game_merge.fillna(0).apply(
     # 1, 2, 3, 4, 5, 6, bonus
-    lambda x: (x[13] + x[14] + x[15] + x[16] + x[17] + x[18] + x[19]), axis=1)
+    #lambda x: (x[13] + x[14] + x[15] + x[16] + x[17] + x[18] + x[19]), axis=1)
+    lambda x: (x[_idx] + x[_idx+1] + x[_idx+2] + x[_idx+3] + x[_idx+4] + x[_idx+5] + x[_idx+6]), axis=1)
 print( df_game_merge_with_per_game )
 print()
 
@@ -565,53 +664,93 @@ df_game_merge_with_digits = df_game_merge.copy()
 df_game_merge_with_digits["d01"] = df_game_merge.fillna(0).apply(
     # 1, 2, 3, 4, 5, 6, bonus
     lambda x: 
-        (1 if (x[13] < 10) else 0) +
-        (1 if (x[14] < 10) else 0) + 
-        (1 if (x[15] < 10) else 0) +
-        (1 if (x[16] < 10) else 0) + 
-        (1 if (x[17] < 10) else 0) +
-        (1 if (x[18] < 10) else 0) + 
-        (1 if (x[19] < 10) else 0), axis=1)
+        #(1 if (x[13] < 10) else 0) +
+        #(1 if (x[14] < 10) else 0) + 
+        #(1 if (x[15] < 10) else 0) +
+        #(1 if (x[16] < 10) else 0) + 
+        #(1 if (x[17] < 10) else 0) +
+        #(1 if (x[18] < 10) else 0) + 
+        #(1 if (x[19] < 10) else 0), axis=1)
+    
+        (1 if (x[_idx] < 10) else 0) +
+        (1 if (x[_idx+1] < 10) else 0) + 
+        (1 if (x[_idx+2] < 10) else 0) +
+        (1 if (x[_idx+3] < 10) else 0) + 
+        (1 if (x[_idx+4] < 10) else 0) +
+        (1 if (x[_idx+5] < 10) else 0) + 
+        (1 if (x[_idx+6] < 10) else 0), axis=1)
 df_game_merge_with_digits["d10"] = df_game_merge.fillna(0).apply(
     # 1, 2, 3, 4, 5, 6, bonus
     lambda x: 
-        (1 if (x[13] >= 10 and x[13] < 20) else 0) +
-        (1 if (x[14] >= 10 and x[14] < 20) else 0) + 
-        (1 if (x[15] >= 10 and x[15] < 20) else 0) +
-        (1 if (x[16] >= 10 and x[16] < 20) else 0) + 
-        (1 if (x[17] >= 10 and x[17] < 20) else 0) +
-        (1 if (x[18] >= 10 and x[18] < 20) else 0) + 
-        (1 if (x[19] >= 10 and x[19] < 20) else 0), axis=1)
+        #(1 if (x[13] >= 10 and x[13] < 20) else 0) +
+        #(1 if (x[14] >= 10 and x[14] < 20) else 0) + 
+        #(1 if (x[15] >= 10 and x[15] < 20) else 0) +
+        #(1 if (x[16] >= 10 and x[16] < 20) else 0) + 
+        #(1 if (x[17] >= 10 and x[17] < 20) else 0) +
+        #(1 if (x[18] >= 10 and x[18] < 20) else 0) + 
+        #(1 if (x[19] >= 10 and x[19] < 20) else 0), axis=1)
+    
+        (1 if (x[_idx] >= 10 and x[_idx] < 20) else 0) +
+        (1 if (x[_idx+1] >= 10 and x[_idx+1] < 20) else 0) + 
+        (1 if (x[_idx+2] >= 10 and x[_idx+2] < 20) else 0) +
+        (1 if (x[_idx+3] >= 10 and x[_idx+3] < 20) else 0) + 
+        (1 if (x[_idx+4] >= 10 and x[_idx+4] < 20) else 0) +
+        (1 if (x[_idx+5] >= 10 and x[_idx+5] < 20) else 0) + 
+        (1 if (x[_idx+6] >= 10 and x[_idx+6] < 20) else 0), axis=1)
 df_game_merge_with_digits["d20"] = df_game_merge.fillna(0).apply(
     # 1, 2, 3, 4, 5, 6, bonus
     lambda x: 
-        (1 if (x[13] >= 20 and x[13] < 30) else 0) +
-        (1 if (x[14] >= 20 and x[14] < 30) else 0) + 
-        (1 if (x[15] >= 20 and x[15] < 30) else 0) +
-        (1 if (x[16] >= 20 and x[16] < 30) else 0) + 
-        (1 if (x[17] >= 20 and x[17] < 30) else 0) +
-        (1 if (x[18] >= 20 and x[18] < 30) else 0) + 
-        (1 if (x[19] >= 20 and x[19] < 30) else 0), axis=1)
+        #(1 if (x[13] >= 20 and x[13] < 30) else 0) +
+        #(1 if (x[14] >= 20 and x[14] < 30) else 0) + 
+        #(1 if (x[15] >= 20 and x[15] < 30) else 0) +
+        #(1 if (x[16] >= 20 and x[16] < 30) else 0) + 
+        #(1 if (x[17] >= 20 and x[17] < 30) else 0) +
+        #(1 if (x[18] >= 20 and x[18] < 30) else 0) + 
+        #(1 if (x[19] >= 20 and x[19] < 30) else 0), axis=1)
+    
+        (1 if (x[_idx] >= 20 and x[_idx] < 30) else 0) +
+        (1 if (x[_idx+1] >= 20 and x[_idx+1] < 30) else 0) + 
+        (1 if (x[_idx+2] >= 20 and x[_idx+2] < 30) else 0) +
+        (1 if (x[_idx+3] >= 20 and x[_idx+3] < 30) else 0) + 
+        (1 if (x[_idx+4] >= 20 and x[_idx+4] < 30) else 0) +
+        (1 if (x[_idx+5] >= 20 and x[_idx+5] < 30) else 0) + 
+        (1 if (x[_idx+6] >= 20 and x[_idx+6] < 30) else 0), axis=1)
 df_game_merge_with_digits["d30"] = df_game_merge.fillna(0).apply(
     # 1, 2, 3, 4, 5, 6, bonus
     lambda x: 
-        (1 if (x[13] >= 30 and x[13] < 40) else 0) +
-        (1 if (x[14] >= 30 and x[14] < 40) else 0) + 
-        (1 if (x[15] >= 30 and x[15] < 40) else 0) +
-        (1 if (x[16] >= 30 and x[16] < 40) else 0) + 
-        (1 if (x[17] >= 30 and x[17] < 40) else 0) +
-        (1 if (x[18] >= 30 and x[18] < 40) else 0) + 
-        (1 if (x[19] >= 30 and x[19] < 40) else 0), axis=1)
+        #(1 if (x[13] >= 30 and x[13] < 40) else 0) +
+        #(1 if (x[14] >= 30 and x[14] < 40) else 0) + 
+        #(1 if (x[15] >= 30 and x[15] < 40) else 0) +
+        #(1 if (x[16] >= 30 and x[16] < 40) else 0) + 
+        #(1 if (x[17] >= 30 and x[17] < 40) else 0) +
+        #(1 if (x[18] >= 30 and x[18] < 40) else 0) + 
+        #(1 if (x[19] >= 30 and x[19] < 40) else 0), axis=1)
+    
+        (1 if (x[_idx] >= 30 and x[_idx] < 40) else 0) +
+        (1 if (x[_idx+1] >= 30 and x[_idx+1] < 40) else 0) + 
+        (1 if (x[_idx+2] >= 30 and x[_idx+2] < 40) else 0) +
+        (1 if (x[_idx+3] >= 30 and x[_idx+3] < 40) else 0) + 
+        (1 if (x[_idx+4] >= 30 and x[_idx+4] < 40) else 0) +
+        (1 if (x[_idx+5] >= 30 and x[_idx+5] < 40) else 0) + 
+        (1 if (x[_idx+6] >= 30 and x[_idx+6] < 40) else 0), axis=1)
 df_game_merge_with_digits["d40"] = df_game_merge.fillna(0).apply(
     # 1, 2, 3, 4, 5, 6, bonus
     lambda x: 
-        (1 if (x[13] >= 40 and x[13] <= 45) else 0) +
-        (1 if (x[14] >= 40 and x[14] <= 45) else 0) + 
-        (1 if (x[15] >= 40 and x[15] <= 45) else 0) +
-        (1 if (x[16] >= 40 and x[16] <= 45) else 0) + 
-        (1 if (x[17] >= 40 and x[17] <= 45) else 0) +
-        (1 if (x[18] >= 40 and x[18] <= 45) else 0) + 
-        (1 if (x[19] >= 40 and x[19] <= 45) else 0), axis=1)
+        #(1 if (x[13] >= 40 and x[13] <= 45) else 0) +
+        #(1 if (x[14] >= 40 and x[14] <= 45) else 0) + 
+        #(1 if (x[15] >= 40 and x[15] <= 45) else 0) +
+        #(1 if (x[16] >= 40 and x[16] <= 45) else 0) + 
+        #(1 if (x[17] >= 40 and x[17] <= 45) else 0) +
+        #(1 if (x[18] >= 40 and x[18] <= 45) else 0) + 
+        #(1 if (x[19] >= 40 and x[19] <= 45) else 0), axis=1)
+    
+        (1 if (x[_idx] >= 40 and x[_idx] <= 45) else 0) +
+        (1 if (x[_idx+1] >= 40 and x[_idx+1] <= 45) else 0) + 
+        (1 if (x[_idx+2] >= 40 and x[_idx+2] <= 45) else 0) +
+        (1 if (x[_idx+3] >= 40 and x[_idx+3] <= 45) else 0) + 
+        (1 if (x[_idx+4] >= 40 and x[_idx+4] <= 45) else 0) +
+        (1 if (x[_idx+5] >= 40 and x[_idx+5] <= 45) else 0) + 
+        (1 if (x[_idx+6] >= 40 and x[_idx+6] <= 45) else 0), axis=1)
 print( df_game_merge_with_digits )
 print()
 
@@ -1181,10 +1320,47 @@ print()
 # comparison (future data): x ~ 1112
 # ------------------------------
 #---
-df_excel_list2 = pd.read_html( xls_filename2, skiprows=2 )
-pd.options.display.float_format = "{:,.2f}".format
-df2 = pd.DataFrame( df_excel_list2[0] )
+# ~ 1204회차 까지 (.xsl file)
+#df_excel_list2 = pd.read_html( xls_filename2, skiprows=2 ) # utf-8
+#pd.options.display.float_format = "{:,.2f}".format
+#df2 = pd.DataFrame( df_excel_list2[0] )
+#
+# 2026.01.03: 1205회차 부터 ~ (구조가 바뀜) (.xslx file 인데 CSV(utf-8) 로 변환했음)
+df_excel_list2 = pd.read_csv( xls_filename, skiprows=0 ) # utf-8
+df_excel_list2.head( 0 )
+print( df_excel_list )
 
+pd.options.display.float_format = "{:,.2f}".format
+
+
+# ~ 1204회차 까지
+#print( df[0] ) # 년도
+#print( df[1] ) # 회차
+#print( df[2] ) # 추첨일
+#print( df[13] ) # 당첨번호 1
+#print( df[14] ) # 당첨번호 2
+#print( df[15] ) # 당첨번호 3
+#print( df[16] ) # 당첨번호 4
+#print( df[17] ) # 당첨번호 5
+#print( df[18] ) # 당첨번호 6
+#print( df[19] ) # 당첨번호 보너스
+#
+# 2026.01.03: 1205회차 부터 ~ (구조가 바뀜)
+#print( df[0] ) # index
+#print( df[1] ) # 회차
+#print( df[2] ) # 당첨번호 1
+#print( df[3] ) # 당첨번호 2
+#print( df[4] ) # 당첨번호 3
+#print( df[5] ) # 당첨번호 4
+#print( df[6] ) # 당첨번호 5
+#print( df[7] ) # 당첨번호 6
+#print( df[8] ) # 당첨번호 보너스
+#print( df[9] ) # 순위 ("1등")
+#print( df[10] ) # 당첨게임수 ("xx 명")
+#print( df[11] ) # 1게임등 당첨금액 ("xxx,xxx,... 원")
+
+# ~ 1204회차 까지
+"""
 df2_1 = { "1": df2[13] } # start at [2]: df[13][2]
 df2_2 = { "2": df2[14] }
 df2_3 = { "3": df2[15] }
@@ -1193,6 +1369,18 @@ df2_5 = { "5": df2[17] }
 df2_6 = { "6": df2[18] }
 df2_b = { "bonus": df2[19] }
 df2_winners = { "winners": df2[3] }
+"""
+# 2026.01.03: 1205회차 부터 ~ (구조가 바뀜)
+df2_0 = { "game": df_excel_list.iloc[:, 1] } # 회차
+df2_1 = { "1": df_excel_list.iloc[:, 2] } # start at [:, 2] ~ [:, 8]
+df2_2 = { "2": df_excel_list.iloc[:, 3] }
+df2_3 = { "3": df_excel_list.iloc[:, 4] }
+df2_4 = { "4": df_excel_list.iloc[:, 5] }
+df2_5 = { "5": df_excel_list.iloc[:, 6] }
+df2_6 = { "6": df_excel_list.iloc[:, 7] }
+df2_b = { "bonus": df_excel_list.iloc[:, 8] }
+df2_winners = { "winners": df_excel_list.iloc[:, 10] }
+
 
 df2_1_count = df2_1["1"].value_counts()
 df2_2_count = df2_2["2"].value_counts()
@@ -1229,6 +1417,7 @@ results_winning_numbers_code_str += "int results_winning_numbers[][1+7] = {\n"
 # { no., winners, 1~6+bonus }
 results_winning_numbers_with_winners_code_str = "// [N] [winners] [1] [2] [3] [4] [5] [6] [bonus]\n"
 results_winning_numbers_with_winners_code_str += "int results_winning_numbers_with_winners[][1+8] = {\n"
+
     
 for i in range(test_start_from, len(df_game_merge_test.index)):
     #print( df_game_merge_test.iloc[[i]] )
@@ -1236,8 +1425,13 @@ for i in range(test_start_from, len(df_game_merge_test.index)):
     #print( df_game_merge_test.iloc[[i]].values[0][0] )
     
     
+    # ~ 1204회차 까지
+    #+ str(df.iloc[i][1]) + ", " \
+    #
+    # 2026.01.03: 1205회차 부터 ~ (구조가 바뀜)
+    #+ str(df2_0["game"][i]) + ", " \
     results_winning_numbers_code_str += "    { " \
-        + str(df.iloc[i][1]) + ", " \
+        + str(df2_0["game"][i]).replace(",", "") + ", " \
         + str(df_game_merge_test.iloc[[i]].values[0][0]) + ", " \
         + str(df_game_merge_test.iloc[[i]].values[0][1]) + ", " \
         + str(df_game_merge_test.iloc[[i]].values[0][2]) + ", " \
@@ -1248,9 +1442,14 @@ for i in range(test_start_from, len(df_game_merge_test.index)):
         + "},\n"
     #print( results_winning_numbers_code_str )
     
+    # ~ 1204회차 까지
+    #+ str(df.iloc[i][1]) + ", " \
+    #
+    # 2026.01.03: 1205회차 부터 ~ (구조가 바뀜)
+    #+ str(df2_0["game"].iloc[i][0]) + ", " \
     results_winning_numbers_with_winners_code_str += "    { " \
-        + str(df.iloc[i][1]) + ", " \
-        + str(df_game_merge_test.iloc[[i]].values[0][7]) + ", " \
+        + str(df2_0["game"][i]).replace(",", "") + ", " \
+        + str(df_game_merge_test.iloc[[i]].values[0][7]).replace("명", "").strip() + ", " \
         + str(df_game_merge_test.iloc[[i]].values[0][0]) + ", " \
         + str(df_game_merge_test.iloc[[i]].values[0][1]) + ", " \
         + str(df_game_merge_test.iloc[[i]].values[0][2]) + ", " \
@@ -1288,7 +1487,12 @@ for i in range(test_start_from, len(df_game_merge_test.index)):
             
         if matched_count > 3:
             #print( "(matched ", matched_count, ")", "no.", df.iloc[i][1], "==>", df_game_merge_test.iloc[[i]].values[0] )
-            result_matched_total.append( [ matched_count, df.iloc[i][1], df_game_merge_test.iloc[[i]].values[0], result_odd_even_3_3[j] ] )
+            
+            # ~ 1204회차 까지
+            #result_matched_total.append( [ matched_count, df.iloc[i][1], df_game_merge_test.iloc[[i]].values[0], result_odd_even_3_3[j] ] )
+            #
+            # 2026.01.03: 1205회차 부터 ~ (구조가 바뀜)
+            result_matched_total.append( [ matched_count, df2_0["game"][i].replace(",", ""), df_game_merge_test.iloc[[i]].values[0], result_odd_even_3_3[j] ] )
         
     #print()
 

@@ -317,7 +317,11 @@ public class HomeFragment extends Fragment {
                             new Thread(
                                     () -> {
                                         Log.d(TAG, "fetching winning numbers...");
-                                        get_this_weekly_winning_numbers();
+                                        // ~ 1204회차 까지
+                                        //get_this_weekly_winning_numbers();
+                                        //
+                                        // 2026.01.03: 1205회차 부터 ~ (구조가 바뀜)
+                                        get_this_weekly_winning_numbers2();
                                     })
                                     .start();
                             return;
@@ -881,6 +885,7 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    // ~ 1204회차 까지
     public void get_this_weekly_winning_numbers() {
         // https://dhlottery.co.kr/gameResult.do?method=byWin
         //
@@ -915,6 +920,7 @@ public class HomeFragment extends Fragment {
         String m_cookie = null;
         try {
             String REQ_URL = "https://dhlottery.co.kr/gameResult.do?method=byWin";
+
             java.net.HttpURLConnection conn = null;
 
             //java.io.InputStream in_stream = null;
@@ -1094,6 +1100,207 @@ public class HomeFragment extends Fragment {
                                 }
                             }
                         }
+                    }
+                }
+            }
+        }
+        catch ( Exception e) {
+            e.printStackTrace();
+            return;
+        }
+    }
+
+    // 2026.01.03: 1205회차 부터 ~ (구조가 바뀜)
+    public void get_this_weekly_winning_numbers2() {
+        if ( !this.m_main_app.network_online() ) {
+            return;
+        }
+
+        if ( m_this_weekly_winning_numbers == null ) {
+            Log.d( TAG, "this_weekly_winning_numbers == NULL" );
+            return;
+        }
+        if ( m_this_weekly_winning_numbers[0] != -1 &&
+                m_this_weekly_winning_numbers[1] != -1 &&
+                m_this_weekly_winning_numbers[2] != -1 &&
+                m_this_weekly_winning_numbers[3] != -1 &&
+                m_this_weekly_winning_numbers[4] != -1 &&
+                m_this_weekly_winning_numbers[5] != -1 &&
+                m_this_weekly_winning_numbers[6] != -1 ) {
+            Log.d( TAG, "this_weekly_winning_numbers != -1" );
+            return;
+        }
+
+        String m_cookie = null;
+        try {
+            // 2026.01.03: 1205회차 부터 ~ (구조가 바뀜)
+            String REQ_URL = "https://dhlottery.co.kr/lt645/selectPstLt645Info.do";
+            /*
+            {
+                "resultCode":null,"resultMessage":null,
+                "data":{
+                    "list":[
+                        {"winType0":0,"winType1":9,"winType2":1,"winType3":0,"gmSqNo":5133,
+                        "ltEpsd":1205,"tm1WnNo":1,"tm2WnNo":4,"tm3WnNo":16,"tm4WnNo":23,"tm5WnNo":31,"tm6WnNo":41,"bnsWnNo":2,
+                        "ltRflYmd":"20260103","rnk1WnNope":10,
+                        "rnk1WnAmt":3226386263,"rnk1SumWnAmt":32263862630,"rnk2WnNope":97,"rnk2WnAmt":55436191,
+                        "rnk2SumWnAmt":5377310527,"rnk3WnNope":3486,"rnk3WnAmt":1542545,"rnk3SumWnAmt":5377311870,
+                        "rnk4WnNope":174740,"rnk4WnAmt":50000,"rnk4SumWnAmt":8737000000,"rnk5WnNope":2915978,
+                        "rnk5WnAmt":5000,"rnk5SumWnAmt":14579890000,"sumWnNope":3094311,"rlvtEpsdSumNtslAmt":66335375027,
+                        "wholEpsdSumNtslAmt":132670747000,"excelRnk":"1등"}
+                    ]
+                }
+            }
+            */
+
+            /*
+            // TEST
+            {
+                String res =
+                    "{" +
+                    "\"resultCode\":null,\"resultMessage\":null," +
+                    "\"data\":{" +
+                    "\"list\":[" +
+                    "{\"winType0\":0,\"winType1\":9,\"winType2\":1,\"winType3\":0,\"gmSqNo\":5133," +
+                    "\"ltEpsd\":1205,\"tm1WnNo\":1,\"tm2WnNo\":4,\"tm3WnNo\":16,\"tm4WnNo\":23,\"tm5WnNo\":31,\"tm6WnNo\":41,\"bnsWnNo\":2," +
+                    "\"ltRflYmd\":\"20260103\",\"rnk1WnNope\":10" +
+                    "}]}" +
+                    "}";
+                //JSONObject obj_export = new JSONObject(res.replace("\\", ""));
+                JSONObject obj_export = new JSONObject(res);
+                JSONObject obj_list = new JSONObject();
+                JSONArray arr_list = new JSONArray();
+                JSONObject obj = new JSONObject();
+
+                obj_list = (JSONObject) obj_export.get("data");
+                arr_list = (JSONArray) obj_list.get( "list" );
+                obj = (JSONObject) arr_list.get(0);
+
+                int wn1 = (int) obj.get( "tm1WnNo" );
+                int wn2 = (int) obj.get( "tm2WnNo" );
+                int wn3 = (int) obj.get( "tm3WnNo" );
+                int wn4 = (int) obj.get( "tm4WnNo" );
+                int wn5 = (int) obj.get( "tm5WnNo" );
+                int wn6 = (int) obj.get( "tm6WnNo" );
+                int wn_b = (int) obj.get( "bnsWnNo" );
+
+                m_this_weekly_winning_numbers[0] = wn1; // #1
+                m_this_weekly_winning_numbers[1] = wn2; // #2
+                m_this_weekly_winning_numbers[2] = wn3; // #3
+                m_this_weekly_winning_numbers[3] = wn4; // #4
+                m_this_weekly_winning_numbers[4] = wn5; // #5
+                m_this_weekly_winning_numbers[5] = wn6; // #6
+                m_this_weekly_winning_numbers[6] = wn_b; // bonus
+
+                Log.d( TAG, "new numbers...\n" + wn1 + ", " + wn2 + ", " + wn3 + ", " + wn4 + ", " + wn5 + ", " + wn6 + ", " +  wn_b );
+                if ( 0 != 1 ) return;
+            }
+            */
+
+            java.net.HttpURLConnection conn = null;
+
+            int response_code = 0;
+            String response = null;
+
+            java.net.URL url = new java.net.URL( REQ_URL );
+            if ( url == null ) {
+                Log.d( TAG, "URL == NULL" );
+                return;
+            }
+
+            conn = (java.net.HttpURLConnection)url.openConnection();
+            if ( conn == null ) {
+                Log.d( TAG, "URLConnection == NULL" );
+                return;
+            }
+
+            //conn.setRequestProperty( "User-Agent", "mobile_app" );
+            //conn.setRequestProperty( "Content-Type", "application/x-www-form-urlencoded" );
+
+            conn.setRequestProperty( "User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" );
+            conn.setRequestProperty( "Content-Type", "application/json" );
+
+            conn.setReadTimeout( 15000 );
+            conn.setConnectTimeout( 15000 );
+            conn.setRequestMethod( "GET" ); // 2026.01.03: 1205회차 부터 ~ (구조가 바뀜)
+            conn.setDoInput( true);
+            conn.setInstanceFollowRedirects( true );
+
+
+            response_code = conn.getResponseCode();
+            Log.d( TAG, "response code = " + response_code );
+
+            if ( response_code == javax.net.ssl.HttpsURLConnection.HTTP_OK ) {
+                Log.d(TAG, "response code = HttpsURLConnection.HTTP_OK");
+
+                java.io.InputStream is = conn.getInputStream();
+                java.io.BufferedReader br = new java.io.BufferedReader(new java.io.InputStreamReader(is, "UTF-8"));
+                //StringBuilder response = new StringBuilder();
+                String line;
+
+                response = "";
+                while ((line = br.readLine()) != null) {
+                    response += line;
+                }
+                br.close();
+                is.close();
+                //Log.d("HTTP_GET", "Response: " + response);
+
+                conn.disconnect();
+                conn = null;
+
+                //Log.d(TAG, "response = " + response);
+
+                response = response.replace("\uFEFF", "");    // remove UTF-8 BOM
+                if ((response != null) && !response.isEmpty()) {
+                    //Log.d(TAG, "response = " + response);
+
+                    // 2026.01.03: 1205회차 부터 ~ (구조가 바뀜)
+                    try  {
+                        //JSONObject obj_export = new JSONObject(response.replace("\\", ""));
+                        JSONObject obj_export = new JSONObject(response);
+                        JSONObject obj_list = new JSONObject();
+                        JSONArray arr_list = new JSONArray();
+                        JSONObject obj = new JSONObject();
+
+                        obj_list = (JSONObject) obj_export.get("data");
+                        arr_list = (JSONArray) obj_list.get( "list" );
+                        obj = (JSONObject) arr_list.get(0);
+
+                        int wn1 = (int) obj.get( "tm1WnNo" );
+                        int wn2 = (int) obj.get( "tm2WnNo" );
+                        int wn3 = (int) obj.get( "tm3WnNo" );
+                        int wn4 = (int) obj.get( "tm4WnNo" );
+                        int wn5 = (int) obj.get( "tm5WnNo" );
+                        int wn6 = (int) obj.get( "tm6WnNo" );
+                        int wn_b = (int) obj.get( "bnsWnNo" );
+
+                        m_this_weekly_winning_numbers[0] = wn1; // #1
+                        m_this_weekly_winning_numbers[1] = wn2; // #2
+                        m_this_weekly_winning_numbers[2] = wn3; // #3
+                        m_this_weekly_winning_numbers[3] = wn4; // #4
+                        m_this_weekly_winning_numbers[4] = wn5; // #5
+                        m_this_weekly_winning_numbers[5] = wn6; // #6
+                        m_this_weekly_winning_numbers[6] = wn_b; // bonus
+
+                        //Log.d( TAG, "--> [ " +
+                        //        m_this_weekly_winning_numbers[0] + ", " +
+                        //        m_this_weekly_winning_numbers[1] + ", " +
+                        //        m_this_weekly_winning_numbers[2] + ", " +
+                        //        m_this_weekly_winning_numbers[3] + ", " +
+                        //        m_this_weekly_winning_numbers[4] + ", " +
+                        //        m_this_weekly_winning_numbers[5] + ", " +
+                        //        m_this_weekly_winning_numbers[6] + " ]" );
+
+                        m_edittext_winning_num1.setText( "" + m_this_weekly_winning_numbers[0] );
+                        m_edittext_winning_num2.setText( "" + m_this_weekly_winning_numbers[1] );
+                        m_edittext_winning_num3.setText( "" + m_this_weekly_winning_numbers[2] );
+                        m_edittext_winning_num4.setText( "" + m_this_weekly_winning_numbers[3] );
+                        m_edittext_winning_num5.setText( "" + m_this_weekly_winning_numbers[4] );
+                        m_edittext_winning_num6.setText( "" + m_this_weekly_winning_numbers[5] );
+                        m_edittext_winning_num7_b.setText( "" + m_this_weekly_winning_numbers[6] );
+                    } catch ( Exception e ) {
+                        e.printStackTrace();
                     }
                 }
             }

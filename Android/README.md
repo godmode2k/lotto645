@@ -63,6 +63,8 @@ Or you can ignore that.
 3. test_lotto645_tmp2.py
  - 마지막 회차번호를 자동으로 가져와서 해당 xls 파일을 다운로드합니다.
  - 코드 수정없이 실행하면 됩니다.
+(2026.01.04 업데이트)
+ - 변경 사항으로 인해 다시 직접 다운로드해서 처리하도록 변경 (자세한 내용은 test_lotto645_tmp2.py 파일을 참조)
 ```
 
 
@@ -72,22 +74,22 @@ Android App
 ```sh
 $ cd lotto645_prediction/app/src/main/cpp/
 
-//1. Download winning list
-// Download (Excel: xls) all results
-// https://www.dhlottery.co.kr/gameResult.do?method=byWin
-//
-// e.g., lotto645 당첨번호 1128회차까지
-// https://dhlottery.co.kr/gameResult.do?method=allWinExel&gubun=byWin&nowPage=
-// &drwNoStart=1&drwNoEnd=1128
-//
-//Rename download file:
-// - lotto645_당첨번호1128회차까지.xls
+2025.01.04 (1205 게임부터)
+다운로드한 Excel(.xslx) 파일을 CSV(encoding=utf-8)로 변환해서 사용해야 됨.
 
-//2. (Edit) test_lotto645_tmp2.py: 188
-//_xls_filename = "./lotto645_당첨번호1128회차까지.xls"
+1. 로또645 당첨번호 리스트 다운로드 (Excel 파일: .xlsx)
+https://dhlottery.co.kr/
+사이트에서 직접 다운로드 (1회부터 최근 회차까지)
 
-//2. (Edit) test_lotto645_tmp2.py:
-//_xls_last_game_num = "1186"    # last game number
+파일명 변경: (e.g., lotto645_당첨번호1128회차까지.xlsx)
+ - lotto645_당첨번호xxxx회차까지.xlsx
+
+Excel에서 CSV 로 변환 (다른 이름으로 저장)
+
+메모장에서 CSV 파일을 열어서 다른 이름으로 저장 (utf-8 선택)
+
+2. (Edit) test_lotto645_tmp2.py: (line: 254)
+_xls_last_game_num = "1205"    # last game number
 
 3. Generate codes
 $ python3 test_lotto645_tmp2.py
