@@ -51,6 +51,7 @@ from sklearn.svm import SVC
 import sys
 import traceback
 from urllib import request
+import json
 
 
 
@@ -239,6 +240,70 @@ except Exception as e:
     sys.exit()
 '''
 
+# 2026.05.13
+# Download xls file
+_xls_last_game_num = None
+FETCH_SRC_URL = "https://www.dhlottery.co.kr/lt645/selectPstLt645Info.do" # latest
+try:
+    print( "get last game number..." )
+    req = request.Request( FETCH_SRC_URL )
+    req.add_header('Content-Type', 'application/json')
+    with request.urlopen( req ) as response:
+        res = response.read().decode("utf-8")
+        res_json = json.loads( res )
+        print( res_json )
+        _xls_last_game_num = str(res_json["data"]["list"][0]["ltEpsd"])
+        print( "last game num = ", _xls_last_game_num )
+except Exception as e:
+    traceback.print_exc()
+    print( "error = ", e )
+    sys.exit()
+
+
+SRC_XLS_URL = "https://www.dhlottery.co.kr/lt645/selectPstLt645Info.do?srchStrLtEpsd=1&srchEndLtEpsd=" + _xls_last_game_num
+try:
+    print( "Download XLS file..." )
+    #request.urlretrieve( SRC_XLS_URL, _xls_filename )
+
+    res = None
+    req = request.Request( SRC_XLS_URL )
+    req.add_header('Content-Type', 'application/json')
+    with request.urlopen( req ) as response:
+        res = response.read().decode("utf-8")
+        print( res )
+
+    res_json = json.loads( res )
+    print( res_json )
+
+    results_str = ""
+    with open("lotto645_당첨번호" + _xls_last_game_num + "회차까지.csv", "w", encoding="UTF-8") as f:
+    #with open("lotto645_당첨번호" + _xls_last_game_num + "회차까지.csv", "w", encoding="UTF-8-sig") as f:
+        results_str = "No,회차,당첨번호,,,,,,보너스,순위,당첨게임수,1게임당 당첨금액"
+        print( results_str, file=f )
+
+        for i, _v in enumerate(res_json["data"]["list"]):
+            game_num = _v["ltEpsd"]
+            n1 = _v["tm1WnNo"]
+            n2 = _v["tm2WnNo"]
+            n3 = _v["tm3WnNo"]
+            n4 = _v["tm4WnNo"]
+            n5 = _v["tm5WnNo"]
+            n6 = _v["tm6WnNo"]
+            nb = _v["bnsWnNo"]
+            rank1_winners = _v["rnk1WnNope"]
+            rank1_amount = _v["rnk1WnAmt"]
+
+            results_str = f"{i+1},\"{game_num:,}\",{n1},{n2},{n3},{n4},{n5},{n6},{nb},1등,{rank1_winners} 명,\"{rank1_amount:,} 원\""
+            #print( results_str )
+            print( results_str, file=f )
+
+    print( "Downloaded..." )
+except Exception as e:
+    traceback.print_exc()
+    print( "error = ", e )
+    sys.exit()
+
+
 # 2026.01.03: 1205회차 부터 ~ (구조가 바뀜)
 # 마지막 게임 결과
 # https://dhlottery.co.kr/lt645/selectPstLt645Info.do
@@ -247,11 +312,12 @@ except Exception as e:
 # https://dhlottery.co.kr/lt645/excelDown.do?encData=<RSA(256bytes, 512 chars)>
 # - 자주 바뀔수도 있으니, 자동 다운로드 빼고 그냥 예전처럼 직접 다운로드해서 사용하겠음.
 # - 어차피 제공해 줄거면 예전처럼 편하게 다운로드 할 수 있게 해주지 이게 뭐라고 암호화까지..
+# - (2026.05.13) JSON 으로 받아서 기존과 같은 CSV format 으로 저장
 # -
 # [주의]
 # - 다운로드한 파일이 .xlsx file 인데 CSV(utf-8) 로 변환했음
 # - 다운로드한 Excel(.xlsx) 파일을 CSV(encoding=utf-8)로 변환해서 사용해야 됨
-_xls_last_game_num = "1205"
+#_xls_last_game_num = "1222"
 #_xls_filename = "./lotto645_당첨번호" + _xls_last_game_num + "회차까지.xlsx" # .xls -> .xlsx
 _xls_filename = "./lotto645_당첨번호" + _xls_last_game_num + "회차까지.csv"
 
@@ -339,16 +405,28 @@ last_game_result = list(
 # 2026.01.03: 1205회차 부터 ~ (구조가 바뀜)
 last_game_result = list(   
     [
-         df_excel_list.iloc[0][1],  # 회차
-         "(unknown)",
+        #df_excel_list.iloc[0][1],  # 회차
+        #
+        df_excel_list.iloc[0, 1],  # 회차
+
+        "(unknown)",
     [
-        df_excel_list.iloc[0][2], # 당첨번호 1
-        df_excel_list.iloc[0][3], # 당첨번호 2
-        df_excel_list.iloc[0][4], # 당첨번호 3
-        df_excel_list.iloc[0][5], # 당첨번호 4
-        df_excel_list.iloc[0][6], # 당첨번호 5
-        df_excel_list.iloc[0][7], # 당첨번호 6
-        df_excel_list.iloc[0][8]  # 당첨번호 보너스
+        #df_excel_list.iloc[0][2], # 당첨번호 1
+        #df_excel_list.iloc[0][3], # 당첨번호 2
+        #df_excel_list.iloc[0][4], # 당첨번호 3
+        #df_excel_list.iloc[0][5], # 당첨번호 4
+        #df_excel_list.iloc[0][6], # 당첨번호 5
+        #df_excel_list.iloc[0][7], # 당첨번호 6
+        #df_excel_list.iloc[0][8]  # 당첨번호 보너스
+        #
+        df_excel_list.iloc[0, 2], # 당첨번호 1
+        df_excel_list.iloc[0, 3], # 당첨번호 2
+        df_excel_list.iloc[0, 4], # 당첨번호 3
+        df_excel_list.iloc[0, 5], # 당첨번호 4
+        df_excel_list.iloc[0, 6], # 당첨번호 5
+        df_excel_list.iloc[0, 7], # 당첨번호 6
+        df_excel_list.iloc[0, 8]  # 당첨번호 보너스
+
     ]
     ]
 )
@@ -539,7 +617,11 @@ _idx = int(0) # 2026.01.03: 1205회차 부터 ~ (구조가 바뀜)
 df_game_merge_with_odd_even["odd"] = df_game_merge.fillna(0).apply(
     # 1, 2, 3, 4, 5, 6, bonus
     #lambda x: x[13]%2 + x[14]%2 + x[15]%2 + x[16]%2 + x[17]%2 + x[18]%2 + x[19]%2, axis=1)
-    lambda x: x[_idx]%2 + x[_idx+1]%2 + x[_idx+2]%2 + x[_idx+3]%2 + x[_idx+4]%2 + x[_idx+5]%2 + x[_idx+6]%2, axis=1)
+
+    #lambda x: x[_idx]%2 + x[_idx+1]%2 + x[_idx+2]%2 + x[_idx+3]%2 + x[_idx+4]%2 + x[_idx+5]%2 + x[_idx+6]%2, axis=1)
+    #
+    lambda x: x.iloc[_idx]%2 + x.iloc[_idx+1]%2 + x.iloc[_idx+2]%2 +
+        x.iloc[_idx+3]%2 + x.iloc[_idx+4]%2 + x.iloc[_idx+5]%2 + x.iloc[_idx+6]%2, axis=1)
 df_game_merge_with_odd_even["even"] = df_game_merge.fillna(0).apply(
     # 1, 2, 3, 4, 5, 6, bonus
     lambda x: 
@@ -551,13 +633,22 @@ df_game_merge_with_odd_even["even"] = df_game_merge.fillna(0).apply(
         #(1 if (x[18]%2 == 0) else 0) + 
         #(1 if (x[19]%2 == 0) else 0), axis=1)
     
-        (1 if (x[_idx]%2 == 0) else 0) +
-        (1 if (x[_idx+1]%2 == 0) else 0) + 
-        (1 if (x[_idx+2]%2 == 0) else 0) + 
-        (1 if (x[_idx+3]%2 == 0) else 0) + 
-        (1 if (x[_idx+4]%2 == 0) else 0) + 
-        (1 if (x[_idx+5]%2 == 0) else 0) + 
-        (1 if (x[_idx+6]%2 == 0) else 0), axis=1)
+        #(1 if (x[_idx]%2 == 0) else 0) +
+        #(1 if (x[_idx+1]%2 == 0) else 0) + 
+        #(1 if (x[_idx+2]%2 == 0) else 0) + 
+        #(1 if (x[_idx+3]%2 == 0) else 0) + 
+        #(1 if (x[_idx+4]%2 == 0) else 0) + 
+        #(1 if (x[_idx+5]%2 == 0) else 0) + 
+        #(1 if (x[_idx+6]%2 == 0) else 0), axis=1)
+        #
+        (1 if (x.iloc[_idx]%2 == 0) else 0) +
+        (1 if (x.iloc[_idx+1]%2 == 0) else 0) + 
+        (1 if (x.iloc[_idx+2]%2 == 0) else 0) + 
+        (1 if (x.iloc[_idx+3]%2 == 0) else 0) + 
+        (1 if (x.iloc[_idx+4]%2 == 0) else 0) + 
+        (1 if (x.iloc[_idx+5]%2 == 0) else 0) + 
+        (1 if (x.iloc[_idx+6]%2 == 0) else 0), axis=1)
+
 print( df_game_merge_with_odd_even )
 print()
 
@@ -591,7 +682,11 @@ df_game_merge_with_per_game = df_game_merge.copy()
 df_game_merge_with_per_game["sum_per_game"] = df_game_merge.fillna(0).apply(
     # 1, 2, 3, 4, 5, 6, bonus
     #lambda x: (x[13] + x[14] + x[15] + x[16] + x[17] + x[18] + x[19]), axis=1)
-    lambda x: (x[_idx] + x[_idx+1] + x[_idx+2] + x[_idx+3] + x[_idx+4] + x[_idx+5] + x[_idx+6]), axis=1)
+
+    #lambda x: (x[_idx] + x[_idx+1] + x[_idx+2] + x[_idx+3] + x[_idx+4] + x[_idx+5] + x[_idx+6]), axis=1)
+    #
+    lambda x: (x.iloc[_idx] + x.iloc[_idx+1] + x.iloc[_idx+2] + x.iloc[_idx+3] +
+               x.iloc[_idx+4] + x.iloc[_idx+5] + x.iloc[_idx+6]), axis=1)
 print( df_game_merge_with_per_game )
 print()
 
@@ -672,13 +767,22 @@ df_game_merge_with_digits["d01"] = df_game_merge.fillna(0).apply(
         #(1 if (x[18] < 10) else 0) + 
         #(1 if (x[19] < 10) else 0), axis=1)
     
-        (1 if (x[_idx] < 10) else 0) +
-        (1 if (x[_idx+1] < 10) else 0) + 
-        (1 if (x[_idx+2] < 10) else 0) +
-        (1 if (x[_idx+3] < 10) else 0) + 
-        (1 if (x[_idx+4] < 10) else 0) +
-        (1 if (x[_idx+5] < 10) else 0) + 
-        (1 if (x[_idx+6] < 10) else 0), axis=1)
+        #(1 if (x[_idx] < 10) else 0) +
+        #(1 if (x[_idx+1] < 10) else 0) + 
+        #(1 if (x[_idx+2] < 10) else 0) +
+        #(1 if (x[_idx+3] < 10) else 0) + 
+        #(1 if (x[_idx+4] < 10) else 0) +
+        ##(1 if (x[_idx+5] < 10) else 0) + 
+        #(1 if (x[_idx+6] < 10) else 0), axis=1)
+        #
+        (1 if (x.iloc[_idx] < 10) else 0) +
+        (1 if (x.iloc[_idx+1] < 10) else 0) + 
+        (1 if (x.iloc[_idx+2] < 10) else 0) +
+        (1 if (x.iloc[_idx+3] < 10) else 0) + 
+        (1 if (x.iloc[_idx+4] < 10) else 0) +
+        (1 if (x.iloc[_idx+5] < 10) else 0) + 
+        (1 if (x.iloc[_idx+6] < 10) else 0), axis=1)
+
 df_game_merge_with_digits["d10"] = df_game_merge.fillna(0).apply(
     # 1, 2, 3, 4, 5, 6, bonus
     lambda x: 
@@ -690,13 +794,22 @@ df_game_merge_with_digits["d10"] = df_game_merge.fillna(0).apply(
         #(1 if (x[18] >= 10 and x[18] < 20) else 0) + 
         #(1 if (x[19] >= 10 and x[19] < 20) else 0), axis=1)
     
-        (1 if (x[_idx] >= 10 and x[_idx] < 20) else 0) +
-        (1 if (x[_idx+1] >= 10 and x[_idx+1] < 20) else 0) + 
-        (1 if (x[_idx+2] >= 10 and x[_idx+2] < 20) else 0) +
-        (1 if (x[_idx+3] >= 10 and x[_idx+3] < 20) else 0) + 
-        (1 if (x[_idx+4] >= 10 and x[_idx+4] < 20) else 0) +
-        (1 if (x[_idx+5] >= 10 and x[_idx+5] < 20) else 0) + 
-        (1 if (x[_idx+6] >= 10 and x[_idx+6] < 20) else 0), axis=1)
+        #(1 if (x[_idx] >= 10 and x[_idx] < 20) else 0) +
+        #(1 if (x[_idx+1] >= 10 and x[_idx+1] < 20) else 0) + 
+        #(1 if (x[_idx+2] >= 10 and x[_idx+2] < 20) else 0) +
+        #(1 if (x[_idx+3] >= 10 and x[_idx+3] < 20) else 0) + 
+        #(1 if (x[_idx+4] >= 10 and x[_idx+4] < 20) else 0) +
+        #(1 if (x[_idx+5] >= 10 and x[_idx+5] < 20) else 0) + 
+        #(1 if (x[_idx+6] >= 10 and x[_idx+6] < 20) else 0), axis=1)
+        #
+        (1 if (x.iloc[_idx] >= 10 and x.iloc[_idx] < 20) else 0) +
+        (1 if (x.iloc[_idx+1] >= 10 and x.iloc[_idx+1] < 20) else 0) + 
+        (1 if (x.iloc[_idx+2] >= 10 and x.iloc[_idx+2] < 20) else 0) +
+        (1 if (x.iloc[_idx+3] >= 10 and x.iloc[_idx+3] < 20) else 0) + 
+        (1 if (x.iloc[_idx+4] >= 10 and x.iloc[_idx+4] < 20) else 0) +
+        (1 if (x.iloc[_idx+5] >= 10 and x.iloc[_idx+5] < 20) else 0) + 
+        (1 if (x.iloc[_idx+6] >= 10 and x.iloc[_idx+6] < 20) else 0), axis=1)
+
 df_game_merge_with_digits["d20"] = df_game_merge.fillna(0).apply(
     # 1, 2, 3, 4, 5, 6, bonus
     lambda x: 
@@ -708,13 +821,22 @@ df_game_merge_with_digits["d20"] = df_game_merge.fillna(0).apply(
         #(1 if (x[18] >= 20 and x[18] < 30) else 0) + 
         #(1 if (x[19] >= 20 and x[19] < 30) else 0), axis=1)
     
-        (1 if (x[_idx] >= 20 and x[_idx] < 30) else 0) +
-        (1 if (x[_idx+1] >= 20 and x[_idx+1] < 30) else 0) + 
-        (1 if (x[_idx+2] >= 20 and x[_idx+2] < 30) else 0) +
-        (1 if (x[_idx+3] >= 20 and x[_idx+3] < 30) else 0) + 
-        (1 if (x[_idx+4] >= 20 and x[_idx+4] < 30) else 0) +
-        (1 if (x[_idx+5] >= 20 and x[_idx+5] < 30) else 0) + 
-        (1 if (x[_idx+6] >= 20 and x[_idx+6] < 30) else 0), axis=1)
+        #(1 if (x[_idx] >= 20 and x[_idx] < 30) else 0) +
+        #(1 if (x[_idx+1] >= 20 and x[_idx+1] < 30) else 0) + 
+        #(1 if (x[_idx+2] >= 20 and x[_idx+2] < 30) else 0) +
+        #(1 if (x[_idx+3] >= 20 and x[_idx+3] < 30) else 0) + 
+        #(1 if (x[_idx+4] >= 20 and x[_idx+4] < 30) else 0) +
+        #(1 if (x[_idx+5] >= 20 and x[_idx+5] < 30) else 0) + 
+        #(1 if (x[_idx+6] >= 20 and x[_idx+6] < 30) else 0), axis=1)
+        #
+        (1 if (x.iloc[_idx] >= 20 and x.iloc[_idx] < 30) else 0) +
+        (1 if (x.iloc[_idx+1] >= 20 and x.iloc[_idx+1] < 30) else 0) + 
+        (1 if (x.iloc[_idx+2] >= 20 and x.iloc[_idx+2] < 30) else 0) +
+        (1 if (x.iloc[_idx+3] >= 20 and x.iloc[_idx+3] < 30) else 0) + 
+        (1 if (x.iloc[_idx+4] >= 20 and x.iloc[_idx+4] < 30) else 0) +
+        (1 if (x.iloc[_idx+5] >= 20 and x.iloc[_idx+5] < 30) else 0) + 
+        (1 if (x.iloc[_idx+6] >= 20 and x.iloc[_idx+6] < 30) else 0), axis=1)
+
 df_game_merge_with_digits["d30"] = df_game_merge.fillna(0).apply(
     # 1, 2, 3, 4, 5, 6, bonus
     lambda x: 
@@ -726,13 +848,22 @@ df_game_merge_with_digits["d30"] = df_game_merge.fillna(0).apply(
         #(1 if (x[18] >= 30 and x[18] < 40) else 0) + 
         #(1 if (x[19] >= 30 and x[19] < 40) else 0), axis=1)
     
-        (1 if (x[_idx] >= 30 and x[_idx] < 40) else 0) +
-        (1 if (x[_idx+1] >= 30 and x[_idx+1] < 40) else 0) + 
-        (1 if (x[_idx+2] >= 30 and x[_idx+2] < 40) else 0) +
-        (1 if (x[_idx+3] >= 30 and x[_idx+3] < 40) else 0) + 
-        (1 if (x[_idx+4] >= 30 and x[_idx+4] < 40) else 0) +
-        (1 if (x[_idx+5] >= 30 and x[_idx+5] < 40) else 0) + 
-        (1 if (x[_idx+6] >= 30 and x[_idx+6] < 40) else 0), axis=1)
+        #(1 if (x[_idx] >= 30 and x[_idx] < 40) else 0) +
+        #(1 if (x[_idx+1] >= 30 and x[_idx+1] < 40) else 0) + 
+        #(1 if (x[_idx+2] >= 30 and x[_idx+2] < 40) else 0) +
+        #(1 if (x[_idx+3] >= 30 and x[_idx+3] < 40) else 0) + 
+        #(1 if (x[_idx+4] >= 30 and x[_idx+4] < 40) else 0) +
+        #(1 if (x[_idx+5] >= 30 and x[_idx+5] < 40) else 0) + 
+        #(1 if (x[_idx+6] >= 30 and x[_idx+6] < 40) else 0), axis=1)
+        #
+        (1 if (x.iloc[_idx] >= 30 and x.iloc[_idx] < 40) else 0) +
+        (1 if (x.iloc[_idx+1] >= 30 and x.iloc[_idx+1] < 40) else 0) + 
+        (1 if (x.iloc[_idx+2] >= 30 and x.iloc[_idx+2] < 40) else 0) +
+        (1 if (x.iloc[_idx+3] >= 30 and x.iloc[_idx+3] < 40) else 0) + 
+        (1 if (x.iloc[_idx+4] >= 30 and x.iloc[_idx+4] < 40) else 0) +
+        (1 if (x.iloc[_idx+5] >= 30 and x.iloc[_idx+5] < 40) else 0) + 
+        (1 if (x.iloc[_idx+6] >= 30 and x.iloc[_idx+6] < 40) else 0), axis=1)
+
 df_game_merge_with_digits["d40"] = df_game_merge.fillna(0).apply(
     # 1, 2, 3, 4, 5, 6, bonus
     lambda x: 
@@ -744,13 +875,22 @@ df_game_merge_with_digits["d40"] = df_game_merge.fillna(0).apply(
         #(1 if (x[18] >= 40 and x[18] <= 45) else 0) + 
         #(1 if (x[19] >= 40 and x[19] <= 45) else 0), axis=1)
     
-        (1 if (x[_idx] >= 40 and x[_idx] <= 45) else 0) +
-        (1 if (x[_idx+1] >= 40 and x[_idx+1] <= 45) else 0) + 
-        (1 if (x[_idx+2] >= 40 and x[_idx+2] <= 45) else 0) +
-        (1 if (x[_idx+3] >= 40 and x[_idx+3] <= 45) else 0) + 
-        (1 if (x[_idx+4] >= 40 and x[_idx+4] <= 45) else 0) +
-        (1 if (x[_idx+5] >= 40 and x[_idx+5] <= 45) else 0) + 
-        (1 if (x[_idx+6] >= 40 and x[_idx+6] <= 45) else 0), axis=1)
+        #(1 if (x[_idx] >= 40 and x[_idx] <= 45) else 0) +
+        #(1 if (x[_idx+1] >= 40 and x[_idx+1] <= 45) else 0) + 
+        #(1 if (x[_idx+2] >= 40 and x[_idx+2] <= 45) else 0) +
+        #(1 if (x[_idx+3] >= 40 and x[_idx+3] <= 45) else 0) + 
+        #(1 if (x[_idx+4] >= 40 and x[_idx+4] <= 45) else 0) +
+        #(1 if (x[_idx+5] >= 40 and x[_idx+5] <= 45) else 0) + 
+        #(1 if (x[_idx+6] >= 40 and x[_idx+6] <= 45) else 0), axis=1)
+        #
+        (1 if (x.iloc[_idx] >= 40 and x.iloc[_idx] <= 45) else 0) +
+        (1 if (x.iloc[_idx+1] >= 40 and x.iloc[_idx+1] <= 45) else 0) + 
+        (1 if (x.iloc[_idx+2] >= 40 and x.iloc[_idx+2] <= 45) else 0) +
+        (1 if (x.iloc[_idx+3] >= 40 and x.iloc[_idx+3] <= 45) else 0) + 
+        (1 if (x.iloc[_idx+4] >= 40 and x.iloc[_idx+4] <= 45) else 0) +
+        (1 if (x.iloc[_idx+5] >= 40 and x.iloc[_idx+5] <= 45) else 0) + 
+        (1 if (x.iloc[_idx+6] >= 40 and x.iloc[_idx+6] <= 45) else 0), axis=1)
+
 print( df_game_merge_with_digits )
 print()
 
